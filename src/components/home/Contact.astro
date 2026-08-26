@@ -22,6 +22,13 @@ const formStrings = JSON.stringify({
 ---
 
 <section class="contact" id="contacto">
+  <div class="star-edge star-edge--tr" data-parallax="0.15">
+    <Star class="star-mark" size="clamp(90px, 10vw, 140px)" color="var(--coral)" spin duration={140} />
+  </div>
+  <div class="star-edge star-edge--bl" data-parallax="0.1">
+    <Star class="star-echo" size="clamp(56px, 6vw, 88px)" color="var(--amber)" spin duration={100} reverse />
+  </div>
+
   <div class="contact-inner">
     <h2>{t.headline}<br /><span class="accent">{t.headlineAccent}</span></h2>
     <p class="contact-sub">{t.sub}</p>
@@ -92,6 +99,31 @@ const formStrings = JSON.stringify({
 </section>
 
 <script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const contactEdges = document.querySelectorAll<HTMLElement>('.contact .star-edge');
+
+  if (!reduceMotion && contactEdges.length) {
+    let contactTicking = false;
+    const updateContactEdges = () => {
+      const y = window.scrollY;
+      contactEdges.forEach((el) => {
+        const factor = parseFloat(el.dataset.parallax ?? '0');
+        el.style.transform = `translateY(${y * factor}px)`;
+      });
+      contactTicking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!contactTicking) {
+          requestAnimationFrame(updateContactEdges);
+          contactTicking = true;
+        }
+      },
+      { passive: true },
+    );
+  }
+
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {
     const statusEl = form.querySelector('.form-status') as HTMLElement | null;
@@ -157,6 +189,20 @@ const formStrings = JSON.stringify({
     margin-top: clamp(40px, 6vh, 80px);
     padding: clamp(70px, 10vh, 120px) clamp(24px, 5vw, 72px) 0;
     overflow: hidden;
+  }
+  .star-edge {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .star-edge--tr {
+    top: -24px;
+    right: -24px;
+  }
+  .star-edge--bl {
+    bottom: -14px;
+    left: -14px;
   }
   .contact-inner {
     position: relative;
