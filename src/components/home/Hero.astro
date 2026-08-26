@@ -1,0 +1,117 @@
+---
+import Star from '../Star.astro';
+import type { UiDictionary } from '../../i18n';
+
+interface Props {
+  t: UiDictionary['hero'];
+}
+const { t } = Astro.props;
+---
+
+<header class="hero">
+  <div class="star-edge star-edge--tr" data-parallax="0.3">
+    <Star class="star-mark" size="clamp(100px, 11vw, 150px)" color="var(--coral)" spin duration={140} />
+  </div>
+  <div class="star-edge star-edge--bl" data-parallax="0.18">
+    <Star class="star-echo" size="clamp(64px, 7vw, 96px)" color="var(--amber)" spin duration={100} reverse />
+  </div>
+
+  <div class="hero-inner">
+    <h1>{t.headline} <span class="accent">{t.headlineAccent}</span></h1>
+    <p class="sub">{t.sub}</p>
+    <div class="cta-row">
+      <a href="#contacto" class="btn btn-primary">
+        <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+        <span class="btn-label">{t.ctaPrimary}</span> <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const edges = document.querySelectorAll<HTMLElement>('.hero .star-edge');
+
+  if (!reduceMotion && edges.length) {
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      edges.forEach((el) => {
+        const factor = parseFloat(el.dataset.parallax ?? '0');
+        el.style.transform = `translateY(${y * factor}px)`;
+      });
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 88px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 clamp(24px, 5vw, 72px) 60px;
+    overflow: hidden;
+  }
+
+  /* Los soles viven en los bordes del hero, opacidad completa, girando lento. El
+     wrapper .star-edge lleva el desplazamiento de scroll (a destiempo con el resto del
+     contenido); el <Star> dentro solo gira, así los dos transforms no se pisan. */
+  .star-edge {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .star-edge--tr {
+    top: -28px;
+    right: -28px;
+  }
+  .star-edge--bl {
+    bottom: -18px;
+    left: -18px;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(38px, 6.4vw, 86px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    max-width: 16ch;
+    margin-bottom: 32px;
+  }
+
+  .sub {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.6;
+    color: var(--ink-60);
+    max-width: 52ch;
+    margin-bottom: 40px;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+</style>

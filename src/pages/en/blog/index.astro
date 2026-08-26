@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getDictionary } from '../../../i18n';
+
+const t = getDictionary('en');
+const posts = (await getCollection('blog-en')).filter((p) => !p.data.draft);
+---
+
+<BaseLayout
+  lang="en"
+  title={`${t.blogPage.heading} | Pablo Kohler`}
+  description={t.blogPage.empty}
+  navDict={t.nav}
+  esHref="/es/blog/"
+  enHref="/en/blog/"
+>
+  <section class="blog">
+    <h1>{t.blogPage.heading}</h1>
+    {
+      posts.length === 0 ? (
+        <p class="mono-note">{t.blogPage.empty}</p>
+      ) : (
+        <ul class="post-list">
+          {posts.map((p) => (
+            <li>
+              <a href={`/en/blog/${p.id}/`}>{p.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .blog {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vh, 100px) clamp(24px, 5vw, 72px) clamp(80px, 12vh, 140px);
+  }
+  .blog h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 4.4vw, 54px);
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .post-list a {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .post-list a:hover {
+    color: var(--coral);
+  }
+</style>

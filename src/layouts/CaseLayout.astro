@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import CaseHero from '../components/case/CaseHero.astro';
+import CaseCover from '../components/case/CaseCover.astro';
+import MetricsStrip from '../components/case/MetricsStrip.astro';
+import CaseBody from '../components/case/CaseBody.astro';
+import CaseNextLink from '../components/case/CaseNextLink.astro';
+import type { Lang, UiDictionary } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<'cases-es' | 'cases-en'>;
+  t: UiDictionary;
+  esHref: string;
+  enHref: string;
+  nextHref: string;
+}
+
+const { lang, entry, t, esHref, enHref, nextHref } = Astro.props;
+const d = entry.data;
+const backHref = `/${lang}/#trabajo`;
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${d.title} | Pablo Kohler`}
+  description={d.lead}
+  navDict={t.nav}
+  esHref={esHref}
+  enHref={enHref}
+  back={{ href: backHref, label: t.caseDetail.back }}
+>
+  <CaseHero title={d.title} lead={d.lead} tags={d.tags} />
+  <CaseCover coverNote={t.caseDetail.coverNote} />
+  <MetricsStrip metrics={d.metrics} metricLabel={t.caseDetail.metricLabel} />
+  <CaseBody
+    meta={{ client: d.client, year: d.year, role: d.role, scope: d.scope }}
+    metaLabels={t.caseDetail}
+    sections={[d.sections.context, d.sections.work, d.sections.result]}
+  />
+  <CaseNextLink href={nextHref} label={d.nextCaseTitle} nextCaseLabel={t.caseDetail.nextCase} />
+</BaseLayout>

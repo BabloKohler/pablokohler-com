@@ -1,0 +1,176 @@
+---
+import type { UiDictionary } from '../../i18n';
+
+interface Props {
+  t: UiDictionary['caps'];
+}
+const { t } = Astro.props;
+
+// La estrella firma se reserva para el hero y el nav — aquí el número de la
+// tarjeta lleva el acento de color en su lugar (una firma, no un ícono repetido).
+const accentColors = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
+---
+
+<section class="caps" id="servicios">
+  <div class="caps-head">
+    <h2>{t.headline} <span class="accent">{t.headlineAccent}</span></h2>
+    <p class="caps-intro">{t.intro}</p>
+  </div>
+
+  <div class="caps-grid">
+    {
+      t.cards.map((card, i) => (
+        <article class="cap">
+          <div class="cap-top">
+            <span class="cap-num" style={`color:${accentColors[i]}`}>{card.num}</span>
+          </div>
+          <h3>{card.title}</h3>
+          <p class="cap-lead">{card.lead}</p>
+          <p class="cap-desc">{card.desc}</p>
+          <ul class="cap-list">
+            {card.list.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="caps-foot">
+    <p>{t.footText}</p>
+    <a href="#contacto" class="caps-link">{t.footLink}</a>
+  </div>
+</section>
+
+<style>
+  .caps {
+    position: relative;
+    z-index: 2;
+    padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 72px) clamp(60px, 8vh, 100px);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .caps-head {
+    max-width: 640px;
+    margin-bottom: clamp(48px, 7vh, 80px);
+  }
+  .caps h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(30px, 4.4vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .caps-intro {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+
+  .caps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 860px) {
+    .caps-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cap {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 20px;
+    padding: 32px 30px 34px;
+    overflow: hidden;
+    transition:
+      transform 0.22s ease,
+      box-shadow 0.22s ease,
+      border-color 0.22s ease;
+  }
+  .cap:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(20, 18, 16, 0.1);
+    border-color: rgba(232, 93, 42, 0.35);
+  }
+
+  .cap-top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 26px;
+  }
+  .cap-num {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+
+  .cap h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .cap-lead {
+    font-size: 16px;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .cap-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-60);
+    margin-bottom: 22px;
+  }
+  .cap-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .cap-list li {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-60);
+    padding-left: 18px;
+    position: relative;
+  }
+  .cap-list li::before {
+    content: '\2726';
+    position: absolute;
+    left: 0;
+    color: var(--coral);
+    font-size: 11px;
+  }
+
+  .caps-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: clamp(40px, 6vh, 64px);
+    padding-top: 32px;
+    border-top: 1px solid var(--ink-12);
+  }
+  .caps-foot p {
+    font-size: 16px;
+    color: var(--ink-60);
+  }
+  .caps-link {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .caps-link:hover {
+    color: var(--coral);
+  }
+</style>

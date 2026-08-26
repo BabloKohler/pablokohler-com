@@ -1,0 +1,25 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CaseLayout from '../../../layouts/CaseLayout.astro';
+import { getDictionary } from '../../../i18n';
+
+interface Props {
+  entry: CollectionEntry<'cases-es'>;
+}
+
+export async function getStaticPaths() {
+  const entries = await getCollection('cases-es');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const t = getDictionary('es');
+const esHref = `/es/casos/${entry.id}`;
+const enHref = `/en/cases/${entry.id}`;
+const nextHref = `/es/casos/${entry.data.nextCaseSlug}`;
+---
+
+<CaseLayout lang="es" entry={entry} t={t} esHref={esHref} enHref={enHref} nextHref={nextHref} />

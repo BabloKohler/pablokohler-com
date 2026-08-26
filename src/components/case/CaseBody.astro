@@ -1,0 +1,110 @@
+---
+interface Section {
+  kicker: string;
+  title: string;
+  body: string;
+}
+interface Props {
+  meta: { client: string; year: string; role: string; scope: string };
+  metaLabels: { metaClient: string; metaYear: string; metaRole: string; metaScope: string };
+  sections: Section[];
+}
+const { meta, metaLabels, sections } = Astro.props;
+---
+
+<div class="case-body">
+  <div class="meta-side">
+    <div class="meta-item">
+      <div class="ml">{metaLabels.metaClient}</div>
+      <div class="mv">{meta.client}</div>
+    </div>
+    <div class="meta-item">
+      <div class="ml">{metaLabels.metaYear}</div>
+      <div class="mv">{meta.year}</div>
+    </div>
+    <div class="meta-item">
+      <div class="ml">{metaLabels.metaRole}</div>
+      <div class="mv">{meta.role}</div>
+    </div>
+    <div class="meta-item">
+      <div class="ml">{metaLabels.metaScope}</div>
+      <div class="mv">{meta.scope}</div>
+    </div>
+  </div>
+
+  {
+    sections.map((s) => (
+      <div class="case-section">
+        <span class="kicker">{s.kicker}</span>
+        <h2>{s.title}</h2>
+        <p>{s.body}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .case-body {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(24px, 5vw, 72px) clamp(60px, 9vh, 120px);
+  }
+  .meta-side {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 28px;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 18px;
+    margin-bottom: clamp(40px, 6vh, 72px);
+  }
+  .meta-item .ml {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-40);
+    margin-bottom: 6px;
+  }
+  .meta-item .mv {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .case-section {
+    margin-bottom: clamp(40px, 6vh, 72px);
+  }
+  .case-section .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 18px;
+  }
+  .case-section .kicker::before {
+    content: '\2726';
+    font-size: 12px;
+  }
+  .case-section h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(24px, 3vw, 34px);
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    line-height: 1.15;
+  }
+  .case-section p {
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.7;
+    color: var(--ink-60);
+    margin-bottom: 16px;
+  }
+</style>

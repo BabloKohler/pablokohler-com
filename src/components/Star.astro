@@ -1,0 +1,42 @@
+---
+import { STAR_PATH, STAR_VIEWBOX } from './star-path';
+
+interface Props {
+  /** Ancho del SVG (cualquier valor CSS válido: '520px', '46vw', '100%'...) */
+  size?: string;
+  /** Color de relleno — pásale una var(--coral), var(--amber), etc. */
+  color?: string;
+  opacity?: number;
+  /** Rota lento y continuo. Se desactiva solo con prefers-reduced-motion (ver global.css). */
+  spin?: boolean;
+  /** Segundos por vuelta completa. */
+  duration?: number;
+  /** Gira en sentido antihorario — usado para el "eco" del hero. */
+  reverse?: boolean;
+  class?: string;
+}
+
+const {
+  size = '100%',
+  color = 'var(--coral)',
+  opacity = 1,
+  spin = false,
+  duration = 120,
+  reverse = false,
+  class: className,
+} = Astro.props;
+
+const style = [
+  `width:${size}`,
+  `fill:${color}`,
+  `opacity:${opacity}`,
+  spin ? `animation:${reverse ? 'star-spin-rev' : 'star-spin'} ${duration}s linear infinite` : '',
+  spin ? 'transform-origin:center' : '',
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<svg class={className} viewBox={STAR_VIEWBOX} style={style} aria-hidden="true">
+  <path d={STAR_PATH} />
+</svg>

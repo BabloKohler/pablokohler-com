@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pablo Kohler — Hero v3 · Cálido + estrella</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141210;
+    --paper:#FAF6F0;
+    --coral:#E85D2A;
+    --amber:#F5A623;
+    --magenta:#D4356B;
+    --ink-60:rgba(20,18,16,.6);
+    --ink-40:rgba(20,18,16,.4);
+    --ink-12:rgba(20,18,16,.12);
+    --display:"Space Grotesk",system-ui,sans-serif;
+    --body:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:28px clamp(24px,5vw,72px)}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em}
+  .brand .star{color:var(--coral);font-size:20px;display:inline-block;transform:translateY(1px)}
+  .nav-links{display:flex;align-items:center;gap:36px}
+  .nav-links a{color:var(--ink-60);text-decoration:none;font-size:15px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .lang{font-family:var(--mono);font-size:13px;color:var(--ink-40);border:1px solid var(--ink-12);border-radius:100px;padding:5px 12px;display:flex;gap:8px}
+  .lang b{color:var(--ink)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  .hero{position:relative;min-height:calc(100vh - 88px);display:flex;flex-direction:column;justify-content:center;padding:0 clamp(24px,5vw,72px) 60px;overflow:hidden}
+
+  /* Estrella firma — forma sólida, contenida, estática. Vive arriba-derecha como acento. */
+  .star-mark{
+    position:absolute;
+    top:clamp(-40px,-4vw,-20px);
+    right:clamp(-60px,-2vw,20px);
+    width:min(46vw,520px);
+    z-index:0;pointer-events:none;
+    opacity:.14;
+  }
+  .star-mark path{fill:var(--coral)}
+  /* un segundo destello pequeño, más abajo, como eco del motivo */
+  .star-echo{
+    position:absolute;bottom:16%;left:clamp(-30px,2vw,40px);
+    width:clamp(60px,7vw,110px);z-index:0;pointer-events:none;opacity:.10;
+  }
+  .star-echo path{fill:var(--amber)}
+
+  .hero-inner{position:relative;z-index:2;max-width:1000px}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--ink-60);margin-bottom:28px;text-transform:uppercase}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 4px rgba(232,93,42,.15)}
+
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(38px,6.4vw,86px);line-height:1.02;letter-spacing:-.03em;max-width:16ch;margin-bottom:32px}
+  h1 .accent{background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .sub{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--ink-60);max-width:52ch;margin-bottom:40px}
+
+  .cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .btn{font-family:var(--display);font-weight:600;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:100px;transition:transform .18s ease, box-shadow .18s ease;display:inline-flex;align-items:center;gap:10px}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(20,18,16,.22)}
+  .btn-primary .arrow{transition:transform .18s}
+  .btn-primary:hover .arrow{transform:translateX(4px)}
+  .tagline{font-family:var(--mono);font-size:14px;color:var(--ink-40)}
+  .tagline b{color:var(--coral);font-weight:500}
+
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:44px}
+  .chip{font-family:var(--mono);font-size:13px;color:var(--ink-60);border:1px solid var(--ink-12);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--amber)}
+
+  .scroll-cue{position:absolute;bottom:32px;left:clamp(24px,5vw,72px);z-index:2;font-family:var(--mono);font-size:12px;color:var(--ink-40);display:flex;align-items:center;gap:10px;letter-spacing:.05em}
+  .scroll-cue .line{width:36px;height:1px;background:var(--ink-40);position:relative;overflow:hidden}
+  .scroll-cue .line::after{content:"";position:absolute;inset:0;background:var(--coral);animation:slide 2.4s ease-in-out infinite}
+  @keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+  @media(prefers-reduced-motion:reduce){.scroll-cue .line::after{animation:none}}
+
+
+  /* rotación de la estrella firma */
+  @keyframes star-spin{to{transform:rotate(360deg)}}
+  @keyframes star-spin-rev{to{transform:rotate(-360deg)}}
+  .star-mark{animation:star-spin 120s linear infinite;transform-origin:center}
+  .star-echo{animation:star-spin-rev 90s linear infinite;transform-origin:center}
+  @media(prefers-reduced-motion:reduce){
+    .star-mark,.star-echo{animation:none}
+  }
+
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* ===================== NIVEL 2 · CAPACIDADES ===================== */
+  .caps{position:relative;z-index:2;padding:clamp(80px,12vh,140px) clamp(24px,5vw,72px) clamp(60px,8vh,100px);max-width:1200px;margin:0 auto}
+  .caps-head{max-width:640px;margin-bottom:clamp(48px,7vh,80px)}
+  .caps-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--ink-60);margin-bottom:22px;text-transform:uppercase}
+  .caps-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 4px rgba(232,93,42,.15)}
+  .caps h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.4vw,54px);line-height:1.06;letter-spacing:-.03em;margin-bottom:24px}
+  .caps h2 .accent{background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .caps-intro{font-size:clamp(16px,1.4vw,19px);line-height:1.6;color:var(--ink-60)}
+
+  .caps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:860px){.caps-grid{grid-template-columns:1fr}}
+
+  .cap{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--ink-12);
+    border-radius:20px;
+    padding:32px 30px 34px;
+    overflow:hidden;
+    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  .cap:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(20,18,16,.10);border-color:rgba(232,93,42,.35)}
+
+  .cap-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+  .cap-star{width:34px;height:34px}
+  .cap-star path{fill:var(--coral)}
+  .cap:nth-child(2) .cap-star path{fill:var(--amber)}
+  .cap:nth-child(3) .cap-star path{fill:var(--magenta)}
+  .cap-num{font-family:var(--mono);font-size:13px;color:var(--ink-40)}
+
+  .cap h3{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.02em;margin-bottom:8px}
+  .cap-lead{font-size:16px;color:var(--ink);font-weight:500;margin-bottom:14px}
+  .cap-desc{font-size:15px;line-height:1.6;color:var(--ink-60);margin-bottom:22px}
+  .cap-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .cap-list li{font-family:var(--mono);font-size:13px;color:var(--ink-60);padding-left:18px;position:relative}
+  .cap-list li::before{content:"\2726";position:absolute;left:0;color:var(--coral);font-size:11px}
+
+  .caps-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:clamp(40px,6vh,64px);padding-top:32px;border-top:1px solid var(--ink-12)}
+  .caps-foot p{font-size:16px;color:var(--ink-60)}
+  .caps-link{font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink);text-decoration:none;transition:color .18s}
+  .caps-link:hover{color:var(--coral)}
+
+
+  /* ===================== NIVEL 3 · CASOS ===================== */
+  .cases{position:relative;z-index:2;padding:clamp(60px,8vh,100px) clamp(24px,5vw,72px) clamp(80px,12vh,140px);max-width:1200px;margin:0 auto}
+  .cases-head{max-width:680px;margin-bottom:44px}
+  .cases h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.4vw,54px);line-height:1.06;letter-spacing:-.03em;margin-bottom:24px}
+  .cases h2 .accent{background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .cases-grid{display:grid;gap:24px}
+  .cases-grid.two{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:760px){.cases-grid.two{grid-template-columns:1fr}}
+
+  .case{display:flex;flex-direction:column;background:#fff;border:1px solid var(--ink-12);border-radius:20px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease}
+  .case:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(20,18,16,.10);border-color:rgba(232,93,42,.35)}
+
+  .case-media{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#FFE8DC,#FDF0D8);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .case-media.alt{background:linear-gradient(135deg,#FDE4CE,#FBD9E6)}
+  .case-star{width:72px;height:72px;opacity:.5}
+  .case-star path{fill:var(--coral)}
+  .case-media.alt .case-star path{fill:var(--magenta)}
+  .case-tag{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:12px;color:var(--ink-60);background:rgba(255,255,255,.85);padding:5px 10px;border-radius:100px;backdrop-filter:blur(4px)}
+
+  .case-body{padding:26px 26px 28px;display:flex;flex-direction:column;flex:1}
+  .case-metric{display:flex;flex-direction:column;gap:3px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--ink-12)}
+  .metric-descriptor{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em;background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .metric-label{font-size:13px;color:var(--ink-60);font-family:var(--mono)}
+
+  .case-body h3{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.25;letter-spacing:-.02em;margin-bottom:10px}
+  .case-body p{font-size:14px;line-height:1.55;color:var(--ink-60);margin-bottom:18px;flex:1}
+  .case-cta{font-family:var(--display);font-weight:600;font-size:15px;color:var(--coral);transition:transform .18s;display:inline-block}
+  .case:hover .case-cta{transform:translateX(4px)}
+
+  .cases-more{margin-top:32px;text-align:center}
+  .mono-note{font-family:var(--mono);font-size:13px;color:var(--ink-40)}
+
+
+  /* ===================== SOBRE MI ===================== */
+  .about{position:relative;z-index:2;padding:clamp(60px,9vh,110px) clamp(24px,5vw,72px);max-width:1200px;margin:0 auto}
+  .about-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(32px,5vw,72px);align-items:center}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:40px}}
+
+  .about-photo{position:relative;aspect-ratio:4/5;border-radius:20px;overflow:hidden;background:linear-gradient(150deg,#FFE8DC,#FBD9E6 70%,#FDF0D8);display:flex;align-items:center;justify-content:center;border:1px solid var(--ink-12)}
+  .about-star{width:120px;height:120px;opacity:.4}
+  .about-star path{fill:var(--coral)}
+  .photo-note{position:absolute;bottom:14px;font-family:var(--mono);font-size:11px;color:var(--ink-40);letter-spacing:.05em}
+
+  .about-facts{display:flex;gap:12px;margin-top:16px}
+  .fact{flex:1;background:#fff;border:1px solid var(--ink-12);border-radius:14px;padding:14px 12px;text-align:center}
+  .fact-n{display:block;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em;background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .fact-l{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-60);margin-top:4px;line-height:1.3}
+
+  .about-text .caps-eyebrow{margin-bottom:22px}
+  .about-text h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.03em;margin-bottom:24px}
+  .about-text h2 .accent{background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .about-text p{font-size:clamp(15px,1.3vw,17px);line-height:1.65;color:var(--ink-60);margin-bottom:18px}
+  .about-text p strong{color:var(--ink);font-weight:600}
+  .about-cta{display:inline-block;margin-top:10px;font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--coral);padding-bottom:2px;transition:color .18s}
+  .about-cta:hover{color:var(--coral)}
+
+
+  /* ===================== CONTACTO ===================== */
+  .contact{position:relative;background:var(--ink);color:var(--paper);margin-top:clamp(40px,6vh,80px);padding:clamp(70px,10vh,120px) clamp(24px,5vw,72px) 0;overflow:hidden}
+  .contact-star{position:absolute;top:-60px;right:-40px;width:min(40vw,380px);opacity:.08;animation:star-spin 140s linear infinite;transform-origin:center}
+  .contact-star path{fill:var(--amber)}
+  @media(prefers-reduced-motion:reduce){.contact-star{animation:none}}
+  .contact-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto}
+  .caps-eyebrow.light{color:rgba(250,246,240,.6)}
+  .contact h2{font-family:var(--display);font-weight:700;font-size:clamp(32px,5vw,60px);line-height:1.05;letter-spacing:-.03em;margin-bottom:18px}
+  .contact h2 .accent{background:linear-gradient(105deg,var(--coral),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .contact-sub{font-size:clamp(16px,1.4vw,19px);color:rgba(250,246,240,.6);margin-bottom:48px}
+
+  .contact-cols{display:grid;grid-template-columns:1.2fr 0.8fr;gap:clamp(32px,5vw,64px);align-items:start}
+  @media(max-width:820px){.contact-cols{grid-template-columns:1fr;gap:40px}}
+
+  .field{margin-bottom:20px;display:flex;flex-direction:column}
+  .field label{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:8px}
+  .field input,.field textarea{background:rgba(250,246,240,.06);border:1px solid rgba(250,246,240,.15);border-radius:12px;padding:14px 16px;color:var(--paper);font-family:var(--body);font-size:15px;transition:border-color .18s}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--coral)}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(250,246,240,.3)}
+  .form-btn{border:none;cursor:pointer;margin-top:4px}
+  .form-note{display:block;font-family:var(--mono);font-size:11px;color:rgba(250,246,240,.35);margin-top:12px}
+
+  .direct-label{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:16px}
+  .direct-link{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid rgba(250,246,240,.15);border-radius:14px;margin-bottom:12px;text-decoration:none;color:var(--paper);transition:border-color .18s, background .18s}
+  .direct-link:hover{border-color:var(--coral);background:rgba(232,93,42,.08)}
+  .dl-icon{font-size:22px;flex-shrink:0}
+  .direct-link span{font-size:14px;line-height:1.4;color:rgba(250,246,240,.7)}
+  .direct-link strong{color:var(--paper);font-weight:600}
+
+  .site-footer{position:relative;z-index:2;max-width:1100px;margin:clamp(60px,9vh,110px) auto 0;padding:28px 0;border-top:1px solid rgba(250,246,240,.12);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .foot-brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:17px}
+  .foot-brand .star{color:var(--coral)}
+  .foot-tagline{font-family:var(--mono);font-size:13px;color:var(--amber)}
+  .foot-copy{font-family:var(--mono);font-size:12px;color:rgba(250,246,240,.4)}
+
+
+  /* ===================== FRANJA DE LOGOS ===================== */
+  .trust{position:relative;z-index:2;padding:clamp(32px,5vh,56px) 0;border-top:1px solid var(--ink-12);border-bottom:1px solid var(--ink-12)}
+  .trust-label{text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-40);margin-bottom:26px}
+  .marquee{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .marquee-track{display:flex;align-items:center;gap:clamp(40px,6vw,80px);width:max-content;animation:marquee 32s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.marquee-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}}
+  .logo-item{font-family:var(--display);font-weight:600;font-size:clamp(18px,2vw,26px);letter-spacing:-.02em;color:var(--ink-40);white-space:nowrap;transition:color .2s;flex-shrink:0}
+  .logo-item:hover{color:var(--coral)}
+
+</style>
+</head>
+<body>
+  <div class="grain"></div>
+
+  <nav>
+    <div class="brand"><span class="star">&#10040;</span> Pablo Kohler</div>
+    <div class="nav-links">
+      <a href="#">Trabajo</a><a href="#">Servicios</a><a href="#">Sobre m&iacute;</a><a href="#">Blog</a><a href="#">Contacto</a>
+    </div>
+    <div class="lang"><b>ES</b> / <span>EN</span></div>
+  </nav>
+
+  <header class="hero">
+    <svg class="star-mark" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+    <svg class="star-echo" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+
+    <div class="hero-inner">
+      <span class="eyebrow"><span class="dot"></span> Tu socio digital, de principio a fin</span>
+      <h1>Hago crecer tu presencia digital <span class="accent">&mdash; y que funcione de verdad.</span></h1>
+      <p class="sub">Una sola persona para pensar tu estrategia digital y construirla completa. Desde la idea hasta que est&aacute; funcionando.</p>
+      <div class="cta-row">
+        <a href="#" class="btn btn-primary">Hablemos <span class="arrow">&rarr;</span></a>
+        <span class="tagline"><b>You need it,</b> I make it real.</span>
+      </div>
+      <div class="chips">
+        <span class="chip">Sitios que convierten</span>
+        <span class="chip">M&aacute;s visibilidad</span>
+        <span class="chip">Menos trabajo manual</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue"><span class="line"></span> Despl&aacute;zate</div>
+  </header>
+
+  <!-- ===================== FRANJA DE LOGOS (marquesina infinita) ===================== -->
+  <section class="trust">
+    <p class="trust-label">Han confiado en m&iacute;</p>
+    <div class="marquee" aria-label="Clientes">
+      <div class="marquee-track">
+        <span class="logo-item">Vetro Chile</span>
+        <span class="logo-item">Rangitaki</span>
+        <span class="logo-item">Proyecto Alquimia</span>
+        <span class="logo-item">Fundaci&oacute;n Huella Animal</span>
+        <span class="logo-item">UC Chile</span>
+        <span class="logo-item">Docomomo</span>
+        <!-- duplicado para loop continuo -->
+        <span class="logo-item" aria-hidden="true">Vetro Chile</span>
+        <span class="logo-item" aria-hidden="true">Rangitaki</span>
+        <span class="logo-item" aria-hidden="true">Proyecto Alquimia</span>
+        <span class="logo-item" aria-hidden="true">Fundaci&oacute;n Huella Animal</span>
+        <span class="logo-item" aria-hidden="true">UC Chile</span>
+        <span class="logo-item" aria-hidden="true">Docomomo</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== NIVEL 2 · CAPACIDADES ===================== -->
+  <section class="caps">
+    <div class="caps-head">
+      <span class="caps-eyebrow"><span class="dot"></span> Lo que hago</span>
+      <h2>De la idea <span class="accent">hasta que est&aacute; funcionando.</span></h2>
+      <p class="caps-intro">No entrego un plan y te dejo solo. Pienso qu&eacute; necesitas, lo construyo, y me quedo hasta que funciona. Todo en un solo lugar, con una sola persona.</p>
+    </div>
+
+    <div class="caps-grid">
+      <article class="cap">
+        <div class="cap-top">
+          <svg class="cap-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="cap-num">01</span>
+        </div>
+        <h3>Presencia</h3>
+        <p class="cap-lead">Que existas y te encuentren.</p>
+        <p class="cap-desc">Sitios web, landing pages, dise&ntilde;o e identidad visual. La cara digital de tu proyecto, hecha para durar y para convertir.</p>
+        <ul class="cap-list">
+          <li>Sitios web y tiendas</li>
+          <li>Landing pages</li>
+          <li>Dise&ntilde;o e identidad</li>
+        </ul>
+      </article>
+
+      <article class="cap">
+        <div class="cap-top">
+          <svg class="cap-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="cap-num">02</span>
+        </div>
+        <h3>Crecimiento</h3>
+        <p class="cap-lead">Que llegues a m&aacute;s gente.</p>
+        <p class="cap-desc">SEO org&aacute;nico y local, contenido y campa&ntilde;as. Que las personas correctas te encuentren cuando te buscan &mdash; y cuando a&uacute;n no saben que existes.</p>
+        <ul class="cap-list">
+          <li>SEO org&aacute;nico &amp; local</li>
+          <li>Contenido y estrategia</li>
+          <li>Campa&ntilde;as Google Ads</li>
+        </ul>
+      </article>
+
+      <article class="cap">
+        <div class="cap-top">
+          <svg class="cap-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="cap-num">03</span>
+        </div>
+        <h3>Sistemas</h3>
+        <p class="cap-lead">Que funcione sin ti.</p>
+        <p class="cap-desc">Automatizaci&oacute;n, apps a medida e integraciones. El trabajo repetitivo lo hace la m&aacute;quina, para que t&uacute; te dediques a lo que importa.</p>
+        <ul class="cap-list">
+          <li>Automatizaci&oacute;n de procesos</li>
+          <li>Apps y herramientas a medida</li>
+          <li>Integraciones entre sistemas</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="caps-foot">
+      <p>&iquest;Necesitas algo puntual? Tambi&eacute;n tomo proyectos concretos.</p>
+      <a href="#" class="caps-link">Cu&eacute;ntame qu&eacute; necesitas &rarr;</a>
+    </div>
+  </section>
+
+
+  <!-- ===================== NIVEL 3 · CASOS (reales, sin metricas aun) ===================== -->
+  <section class="cases">
+    <div class="cases-head">
+      <span class="caps-eyebrow"><span class="dot"></span> Trabajo seleccionado</span>
+      <h2>Proyectos donde <span class="accent">estrategia y ejecuci&oacute;n</span> vivieron juntas.</h2>
+      <p class="caps-intro">Una muestra de lo que hago. Pronto, cada caso con sus resultados en n&uacute;meros.</p>
+    </div>
+
+    <div class="cases-grid two">
+      <a href="#" class="case">
+        <div class="case-media">
+          <svg class="case-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="case-tag">Dise&ntilde;o Web &middot; Arquitectura</span>
+        </div>
+        <div class="case-body">
+          <div class="case-metric">
+            <span class="metric-descriptor">Conferencia internacional</span>
+            <span class="metric-label">Sitio web de evento acad&eacute;mico global</span>
+          </div>
+          <h3>Docomomo &mdash; Conferencia Internacional de Arquitectura</h3>
+          <p>Dise&ntilde;o y construcci&oacute;n del sitio web para una conferencia internacional de arquitectura moderna. De la estructura a la puesta en l&iacute;nea.</p>
+          <span class="case-cta">Ver el caso &rarr;</span>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="case-media alt">
+          <svg class="case-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="case-tag">Contenido &middot; Divulgaci&oacute;n cient&iacute;fica</span>
+        </div>
+        <div class="case-body">
+          <div class="case-metric">
+            <span class="metric-descriptor">Art&iacute;culo de divulgaci&oacute;n</span>
+            <span class="metric-label">Comunicaci&oacute;n de ciencia compleja a p&uacute;blico amplio</span>
+          </div>
+          <h3>&ldquo;One Health&rdquo;: &iquest;c&oacute;mo prevenir una nueva pandemia?</h3>
+          <p>Investigaci&oacute;n y redacci&oacute;n de un art&iacute;culo que traduce un tema cient&iacute;fico complejo a un lenguaje accesible y movilizador.</p>
+          <span class="case-cta">Ver el caso &rarr;</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="cases-more">
+      <span class="mono-note">Y m&aacute;s casos en camino &mdash; con m&eacute;tricas.</span>
+    </div>
+  </section>
+
+
+  <!-- ===================== NIVEL 3 · SOBRE MI ===================== -->
+  <section class="about">
+    <div class="about-grid">
+      <div class="about-media">
+        <div class="about-photo">
+          <svg class="about-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+          <span class="photo-note">tu foto aqu&iacute;</span>
+        </div>
+        <div class="about-facts">
+          <div class="fact"><span class="fact-n">9+</span><span class="fact-l">a&ntilde;os de experiencia</span></div>
+          <div class="fact"><span class="fact-n">ES/EN</span><span class="fact-l">biling&uuml;e</span></div>
+          <div class="fact"><span class="fact-n">CL &rarr; AU</span><span class="fact-l">Chile, rumbo a Australia</span></div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <span class="caps-eyebrow"><span class="dot"></span> Sobre m&iacute;</span>
+        <h2>Trabajo donde <span class="accent">la estrategia se encuentra con la ejecuci&oacute;n.</span></h2>
+        <p>Soy especialista en comunicaciones y marketing digital. Durante m&aacute;s de 9 a&ntilde;os he ayudado a universidades, emprendedores acad&eacute;micos y organizaciones a convertir sus objetivos de comunicaci&oacute;n en resultados medibles &mdash; dise&ntilde;ando campa&ntilde;as basadas en datos y construyendo los sistemas digitales que las hacen funcionar.</p>
+        <p>No solo planifico campa&ntilde;as: <strong>las construyo</strong>. Mi trabajo abarca estrategia de contenido y comunicaciones, automatizaci&oacute;n de marketing, anal&iacute;tica y desarrollo web pr&aacute;ctico &mdash; uniendo el mensaje con la tecnolog&iacute;a que hay detr&aacute;s.</p>
+        <p>Lo que me mueve es el <strong>prop&oacute;sito</strong>: me comprometo especialmente con organizaciones que trabajan en ciencia, educaci&oacute;n, bienestar animal e impacto basado en evidencia.</p>
+        <a href="#" class="about-cta">Conversemos &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== CONTACTO ===================== -->
+  <section class="contact">
+    <svg class="contact-star" viewBox="0 0 896 937" aria-hidden="true"><path d="M897.000000,594.000000 
+	C897.000000,599.688049 897.000000,605.376038 896.659302,611.626587 
+	C895.806702,613.187500 895.194702,614.147766 894.797974,615.190002 
+	C890.444885,626.625610 882.601501,634.492126 870.863892,638.112854 
+	C857.533875,642.224731 844.118469,646.059082 830.749268,650.044678 
+	C807.510010,656.972839 784.196655,663.667114 761.071289,670.957031 
+	C745.707947,675.800110 736.392883,689.337585 736.755432,704.935181 
+	C737.087708,719.228699 737.683167,733.516663 737.946533,747.811096 
+	C738.388000,771.766663 738.258789,795.739502 739.109192,819.678833 
+	C739.999146,844.729858 713.909485,861.878418 692.095581,854.158203 
+	C684.262939,851.386169 676.375366,848.769470 668.540771,846.002563 
+	C641.435425,836.429749 614.299316,826.941284 587.259827,817.185242 
+	C569.401489,810.741699 553.109131,815.315552 542.390015,830.414429 
+	C537.774963,836.915283 533.413940,843.596069 528.907410,850.174377 
+	C512.852173,873.610840 496.812378,897.057983 480.702606,920.456909 
+	C476.117310,927.117004 470.645538,932.843018 462.941406,936.017456 
+	C462.155426,936.341248 461.640656,937.323364 461.000000,938.000000 
+	C452.979095,938.000000 444.958191,938.000000 436.409821,937.658752 
+	C434.850708,936.521118 433.922241,935.504761 432.770416,934.964722 
+	C426.087250,931.831116 421.271484,926.829102 417.134552,920.778625 
+	C396.219177,890.188538 375.140869,859.709717 354.088898,829.213074 
+	C345.732330,817.107544 330.061951,811.209595 316.351776,815.477112 
+	C305.247589,818.933411 294.336456,823.013794 283.358063,826.869629 
+	C257.482056,835.957825 231.745255,845.465698 205.707672,854.063477 
+	C184.099884,861.198547 162.808792,848.345093 159.008759,825.792969 
+	C157.573578,817.275452 158.829025,808.289185 159.003586,799.519470 
+	C159.258392,786.717590 159.695938,773.919312 159.962601,761.117554 
+	C160.350708,742.486023 160.811066,723.853882 160.950241,705.219849 
+	C161.073441,688.728638 150.772430,674.927612 134.982178,670.226440 
+	C100.428215,659.938843 65.889824,649.591553 31.229378,639.672974 
+	C18.235714,635.954651 8.474792,629.075012 3.158923,616.411560 
+	C2.764239,615.471313 1.734504,614.797607 0.999993,614.000000 
+	C1.000000,606.979065 1.000000,599.958069 1.344482,592.403931 
+	C3.844033,588.379639 5.724024,584.679199 8.197084,581.430237 
+	C31.029036,551.434814 53.967754,521.520691 76.866150,491.575836 
+	C87.284576,477.951385 86.966240,460.323212 76.838554,447.303314 
+	C55.021240,419.255524 33.477329,390.994537 11.916177,362.748535 
+	C8.044679,357.676697 4.627144,352.258331 1.000004,347.000000 
+	C1.000000,339.979034 1.000000,332.958099 1.325665,325.352783 
+	C2.653574,323.086029 3.793340,321.469452 4.634980,319.710236 
+	C8.976204,310.636108 16.166349,304.577606 25.475000,301.500122 
+	C38.239338,297.280182 51.253380,293.818939 64.141411,289.968933 
+	C88.487030,282.696228 112.897797,275.627716 137.127441,267.985901 
+	C151.764435,263.369507 161.070679,249.939056 160.949707,234.647614 
+	C160.847153,221.684967 160.279480,208.726700 160.012527,195.764542 
+	C159.622147,176.808899 159.319244,157.851440 158.967743,138.894974 
+	C158.949265,137.898361 158.751038,136.902802 158.762802,135.908249 
+	C158.862549,127.478149 157.957108,118.876205 159.325684,110.654129 
+	C162.241547,93.136292 182.578949,79.730110 199.993607,83.994141 
+	C212.527832,87.063194 224.681824,91.752632 236.907120,96.002045 
+	C262.956757,105.056686 288.842224,114.595184 314.996704,123.331474 
+	C328.000305,127.675026 340.339447,125.025108 349.647675,114.597206 
+	C356.354889,107.083153 362.038422,98.610741 367.790558,90.297333 
+	C384.045502,66.804558 400.049316,43.138153 416.265808,19.618553 
+	C421.125671,12.570013 426.886169,6.393709 435.059174,2.983174 
+	C435.845123,2.655213 436.359528,1.676577 437.000000,0.999999 
+	C444.354248,1.000000 451.708496,1.000000 459.609131,1.339525 
+	C462.152222,2.809102 464.333252,3.706931 466.108490,5.115955 
+	C470.227417,8.385135 475.078003,11.250250 478.005005,15.420990 
+	C500.056702,46.842979 521.724548,78.534515 543.489868,110.157257 
+	C551.314392,121.525398 566.612183,127.976868 579.851807,124.040428 
+	C594.646484,119.641632 609.091736,114.062569 623.671997,108.948456 
+	C644.376892,101.686073 665.096741,94.464111 685.746826,87.048332 
+	C693.668701,84.203453 701.449280,82.439247 710.057739,83.878555 
+	C725.211731,86.412262 739.058594,101.579895 738.947937,116.940742 
+	C738.829285,133.409363 738.298340,149.874680 738.008423,166.342514 
+	C737.633484,187.641525 737.320129,208.941635 736.974731,230.241180 
+	C736.961243,231.073395 736.905640,231.905777 736.844727,232.736252 
+	C736.140503,242.335968 739.248779,250.524246 745.347778,257.949188 
+	C752.425110,266.565216 762.510437,268.921936 772.354553,271.862366 
+	C804.831116,281.563171 837.331421,291.184723 869.827942,300.818542 
+	C881.817200,304.372833 889.963501,311.995941 894.438538,323.664948 
+	C894.919678,324.919556 896.128662,325.895050 897.000000,327.000000 
+	C897.000000,332.688049 897.000000,338.376068 896.657410,344.616119 
+	C893.732788,349.752350 891.638062,354.705566 888.490784,358.861755 
+	C865.740173,388.905487 842.744873,418.763702 819.896240,448.733429 
+	C810.470215,461.097229 810.569885,478.131470 819.941650,490.497925 
+	C823.651001,495.392731 827.363647,500.285095 831.088928,505.167725 
+	C842.267517,519.818848 853.717102,534.272461 864.560669,549.167358 
+	C875.065796,563.597656 888.329590,576.108826 895.420959,592.955566 
+	C895.624695,593.439453 896.459473,593.657776 897.000000,594.000000 
+z"/></svg>
+    <div class="contact-inner">
+      <span class="caps-eyebrow light"><span class="dot"></span> Hablemos</span>
+      <h2>&iquest;Tienes algo en mente?<br><span class="accent">Hag&aacute;moslo realidad.</span></h2>
+      <p class="contact-sub">Cu&eacute;ntame qu&eacute; necesitas. Respondo en menos de 24 horas h&aacute;biles.</p>
+
+      <div class="contact-cols">
+        <div class="contact-form">
+          <div class="field"><label>Nombre</label><input type="text" placeholder="Tu nombre"></div>
+          <div class="field"><label>Email</label><input type="email" placeholder="tu@correo.com"></div>
+          <div class="field"><label>&iquest;En qu&eacute; te ayudo?</label><textarea rows="4" placeholder="Cont&aacute;ndome brevemente tu proyecto o idea..."></textarea></div>
+          <button class="btn-primary form-btn" type="button">Enviar mensaje &rarr;</button>
+          <span class="form-note">El formulario se conecta con Formspree al construir el sitio.</span>
+        </div>
+
+        <div class="contact-direct">
+          <p class="direct-label">O directamente:</p>
+          <a href="https://calendly.com/pablokohlerlara/30min" class="direct-link">
+            <span class="dl-icon">&#128197;</span>
+            <span><strong>Agenda una reuni&oacute;n</strong><br>30 min por Calendly</span>
+          </a>
+          <a href="https://www.linkedin.com/in/pablo-kohler/" class="direct-link">
+            <span class="dl-icon">&#128188;</span>
+            <span><strong>LinkedIn</strong><br>Conectemos profesionalmente</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="foot-brand"><span class="star">&#10040;</span> Pablo Kohler</div>
+      <span class="foot-tagline">You need it, I make it real.</span>
+      <span class="foot-copy">&copy; 2026 Pablo Kohler &middot; Santiago &rarr; Australia</span>
+    </footer>
+  </section>
+
+</body>
+</html>

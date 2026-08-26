@@ -1,0 +1,100 @@
+---
+import type { UiDictionary } from '../../i18n';
+
+interface Props {
+  t: UiDictionary['formats'];
+}
+const { t } = Astro.props;
+
+// Tamaño y color de cada tag son puramente presentacionales (no traducibles), por eso
+// viven aquí y no en el diccionario. El patrón es fijo, no aleatorio, para que la nube
+// se vea igual en cada carga de página.
+const SIZES = ['lg', 'sm', 'md', 'lg', 'sm', 'md', 'sm', 'lg', 'sm', 'md', 'sm', 'lg'];
+const COLORS = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
+const tags = t.tags.map((label, i) => ({
+  label,
+  size: SIZES[i % SIZES.length],
+  color: COLORS[i % COLORS.length],
+}));
+---
+
+<section class="formats" id="formatos">
+  <div class="formats-head">
+    <h2>{t.headline} <span class="accent">{t.headlineAccent}</span></h2>
+    <p class="formats-intro">{t.intro}</p>
+  </div>
+  <div class="tag-cloud">
+    {
+      tags.map((tag) => (
+        <span class={`tag tag--${tag.size}`} style={`--tag-color:${tag.color}`}>
+          {tag.label}
+        </span>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .formats {
+    position: relative;
+    z-index: 2;
+    padding: clamp(60px, 8vh, 100px) clamp(24px, 5vw, 72px);
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .formats-head {
+    max-width: 620px;
+    margin: 0 auto clamp(40px, 6vh, 64px);
+  }
+  .formats h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+  .formats-intro {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px 14px;
+  }
+  .tag {
+    font-family: var(--display);
+    font-weight: 600;
+    border: 1.5px solid var(--tag-color);
+    color: var(--tag-color);
+    border-radius: 100px;
+    white-space: nowrap;
+    transition:
+      transform 0.18s ease,
+      background 0.18s ease,
+      color 0.18s ease;
+  }
+  .tag:hover {
+    background: var(--tag-color);
+    color: var(--paper);
+    transform: translateY(-2px);
+  }
+  .tag--sm {
+    font-size: 14px;
+    padding: 7px 16px;
+  }
+  .tag--md {
+    font-size: 16px;
+    padding: 9px 20px;
+  }
+  .tag--lg {
+    font-size: 20px;
+    padding: 11px 24px;
+  }
+</style>

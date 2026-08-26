@@ -1,0 +1,84 @@
+---
+interface Metric {
+  value: string | null;
+  label: string;
+}
+interface Props {
+  metrics: Metric[];
+  metricLabel: string;
+}
+const { metrics, metricLabel } = Astro.props;
+---
+
+<div class="metrics-strip">
+  <div class="metrics-inner">
+    {
+      metrics.map((m) => (
+        <div class="metric-box">
+          {m.value === null && <span class="metric-hueco">{metricLabel}</span>}
+          <div class="metric-big">{m.value ?? '—'}</div>
+          <div class="metric-cap">{m.label}</div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .metrics-strip {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto clamp(50px, 7vh, 90px);
+    padding: 0 clamp(24px, 5vw, 72px);
+  }
+  .metrics-inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 720px) {
+    .metrics-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+  .metric-box {
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 18px;
+    padding: 28px 26px;
+    text-align: center;
+    position: relative;
+  }
+  .metric-hueco {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--ink-40);
+    background: var(--paper);
+    border: 1px dashed var(--ink-12);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+  .metric-big {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(105deg, var(--coral), var(--amber));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .metric-cap {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-60);
+    line-height: 1.4;
+  }
+</style>

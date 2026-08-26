@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/home/Hero.astro';
+import TrustMarquee from '../../components/home/TrustMarquee.astro';
+import Capabilities from '../../components/home/Capabilities.astro';
+import Formats from '../../components/home/Formats.astro';
+import Cases from '../../components/home/Cases.astro';
+import About from '../../components/home/About.astro';
+import Contact from '../../components/home/Contact.astro';
+import { getDictionary } from '../../i18n';
+
+const t = getDictionary('en');
+
+const order = ['docomomo', 'one-health'];
+const allCases = await getCollection('cases-en');
+const cases = order
+  .map((slug) => allCases.find((c) => c.id === slug))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
+---
+
+<BaseLayout
+  lang="en"
+  title="Pablo Kohler: Digital Marketing & Communications Consultant"
+  description="One person to think through your digital strategy and build all of it: websites, SEO, and automation."
+  navDict={t.nav}
+  esHref="/es/"
+  enHref="/en/"
+>
+  <Hero t={t.hero} />
+  <TrustMarquee t={t.trust} />
+  <Capabilities t={t.caps} />
+  <Formats t={t.formats} />
+  <Cases t={t.cases} lang="en" cases={cases} />
+  <About t={t.about} />
+  <Contact t={t.contact} />
+</BaseLayout>

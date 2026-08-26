@@ -1,0 +1,71 @@
+---
+import Nav from '../components/Nav.astro';
+import type { Lang, UiDictionary } from '../i18n';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  navDict: UiDictionary['nav'];
+  /** Rutas absolutas de esta misma página en cada idioma, para hreflang + el switch de idioma. */
+  esHref: string;
+  enHref: string;
+  back?: { href: string; label: string };
+}
+
+const { lang, title, description, navDict, esHref, enHref, back } = Astro.props;
+const otherLangHref = lang === 'es' ? enHref : esHref;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(lang === 'es' ? esHref : enHref, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(esHref, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(enHref, Astro.site)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="grain"></div>
+    <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} />
+    <slot />
+
+    <script>
+      document.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('.btn-primary');
+        if (!btn) return;
+        btn.classList.remove('pop');
+        // Fuerza un reflow para poder reiniciar la animación si se hace clic varias veces seguidas.
+        void (btn as HTMLElement).offsetWidth;
+        btn.classList.add('pop');
+        setTimeout(() => btn.classList.remove('pop'), 320);
+      });
+
+      // El sol siempre se asoma centrado por abajo, con un color cálido distinto cada vez
+      // que el mouse entra al botón (nunca repite el de la vez anterior). Al salir del
+      // hover retrocede por el mismo camino y queda oculto bajo el botón.
+      const WARM_COLORS = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
+      let lastSunColor = '';
+      document.querySelectorAll<HTMLElement>('.btn-primary').forEach((btn) => {
+        btn.addEventListener('mouseenter', () => {
+          const colorOptions = WARM_COLORS.filter((c) => c !== lastSunColor);
+          const nextColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+          lastSunColor = nextColor;
+          btn.style.setProperty('--sun-color', nextColor);
+        });
+      });
+    </script>
+  </body>
+</html>

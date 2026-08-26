@@ -1,0 +1,43 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  nextCaseLabel: string;
+}
+const { href, label, nextCaseLabel } = Astro.props;
+---
+
+<div class="case-next">
+  <p>{nextCaseLabel}</p>
+  <a href={href}>{label} →</a>
+</div>
+
+<style>
+  .case-next {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(40px, 6vh, 72px) clamp(24px, 5vw, 72px);
+    border-top: 1px solid var(--ink-12);
+    text-align: center;
+  }
+  .case-next p {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-40);
+    margin-bottom: 14px;
+  }
+  .case-next a {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(20px, 2.5vw, 28px);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: color 0.18s;
+  }
+  .case-next a:hover {
+    color: var(--coral);
+  }
+</style>
