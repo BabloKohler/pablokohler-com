@@ -1,0 +1,60 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/es/", "permanent": true },
+    {
+      "source": "/docomomo-web-design-for-an-international-architecture-conference/",
+      "destination": "/es/casos/docomomo",
+      "permanent": true
+    },
+    {
+      "source": "/one-health-article/",
+      "destination": "/es/casos/one-health",
+      "permanent": true
+    },
+    {
+      "source": "/clients/docomomo/",
+      "destination": "/es/casos/docomomo",
+      "permanent": true
+    },
+    {
+      "source": "/clients/proyecto-alquimia/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/clients/vetro-chile/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/clients/educacion-patrimonial-uc/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/clients/huella-animal/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/clients/rangitaki-tour/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/category/web-design/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/category/writing/",
+      "destination": "/es/#trabajo",
+      "permanent": true
+    },
+    {
+      "source": "/author/pablo-kohler/",
+      "destination": "/es/#sobre-mi",
+      "permanent": true
+    }
+  ]
+}

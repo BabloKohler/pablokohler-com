@@ -11,7 +11,6 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-  redirects: {
-    '/': '/es/',
-  },
+  // El redirect "/" → "/es/" y todos los redirects 301 de las URLs viejas de
+  // WordPress viven en vercel.json (301 reales a nivel de edge, no meta-refresh).
 });
