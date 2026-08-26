@@ -6,17 +6,22 @@ interface Props {
 }
 const { t } = Astro.props;
 
-// Texto por ahora — cuando tengas los PNG de los logos (están en el WordPress actual),
-// se reemplaza cada <span class="logo-item"> por un <img>.
-const clients = ['Vetro Chile', 'Rangitaki', 'Proyecto Alquimia', 'Fundación Huella Animal', 'UC Chile', 'Docomomo'];
+const clients = [
+  { name: 'Vetro Chile', logo: '/logos/vetro-chile.png' },
+  { name: 'Rangitaki', logo: '/logos/rangitaki.png' },
+  { name: 'Proyecto Alquimia', logo: '/logos/alquimia.png' },
+  { name: 'Fundación Huella Animal', logo: '/logos/huella-animal.png' },
+  { name: 'UC Chile', logo: '/logos/uc.png' },
+  { name: 'Docomomo', logo: '/logos/docomomo.png' },
+];
 ---
 
 <section class="trust">
   <p class="trust-label">{t.label}</p>
   <div class="marquee" aria-label="Clientes">
     <div class="marquee-track">
-      {clients.map((c) => <span class="logo-item">{c}</span>)}
-      {clients.map((c) => <span class="logo-item" aria-hidden="true">{c}</span>)}
+      {clients.map((c) => <img class="logo-item" src={c.logo} alt={c.name} loading="lazy" />)}
+      {clients.map((c) => <img class="logo-item" src={c.logo} alt="" aria-hidden="true" loading="lazy" />)}
     </div>
   </div>
 </section>
@@ -69,16 +74,14 @@ const clients = ['Vetro Chile', 'Rangitaki', 'Proyecto Alquimia', 'Fundación Hu
     }
   }
   .logo-item {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: clamp(18px, 2vw, 26px);
-    letter-spacing: -0.02em;
-    color: var(--ink-40);
-    white-space: nowrap;
-    transition: color 0.2s;
+    height: clamp(32px, 4vw, 44px);
+    width: auto;
+    object-fit: contain;
     flex-shrink: 0;
+    filter: grayscale(1) opacity(0.55);
+    transition: filter 0.2s;
   }
   .logo-item:hover {
-    color: var(--coral);
+    filter: grayscale(0) opacity(1);
   }
 </style>
