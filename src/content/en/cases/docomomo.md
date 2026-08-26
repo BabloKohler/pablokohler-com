@@ -10,6 +10,7 @@ cardMetricDescriptor: "International conference"
 cardMetricLabel: "Website for a global academic event"
 cardDescription: "Design and build of the website for an international modern architecture conference. From structure to launch."
 coverVariant: "default"
+coverImage: "/cases/docomomo-cover.webp"
 metrics:
   - value: "512"
     label: "Abstract submissions received"

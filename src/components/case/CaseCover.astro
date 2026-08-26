@@ -3,14 +3,23 @@ import Star from '../Star.astro';
 
 interface Props {
   coverNote: string;
+  coverImage?: string;
 }
-const { coverNote } = Astro.props;
+const { coverNote, coverImage } = Astro.props;
 ---
 
 <div class="case-cover">
   <div class="cover-inner">
-    <Star class="cstar" opacity={0.45} spin duration={120} />
-    <span class="cover-note">{coverNote}</span>
+    {
+      coverImage ? (
+        <img class="cover-img" src={coverImage} alt="" />
+      ) : (
+        <>
+          <Star class="cstar" opacity={0.45} spin duration={120} />
+          <span class="cover-note">{coverNote}</span>
+        </>
+      )
+    }
   </div>
 </div>
 
@@ -36,6 +45,11 @@ const { coverNote } = Astro.props;
   .cover-inner :global(.cstar) {
     width: 110px;
     height: 110px;
+  }
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .cover-note {
     position: absolute;

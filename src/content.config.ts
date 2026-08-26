@@ -17,6 +17,7 @@ const caseSchema = z.object({
   cardMetricLabel: z.string(),
   cardDescription: z.string(),
   coverVariant: z.enum(['default', 'alt']).default('default'),
+  coverImage: z.string().optional(),
   metrics: z
     .array(z.object({ value: z.string().nullable(), label: z.string() }))
     .length(3),

@@ -10,6 +10,7 @@ cardMetricDescriptor: "Artículo de divulgación"
 cardMetricLabel: "Comunicación de ciencia compleja a público amplio"
 cardDescription: "Investigación y redacción de un artículo que traduce un tema científico complejo a un lenguaje accesible y movilizador."
 coverVariant: "alt"
+coverImage: "/cases/one-health-cover.jpg"
 metrics:
   - value: null
     label: "Lecturas del artículo"

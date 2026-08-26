@@ -10,6 +10,7 @@ cardMetricDescriptor: "Science communication piece"
 cardMetricLabel: "Complex science for a general audience"
 cardDescription: "Research and writing for an article that translates a complex scientific topic into language that's accessible and compelling."
 coverVariant: "alt"
+coverImage: "/cases/one-health-cover.jpg"
 metrics:
   - value: null
     label: "Article reads"

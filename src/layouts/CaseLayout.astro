@@ -32,7 +32,7 @@ const backHref = `/${lang}/#trabajo`;
   back={{ href: backHref, label: t.caseDetail.back }}
 >
   <CaseHero title={d.title} lead={d.lead} tags={d.tags} />
-  <CaseCover coverNote={t.caseDetail.coverNote} />
+  <CaseCover coverNote={t.caseDetail.coverNote} coverImage={d.coverImage} />
   <MetricsStrip metrics={d.metrics} metricLabel={t.caseDetail.metricLabel} />
   <CaseBody
     meta={{ client: d.client, year: d.year, role: d.role, scope: d.scope }}

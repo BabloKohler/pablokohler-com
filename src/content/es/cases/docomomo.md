@@ -10,6 +10,7 @@ cardMetricDescriptor: "Conferencia internacional"
 cardMetricLabel: "Sitio web de evento académico global"
 cardDescription: "Diseño y construcción del sitio web para una conferencia internacional de arquitectura moderna. De la estructura a la puesta en línea."
 coverVariant: "default"
+coverImage: "/cases/docomomo-cover.webp"
 metrics:
   - value: "512"
     label: "Postulaciones de resúmenes recibidas"
