@@ -13,7 +13,7 @@ export const es = {
   },
   hero: {
     headline: 'Hago crecer tu presencia digital',
-    headlineAccent: ', para que funcione de verdad.',
+    headlineAccent: ', y que funcione de verdad.',
     sub: 'Una sola persona para pensar tu estrategia digital y construirla completa. Desde la idea hasta que está funcionando.',
     ctaPrimary: 'Hablemos',
   },

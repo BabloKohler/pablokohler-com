@@ -14,14 +14,24 @@ const clients = [
   { name: 'UC Chile', logo: '/logos/uc.png' },
   { name: 'Docomomo', logo: '/logos/docomomo.png' },
 ];
+
+// El track se repite 8 veces (no 2) para que el set nunca sea más angosto que la
+// pantalla — si lo fuera, después de una vuelta se ve un hueco vacío antes de que
+// vuelva a aparecer el siguiente set. Con 8 copias el keyframe avanza -12.5% (1/8).
+const repeatedSets = Array.from({ length: 8 }, (_, i) => i);
 ---
 
 <section class="trust">
   <p class="trust-label">{t.label}</p>
   <div class="marquee" aria-label="Clientes">
     <div class="marquee-track">
-      {clients.map((c) => <img class="logo-item" src={c.logo} alt={c.name} loading="lazy" />)}
-      {clients.map((c) => <img class="logo-item" src={c.logo} alt="" aria-hidden="true" loading="lazy" />)}
+      {
+        repeatedSets.map((setIndex) =>
+          clients.map((c) => (
+            <img class="logo-item" src={c.logo} alt={setIndex === 0 ? c.name : ''} aria-hidden={setIndex === 0 ? undefined : 'true'} />
+          )),
+        )
+      }
     </div>
   </div>
 </section>
@@ -50,9 +60,9 @@ const clients = [
   .marquee-track {
     display: flex;
     align-items: center;
-    gap: clamp(40px, 6vw, 80px);
+    gap: clamp(56px, 6vw, 100px);
     width: max-content;
-    animation: marquee 32s linear infinite;
+    animation: marquee 60s linear infinite;
   }
   .marquee:hover .marquee-track {
     animation-play-state: paused;
@@ -62,7 +72,7 @@ const clients = [
       transform: translateX(0);
     }
     to {
-      transform: translateX(-50%);
+      transform: translateX(-12.5%);
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -74,7 +84,7 @@ const clients = [
     }
   }
   .logo-item {
-    height: clamp(32px, 4vw, 44px);
+    height: clamp(64px, 8vw, 88px);
     width: auto;
     object-fit: contain;
     flex-shrink: 0;
