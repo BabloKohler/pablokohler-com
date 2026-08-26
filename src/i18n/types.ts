@@ -50,7 +50,6 @@ export interface UiDictionary {
     headlineAccent: string;
     paragraphs: [string, string, string];
     facts: [{ n: string; l: string }, { n: string; l: string }, { n: string; l: string }];
-    photoNote: string;
     cta: string;
   };
   contact: {

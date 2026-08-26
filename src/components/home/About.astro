@@ -1,5 +1,4 @@
 ---
-import Star from '../Star.astro';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
@@ -15,8 +14,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   <div class="about-grid">
     <div class="about-media">
       <div class="about-photo">
-        <Star class="about-star" opacity={0.4} />
-        <span class="photo-note">{t.photoNote}</span>
+        <img src="/about/pablo-kohler.jpg" alt="Pablo Kohler" />
       </div>
       <div class="about-facts">
         {
@@ -64,23 +62,13 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     aspect-ratio: 4 / 5;
     border-radius: 20px;
     overflow: hidden;
-    background: linear-gradient(150deg, #ffe8dc, #fbd9e6 70%, #fdf0d8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border: 1px solid var(--ink-12);
   }
-  .about-photo :global(.about-star) {
-    width: 120px;
-    height: 120px;
-  }
-  .photo-note {
-    position: absolute;
-    bottom: 14px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ink-40);
-    letter-spacing: 0.05em;
+  .about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .about-facts {

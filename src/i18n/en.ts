@@ -92,7 +92,6 @@ export const en = {
       { n: 'ES/EN', l: 'bilingual' },
       { n: 'CL → AU', l: 'Chile, heading to Australia' },
     ],
-    photoNote: 'your photo here',
     cta: "Let's talk →",
   },
   contact: {

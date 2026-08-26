@@ -90,7 +90,6 @@ export const es = {
       { n: 'ES/EN', l: 'bilingüe' },
       { n: 'CL → AU', l: 'Chile, rumbo a Australia' },
     ],
-    photoNote: 'tu foto aquí',
     cta: 'Hablemos →',
   },
   contact: {
