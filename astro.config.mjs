@@ -1,9 +1,12 @@
 import { defineConfig } from 'astro/config';
 
-// Sitio de staging por ahora — se actualiza a https://pablokohler.com
-// cuando el DNS apunte a Vercel (ver LEEME-PRIMERO.md).
+import sitemap from '@astrojs/sitemap';
+
 export default defineConfig({
-  site: 'https://pablokohler.vercel.app',
+  site: 'https://pablokohler.com',
+
+  // El redirect "/" → "/es/" y todos los redirects 301 de las URLs viejas de
+  // WordPress viven en vercel.json (301 reales a nivel de edge, no meta-refresh).
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],
@@ -11,6 +14,6 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-  // El redirect "/" → "/es/" y todos los redirects 301 de las URLs viejas de
-  // WordPress viven en vercel.json (301 reales a nivel de edge, no meta-refresh).
+
+  integrations: [sitemap()],
 });

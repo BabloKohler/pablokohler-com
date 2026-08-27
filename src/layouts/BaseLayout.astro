@@ -1,5 +1,7 @@
 ---
+import { getImage } from 'astro:assets';
 import Nav from '../components/Nav.astro';
+import portrait from '../assets/about/pablo-kohler.jpg';
 import type { Lang, UiDictionary } from '../i18n';
 import '../styles/global.css';
 
@@ -16,6 +18,46 @@ interface Props {
 
 const { lang, title, description, navDict, esHref, enHref, back } = Astro.props;
 const otherLangHref = lang === 'es' ? enHref : esHref;
+const canonicalHref = new URL(lang === 'es' ? esHref : enHref, Astro.site);
+
+// Misma foto que "Sobre mí", reescalada para vista previa en redes (og:image / Twitter card).
+const ogImage = await getImage({ src: portrait, width: 1200, format: 'jpg' });
+const ogImageUrl = new URL(ogImage.src, Astro.site);
+
+// Datos estructurados: quién soy (para búsquedas de mi nombre) + el servicio y sus mercados
+// (Chile, Latinoamérica y Australia — hacia donde me estoy relocalizando).
+const jobTitle =
+  lang === 'es' ? 'Consultor de marketing digital y comunicaciones' : 'Digital marketing & communications consultant';
+const serviceDescription =
+  lang === 'es'
+    ? 'Estrategia digital y construcción técnica —sitios web, SEO y automatización— para clientes en Chile, Latinoamérica y Australia.'
+    : 'Digital strategy and technical execution — websites, SEO, and automation — for clients across Latin America and Australia.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${Astro.site}#pablo-kohler`,
+      name: 'Pablo Kohler',
+      url: String(Astro.site),
+      image: String(ogImageUrl),
+      jobTitle,
+      sameAs: ['https://www.linkedin.com/in/pablo-kohler/'],
+    },
+    {
+      '@type': 'Service',
+      serviceType: jobTitle,
+      description: serviceDescription,
+      provider: { '@id': `${Astro.site}#pablo-kohler` },
+      areaServed: [
+        { '@type': 'Country', name: 'Chile' },
+        { '@type': 'Place', name: 'Latin America' },
+        { '@type': 'Country', name: 'Australia' },
+      ],
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -26,9 +68,25 @@ const otherLangHref = lang === 'es' ? enHref : esHref;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={new URL(lang === 'es' ? esHref : enHref, Astro.site)} />
+    <link rel="canonical" href={canonicalHref} />
     <link rel="alternate" hreflang="es" href={new URL(esHref, Astro.site)} />
     <link rel="alternate" hreflang="en" href={new URL(enHref, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(esHref, Astro.site)} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pablo Kohler" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalHref} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_CL' : 'en_AU'} />
+    <meta property="og:locale:alternate" content={lang === 'es' ? 'en_AU' : 'es_CL'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
