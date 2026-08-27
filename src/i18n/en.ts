@@ -83,7 +83,7 @@ export const en = {
     headline: 'I work where',
     headlineAccent: 'strategy meets execution.',
     paragraphs: [
-      "I'm a communications and digital marketing specialist. For more than 9 years I've helped universities, academic founders, and organizations turn their communication goals into measurable results. I design data-driven campaigns and build the digital systems that make them work.",
+      "I'm a communications and digital marketing specialist. For more than 9 years I've helped universities, academic founders, and organizations across Chile and Latin America turn their communication goals into measurable results — and I'm now getting ready to do the same from Australia. I design data-driven campaigns and build the digital systems that make them work.",
       "I don't just plan campaigns: **I build them**. My work spans content and communications strategy, marketing automation, analytics, and hands-on web development, connecting the message with the technology behind it.",
       "What drives me is **purpose**: I'm especially committed to organizations working in science, education, animal welfare, and evidence-based impact.",
     ],

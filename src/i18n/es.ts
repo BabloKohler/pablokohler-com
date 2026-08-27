@@ -81,7 +81,7 @@ export const es = {
     headline: 'Trabajo donde',
     headlineAccent: 'la estrategia se encuentra con la ejecución.',
     paragraphs: [
-      'Soy especialista en comunicaciones y marketing digital. Durante más de 9 años he ayudado a universidades, emprendedores académicos y organizaciones a convertir sus objetivos de comunicación en resultados medibles. Diseño campañas basadas en datos y construyo los sistemas digitales que las hacen funcionar.',
+      'Soy especialista en comunicaciones y marketing digital. Durante más de 9 años he ayudado a universidades, emprendedores académicos y organizaciones en Chile y Latinoamérica a convertir sus objetivos de comunicación en resultados medibles, y hoy me preparo para hacer lo mismo desde Australia. Diseño campañas basadas en datos y construyo los sistemas digitales que las hacen funcionar.',
       'No solo planifico campañas: **las construyo**. Mi trabajo abarca estrategia de contenido y comunicaciones, automatización de marketing, analítica y desarrollo web práctico, uniendo el mensaje con la tecnología que hay detrás.',
       'Lo que me mueve es el **propósito**: me comprometo especialmente con organizaciones que trabajan en ciencia, educación, bienestar animal e impacto basado en evidencia.',
     ],
