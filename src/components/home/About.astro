@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import portrait from '../../assets/about/pablo-kohler.jpg';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
@@ -14,7 +16,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   <div class="about-grid">
     <div class="about-media">
       <div class="about-photo">
-        <img src="/about/pablo-kohler.jpg" alt="Pablo Kohler" />
+        <Image src={portrait} alt="Pablo Kohler" width={900} format="webp" quality={85} />
       </div>
       <div class="about-facts">
         {
