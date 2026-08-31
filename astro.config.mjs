@@ -15,10 +15,5 @@ export default defineConfig({
     },
   },
 
-  integrations: [
-    sitemap({
-      // Página temporal y privada, sin indexar (ver src/pages/cuenta-despedida/index.astro).
-      filter: (page) => !page.includes('/cuenta-despedida/'),
-    }),
-  ],
+  integrations: [sitemap()],
 });
