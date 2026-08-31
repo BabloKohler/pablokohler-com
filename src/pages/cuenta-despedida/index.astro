@@ -179,19 +179,6 @@ import '../../styles/global.css';
         width: 100%;
         padding: 32px 20px;
       }
-      .claim {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-        margin-top: 14px;
-      }
-      .claim button {
-        background: transparent;
-        border: 1px solid var(--ink-12);
-        color: var(--ink-60);
-        padding: 9px 13px;
-      }
-
       .people {
         display: flex;
         flex-wrap: wrap;
@@ -478,7 +465,6 @@ import '../../styles/global.css';
         <p class="hint">Escribe tu nombre para entrar a la mesa. Todos ven lo mismo en tiempo real.</p>
         <input type="text" id="gateName" placeholder="Tu nombre" autocomplete="name" enterkeyhint="go" />
         <button class="btn" id="gateGo" style="margin-top:10px;width:100%">Entrar a la mesa</button>
-        <div id="gateClaim"></div>
       </div>
     </div>
 
@@ -641,12 +627,13 @@ import '../../styles/global.css';
 
       async function mutate(fn) {
         try {
-          await runTransaction(roomRef, (s) => {
+          return await runTransaction(roomRef, (s) => {
             s = s && typeof s === 'object' ? { tip: 10, people: {}, assign: {}, ...s } : blankState();
             return fn(s) || s;
           });
         } catch (e) {
           toast('No se pudo guardar, reintenta.');
+          return null;
         }
       }
 
@@ -657,28 +644,30 @@ import '../../styles/global.css';
           return null;
         }
         const newId = crypto.randomUUID().slice(0, 8);
-        let resultId = null;
         let full = false;
-        await mutate((s) => {
+        const result = await mutate((s) => {
           const existing = Object.entries(s.people).find(
             ([, p]) => p.name.toLowerCase() === name.toLowerCase(),
           );
-          if (existing) {
-            resultId = existing[0];
-            return s;
-          }
+          if (existing) return s;
           if (Object.keys(s.people).length >= MAX_PEOPLE) {
             full = true;
             return s;
           }
           s.people[newId] = { name };
-          resultId = newId;
           return s;
         });
-        // El callback de arriba puede reintentarse solo internamente si hay contención — los
-        // efectos secundarios (toast) van aquí afuera, donde se ejecutan una sola vez.
-        if (full && !resultId) toast('Mesa llena.');
-        return resultId;
+        if (full) {
+          toast('Mesa llena.');
+          return null;
+        }
+        // Leemos el id ganador desde el valor YA confirmado por Firebase (result.snapshot), no
+        // desde una variable de closure — el listener onValue puede refrescar el estado (y
+        // disparar un render) antes de que esta transacción termine de resolver, así que
+        // cualquier variable capturada en el callback puede quedar desactualizada.
+        const finalPeople = (result && result.committed && result.snapshot.val()?.people) || {};
+        const mine = Object.entries(finalPeople).find(([, p]) => p.name.toLowerCase() === name.toLowerCase());
+        return mine ? mine[0] : null;
       }
 
       function remove(pid) {
@@ -781,24 +770,6 @@ import '../../styles/global.css';
         $('#app').hidden = true;
         $('#bar').hidden = true;
         $('#gateCode').textContent = 'Mesa ' + room;
-        const box = $('#gateClaim');
-        const people = peopleList();
-        if (people.length) {
-          box.innerHTML = '<p class="hint" style="margin-top:22px">O si ya estás en la lista:</p>';
-          const row = document.createElement('div');
-          row.className = 'claim';
-          people.forEach((p) => {
-            const b = document.createElement('button');
-            b.textContent = p.name;
-            b.onclick = () => {
-              me = p.id;
-              localStorage.setItem(KEY, me);
-              render();
-            };
-            row.appendChild(b);
-          });
-          box.appendChild(row);
-        } else box.innerHTML = '';
       }
 
       function renderPeople() {
@@ -979,13 +950,18 @@ import '../../styles/global.css';
 
       // --- acciones globales ---
       $('#gateGo').onclick = async () => {
+        const btn = $('#gateGo');
         const name = $('#gateName').value;
+        btn.disabled = true;
+        btn.textContent = 'Entrando…';
         const pid = await join(name);
         if (pid) {
           me = pid;
           localStorage.setItem(KEY, me);
           render();
         }
+        btn.disabled = false;
+        btn.textContent = 'Entrar a la mesa';
       };
       $('#gateName').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') $('#gateGo').click();
