@@ -130,5 +130,6 @@ export const es = {
     metaYear: 'Año',
     metaRole: 'Rol',
     metaScope: 'Alcance',
+    gallery: 'Galería',
   },
 } satisfies UiDictionary;

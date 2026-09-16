@@ -18,6 +18,10 @@ const caseSchema = z.object({
   cardDescription: z.string(),
   coverVariant: z.enum(['default', 'alt']).default('default'),
   coverImage: z.string().optional(),
+  // 'contain' evita recortar piezas gráficas verticales (posters, flyers) en el cover 16:9.
+  coverFit: z.enum(['cover', 'contain']).default('cover'),
+  // Galería opcional de piezas (caso de diseño gráfico en vez de web/contenido).
+  gallery: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
   metrics: z
     .array(z.object({ value: z.string().nullable(), label: z.string() }))
     .length(3),

@@ -12,7 +12,7 @@ import { getDictionary } from '../../i18n';
 
 const t = getDictionary('en');
 
-const order = ['docomomo', 'one-health'];
+const order = ['docomomo', 'one-health', 'uc-graficas'];
 const allCases = await getCollection('cases-en');
 const cases = order
   .map((slug) => allCases.find((c) => c.id === slug))

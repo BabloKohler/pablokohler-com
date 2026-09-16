@@ -4,12 +4,14 @@ import Star from '../Star.astro';
 interface Props {
   coverNote: string;
   coverImage?: string;
+  /** 'contain' evita recortar piezas verticales (posters, flyers) dentro del marco 16:9. */
+  fit?: 'cover' | 'contain';
 }
-const { coverNote, coverImage } = Astro.props;
+const { coverNote, coverImage, fit = 'cover' } = Astro.props;
 ---
 
 <div class="case-cover">
-  <div class="cover-inner">
+  <div class={`cover-inner ${fit === 'contain' ? 'is-contain' : ''}`}>
     {
       coverImage ? (
         <img class="cover-img" src={coverImage} alt="" />
@@ -50,6 +52,16 @@ const { coverNote, coverImage } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .cover-inner.is-contain {
+    padding: clamp(20px, 4vh, 40px);
+  }
+  .cover-inner.is-contain .cover-img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(20, 18, 16, 0.16);
   }
   .cover-note {
     position: absolute;

@@ -90,5 +90,6 @@ export interface UiDictionary {
     metaYear: string;
     metaRole: string;
     metaScope: string;
+    gallery: string;
   };
 }

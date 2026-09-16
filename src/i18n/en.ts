@@ -132,5 +132,6 @@ export const en = {
     metaYear: 'Year',
     metaRole: 'Role',
     metaScope: 'Scope',
+    gallery: 'Gallery',
   },
 } satisfies UiDictionary;

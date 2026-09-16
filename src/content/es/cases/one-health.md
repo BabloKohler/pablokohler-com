@@ -31,6 +31,6 @@ sections:
     kicker: "El resultado"
     title: "Ciencia compleja, contada de forma que se entiende."
     body: "El artículo se publicó en el sitio oficial de la UC, una de las instituciones que ya confía en mi trabajo. Cuando tenga datos de lectura o alcance, este es el párrafo que los convierte en historia."
-nextCaseSlug: "docomomo"
-nextCaseTitle: "Docomomo: sitio web para una conferencia internacional de arquitectura"
+nextCaseSlug: "uc-graficas"
+nextCaseTitle: "Diseño gráfico para campañas de la UC"
 ---

@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import CaseHero from '../components/case/CaseHero.astro';
 import CaseCover from '../components/case/CaseCover.astro';
+import CaseGallery from '../components/case/CaseGallery.astro';
 import MetricsStrip from '../components/case/MetricsStrip.astro';
 import CaseBody from '../components/case/CaseBody.astro';
 import CaseNextLink from '../components/case/CaseNextLink.astro';
@@ -32,7 +33,8 @@ const backHref = `/${lang}/#trabajo`;
   back={{ href: backHref, label: t.caseDetail.back }}
 >
   <CaseHero title={d.title} lead={d.lead} tags={d.tags} />
-  <CaseCover coverNote={t.caseDetail.coverNote} coverImage={d.coverImage} />
+  <CaseCover coverNote={t.caseDetail.coverNote} coverImage={d.coverImage} fit={d.coverFit} />
+  {d.gallery && <CaseGallery label={t.caseDetail.gallery} images={d.gallery} />}
   <MetricsStrip metrics={d.metrics} metricLabel={t.caseDetail.metricLabel} />
   <CaseBody
     meta={{ client: d.client, year: d.year, role: d.role, scope: d.scope }}

@@ -31,6 +31,6 @@ sections:
     kicker: "The result"
     title: "Complex science, told in a way people understand."
     body: "The article was published on UC Chile's official site, one of the institutions that already trusts my work. Once I have read or reach data, this is the paragraph that turns it into a story."
-nextCaseSlug: "docomomo"
-nextCaseTitle: "Docomomo: website for an international architecture conference"
+nextCaseSlug: "uc-graficas"
+nextCaseTitle: "Graphic design for UC campaigns"
 ---

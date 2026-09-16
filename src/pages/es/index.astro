@@ -13,7 +13,7 @@ import { getDictionary } from '../../i18n';
 const t = getDictionary('es');
 
 // Orden editorial fijo (no el orden del filesystem) — así siempre sale Docomomo primero.
-const order = ['docomomo', 'one-health'];
+const order = ['docomomo', 'one-health', 'uc-graficas'];
 const allCases = await getCollection('cases-es');
 const cases = order
   .map((slug) => allCases.find((c) => c.id === slug))
