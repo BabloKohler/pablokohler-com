@@ -10,6 +10,10 @@ interface Props {
   sections: Section[];
 }
 const { meta, metaLabels, sections } = Astro.props;
+
+// Convierte URLs sueltas en el body (ej. "Se pueden consultar en https://...") en links reales.
+const linkify = (s: string) =>
+  s.replace(/(https?:\/\/[^\s]+)/g, (url) => `<a href="${url}" target="_blank" rel="noopener">${url}</a>`);
 ---
 
 <div class="case-body">
@@ -37,7 +41,7 @@ const { meta, metaLabels, sections } = Astro.props;
       <div class="case-section">
         <span class="kicker">{s.kicker}</span>
         <h2>{s.title}</h2>
-        <p>{s.body}</p>
+        <p set:html={linkify(s.body)} />
       </div>
     ))
   }
@@ -106,5 +110,10 @@ const { meta, metaLabels, sections } = Astro.props;
     line-height: 1.7;
     color: var(--ink-60);
     margin-bottom: 16px;
+  }
+  .case-section p :global(a) {
+    color: var(--coral);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 </style>

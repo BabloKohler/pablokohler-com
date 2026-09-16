@@ -3,7 +3,7 @@ title: "Diseño gráfico para campañas de la UC"
 lead: "Piezas gráficas para redes sociales — afiches, posts y una portada de podcast — para programas de innovación y educación de la Pontificia Universidad Católica de Chile, hechas en Adobe Photoshop con apoyo de IA para algunas ilustraciones."
 tags: ["Diseño Gráfico", "Redes Sociales", "Photoshop"]
 client: "Pontificia Universidad Católica de Chile (UC)"
-year: "2025–2026"
+year: "2018 - 2026"
 role: "Diseño gráfico"
 scope: "Piezas para redes sociales de programas de innovación, transferencia y educación"
 cardMetricDescriptor: "7 piezas"
@@ -37,8 +37,8 @@ metrics:
 sections:
   context:
     kicker: "El punto de partida"
-    title: "Programas distintos, la misma necesidad: piezas que se vean a la altura."
-    body: "Los equipos de innovación, transferencia tecnológica y educación de la UC (la Dirección de Transferencia y Desarrollo, EduLab UC, la Vicerrectoría de Investigación y Postgrado, entre otros) lanzan charlas, concursos, podcasts y programas de forma constante, cada uno con su propia identidad, pero todos bajo el sello UC. Necesitaban piezas gráficas para redes sociales con calidad profesional y tiempos de entrega cortos."
+    title: "Piezas gráficas adaptadas a cada programa."
+    body: "La Dirección de Transferencia y Desarrollo junto al Laboratorio de Innovación en Educación UC y la Vicerrectoría de Investigación y Postgrado, lanzan charlas, concursos, podcasts y programas de forma constante, cada uno con su propia identidad, pero todos bajo el sello UC. Necesitaban piezas gráficas para redes sociales con calidad profesional y tiempos de entrega cortos."
   work:
     kicker: "Lo que hice"
     title: "De brief a pieza publicada, en Photoshop."
@@ -46,7 +46,7 @@ sections:
   result:
     kicker: "El resultado"
     title: "Una galería creciente de piezas en circulación."
-    body: "Estas son algunas de las piezas que ya circularon en las redes de la UC y sus distintos programas. El trabajo sigue activo: cada campaña nueva suma piezas a esta galería."
+    body: "Estas son algunas de las piezas que ya circularon en las redes de la UC y sus distintos programas. El trabajo sigue activo: cada campaña nueva suma piezas a esta galería. Se pueden consultar en https://instagram.com/transferenciauc"
 nextCaseSlug: "docomomo"
 nextCaseTitle: "Docomomo: sitio web para una conferencia internacional de arquitectura"
 ---

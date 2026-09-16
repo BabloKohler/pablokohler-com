@@ -3,7 +3,7 @@ title: "Graphic design for UC campaigns"
 lead: "Social media graphics — posters, posts, and a podcast cover — for innovation and education programs at Pontificia Universidad Católica de Chile, made in Adobe Photoshop with AI-assisted illustration for some pieces."
 tags: ["Graphic Design", "Social Media", "Photoshop"]
 client: "Pontificia Universidad Católica de Chile (UC)"
-year: "2025–2026"
+year: "2018 - 2026"
 role: "Graphic Design"
 scope: "Social media graphics for innovation, tech transfer, and education programs"
 cardMetricDescriptor: "7 pieces"
@@ -37,8 +37,8 @@ metrics:
 sections:
   context:
     kicker: "The starting point"
-    title: "Different programs, the same need: graphics that hold up."
-    body: "UC's innovation, tech transfer, and education teams (the Directorate of Transfer and Development, EduLab UC, the Vice-Rectory for Research and Graduate Studies, among others) constantly launch talks, contests, podcasts, and programs, each with its own identity but all under the UC seal. They needed social media graphics with professional quality and short turnaround times."
+    title: "Graphics tailored to every program."
+    body: "The Directorate of Transfer and Development, together with EduLab UC (UC's Education Innovation Lab) and the Vice-Rectory for Research and Graduate Studies, constantly launch talks, contests, podcasts, and programs, each with its own identity but all under the UC seal. They needed social media graphics with professional quality and short turnaround times."
   work:
     kicker: "What I did"
     title: "From brief to published piece, in Photoshop."
@@ -46,7 +46,7 @@ sections:
   result:
     kicker: "The result"
     title: "A growing gallery of published work."
-    body: "These are some of the pieces already in circulation across UC's channels and programs. The work is ongoing: every new campaign adds more pieces to this gallery."
+    body: "These are some of the pieces already in circulation across UC's channels and programs. The work is ongoing: every new campaign adds more pieces to this gallery. You can follow along at https://instagram.com/transferenciauc"
 nextCaseSlug: "docomomo"
 nextCaseTitle: "Docomomo: website for an international architecture conference"
 ---
