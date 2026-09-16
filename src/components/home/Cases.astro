@@ -33,10 +33,6 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
             <span class="case-tag">{c.data.tags[0]}</span>
           </div>
           <div class="case-body">
-            <div class="case-metric">
-              <span class="metric-descriptor">{c.data.cardMetricDescriptor}</span>
-              <span class="metric-label">{c.data.cardMetricLabel}</span>
-            </div>
             <h3>{c.data.title}</h3>
             <p>{c.data.cardDescription}</p>
             <span class="case-cta">{t.viewCase}</span>
@@ -143,37 +139,14 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
     flex-direction: column;
     flex: 1;
   }
-  .case-metric {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    margin-bottom: 18px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--ink-12);
-  }
-  .metric-descriptor {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing: -0.02em;
-    background: linear-gradient(105deg, var(--coral), var(--amber));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .metric-label {
-    font-size: 13px;
-    color: var(--ink-60);
-    font-family: var(--mono);
-  }
-
   .case-body h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 19px;
+    font-size: 21px;
     line-height: 1.25;
     letter-spacing: -0.02em;
-    margin-bottom: 10px;
+    color: var(--coral);
+    margin-bottom: 12px;
   }
   .case-body p {
     font-size: 14px;
