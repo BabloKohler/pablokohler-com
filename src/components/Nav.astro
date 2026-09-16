@@ -1,5 +1,6 @@
 ---
-import Star from './Star.astro';
+import { Image } from 'astro:assets';
+import wordmark from '../assets/brand/wordmark-negro.png';
 import type { Lang, UiDictionary } from '../i18n';
 
 interface Props {
@@ -20,8 +21,7 @@ const home = `/${lang}/`;
 
 <nav>
   <a href={home} class="brand">
-    <Star class="brand-star" size="18px" color="var(--coral)" />
-    Pablo Kohler
+    <Image src={wordmark} alt="Pablo Kohler" height={22} format="webp" quality={90} />
   </a>
 
   {
@@ -98,17 +98,12 @@ const home = `/${lang}/`;
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 19px;
-    letter-spacing: -0.02em;
-    color: var(--ink);
     text-decoration: none;
   }
-  .brand :global(.brand-star) {
-    display: inline-block;
-    flex-shrink: 0;
+  .brand :global(img) {
+    display: block;
+    width: auto;
+    height: 22px;
   }
   .back-group {
     display: flex;

@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Star from '../Star.astro';
+import wordmark from '../../assets/brand/wordmark-blanco.png';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
@@ -94,8 +96,7 @@ const formStrings = JSON.stringify({
 
   <footer class="site-footer">
     <div class="foot-brand">
-      <Star class="foot-star" size="14px" color="var(--coral)" />
-      Pablo Kohler
+      <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
     </div>
     <span class="foot-copy">{t.footerCopy}</span>
   </footer>
@@ -364,13 +365,11 @@ const formStrings = JSON.stringify({
   .foot-brand {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 17px;
   }
-  .foot-brand :global(.foot-star) {
-    flex-shrink: 0;
+  .foot-brand :global(img) {
+    display: block;
+    width: auto;
+    height: 16px;
   }
   .foot-copy {
     font-family: var(--mono);
