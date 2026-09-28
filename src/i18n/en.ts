@@ -7,7 +7,6 @@ export const en = {
     work: 'Work',
     services: 'Services',
     about: 'About',
-    blog: 'Blog',
     contact: 'Contact',
     langLabel: 'EN',
     menuOpen: 'Open menu',

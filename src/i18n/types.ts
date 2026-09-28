@@ -5,7 +5,6 @@ export interface UiDictionary {
     work: string;
     services: string;
     about: string;
-    blog: string;
     contact: string;
     langLabel: string;
     menuOpen: string;

@@ -5,7 +5,6 @@ export const es = {
     work: 'Trabajo',
     services: 'Servicios',
     about: 'Sobre mí',
-    blog: 'Blog',
     contact: 'Contacto',
     langLabel: 'ES',
     menuOpen: 'Abrir menú',
