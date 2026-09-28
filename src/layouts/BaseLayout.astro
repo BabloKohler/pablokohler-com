@@ -1,6 +1,7 @@
 ---
 import { getImage } from 'astro:assets';
 import Nav from '../components/Nav.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import portrait from '../assets/about/pablo-kohler.jpg';
 import type { Lang, UiDictionary } from '../i18n';
 import '../styles/global.css';
@@ -10,13 +11,14 @@ interface Props {
   title: string;
   description: string;
   navDict: UiDictionary['nav'];
+  cookieDict: UiDictionary['cookieConsent'];
   /** Rutas absolutas de esta misma página en cada idioma, para hreflang + el switch de idioma. */
   esHref: string;
   enHref: string;
   back?: { href: string; label: string };
 }
 
-const { lang, title, description, navDict, esHref, enHref, back } = Astro.props;
+const { lang, title, description, navDict, cookieDict, esHref, enHref, back } = Astro.props;
 const otherLangHref = lang === 'es' ? enHref : esHref;
 const canonicalHref = new URL(lang === 'es' ? esHref : enHref, Astro.site);
 
@@ -99,6 +101,7 @@ const jsonLd = {
     <div class="grain"></div>
     <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} />
     <slot />
+    <CookieConsent lang={lang} t={cookieDict} />
 
     <script>
       document.addEventListener('click', (e) => {

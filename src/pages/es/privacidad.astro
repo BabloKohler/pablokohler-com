@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDictionary } from '../../i18n';
+
+const t = getDictionary('es');
+const p = t.privacyPage;
+---
+
+<BaseLayout
+  lang="es"
+  title={`${p.title} | Pablo Kohler`}
+  description={p.intro}
+  navDict={t.nav}
+  cookieDict={t.cookieConsent}
+  esHref="/es/privacidad/"
+  enHref="/en/privacy/"
+>
+  <section class="privacy">
+    <h1>{p.title}</h1>
+    <p class="updated mono-note">{p.updated}</p>
+    <p class="intro">{p.intro}</p>
+
+    {
+      p.sections.map((s) => (
+        <div class="privacy-section">
+          <h2>{s.heading}</h2>
+          <p>{s.body}</p>
+        </div>
+      ))
+    }
+
+    <button type="button" id="manage-cookies" class="manage-btn">
+      {p.managePreferences}
+    </button>
+    <p id="manage-cookies-feedback" class="mono-note" hidden>{p.preferencesSaved}</p>
+  </section>
+</BaseLayout>
+
+<script>
+  const btn = document.getElementById('manage-cookies');
+  const feedback = document.getElementById('manage-cookies-feedback');
+  btn?.addEventListener('click', () => {
+    localStorage.removeItem('cookie_consent');
+    feedback?.removeAttribute('hidden');
+  });
+</script>
+
+<style>
+  .privacy {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(110px, 16vh, 150px) clamp(24px, 5vw, 72px) clamp(80px, 12vh, 140px);
+  }
+  .privacy h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(32px, 4.4vw, 54px);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 14px;
+  }
+  .updated {
+    margin-bottom: 28px;
+  }
+  .intro {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+    color: var(--ink-60);
+    margin-bottom: clamp(40px, 6vh, 64px);
+  }
+  .privacy-section {
+    padding-top: 28px;
+    margin-bottom: 28px;
+    border-top: 1px solid var(--ink-12);
+  }
+  .privacy-section h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .privacy-section p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-60);
+  }
+  .manage-btn {
+    appearance: none;
+    margin-top: 20px;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 100px;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition:
+      border-color 0.18s ease,
+      color 0.18s ease;
+  }
+  .manage-btn:hover {
+    border-color: var(--coral);
+    color: var(--coral);
+  }
+  #manage-cookies-feedback {
+    margin-top: 12px;
+  }
+</style>

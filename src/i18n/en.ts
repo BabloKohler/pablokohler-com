@@ -117,6 +117,34 @@ export const en = {
     linkedinTitle: 'LinkedIn',
     linkedinSub: "Let's connect professionally",
     footerCopy: '© 2026 Pablo Kohler · Santiago → Australia',
+    privacyLink: 'Privacy',
+  },
+  cookieConsent: {
+    message: "I use cookies to understand how this site gets used. You can accept or decline — either way, you'll see and can do the same things here.",
+    accept: 'Accept',
+    reject: 'Decline',
+    policyLink: 'Learn more',
+  },
+  privacyPage: {
+    title: 'Privacy & cookies',
+    updated: 'Last updated: October 2026',
+    intro: "This site is simple and doesn't sell or share your data. Here's a plain-language explanation of what I collect and why.",
+    sections: [
+      {
+        heading: 'What data I collect',
+        body: "The contact form uses Formspree to handle messages: your name, email, and message are sent to their servers so I can reply to you. The site's fonts load from Google Fonts' servers, which means a request to Google happens when the page loads.",
+      },
+      {
+        heading: 'Cookies & analytics',
+        body: "If you accept cookies, I use Google Analytics 4 to understand which pages get visited and how people find the site — aggregated data, not tied to your identity. Google stores cookies like _ga and _ga_* for up to 2 years. If you decline, no analytics script loads and no cookie of that kind is stored.",
+      },
+      {
+        heading: 'Your rights',
+        body: 'You can ask me to access, correct, or delete the data I have about you (for example, messages you sent through the contact form), and you can change your cookie decision at any time. Email me at p.kohlerlara@gmail.com.',
+      },
+    ],
+    managePreferences: 'Change my cookie preference',
+    preferencesSaved: 'Preference cleared. Reload the page to choose again.',
   },
   blogPage: {
     heading: 'Blog',

@@ -12,6 +12,7 @@ const posts = (await getCollection('blog-en')).filter((p) => !p.data.draft);
   title={`${t.blogPage.heading} | Pablo Kohler`}
   description={t.blogPage.empty}
   navDict={t.nav}
+  cookieDict={t.cookieConsent}
   esHref="/es/blog/"
   enHref="/en/blog/"
 >

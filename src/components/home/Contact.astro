@@ -2,12 +2,14 @@
 import { Image } from 'astro:assets';
 import Star from '../Star.astro';
 import wordmark from '../../assets/brand/wordmark-blanco.png';
-import type { UiDictionary } from '../../i18n';
+import type { Lang, UiDictionary } from '../../i18n';
 
 interface Props {
   t: UiDictionary['contact'];
+  lang: Lang;
 }
-const { t } = Astro.props;
+const { t, lang } = Astro.props;
+const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
 
 // Configura PUBLIC_FORMSPREE_ID en .env (ver .env.example) con el ID de tu formulario
 // del plan gratis de Formspree. Mientras no exista, el form avisa que aún no está
@@ -99,6 +101,7 @@ const formStrings = JSON.stringify({
       <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
     </div>
     <span class="foot-copy">{t.footerCopy}</span>
+    <a href={privacyHref} class="foot-privacy">{t.privacyLink}</a>
   </footer>
 </section>
 
@@ -375,5 +378,16 @@ const formStrings = JSON.stringify({
     font-family: var(--mono);
     font-size: 12px;
     color: rgba(250, 246, 240, 0.4);
+  }
+  .foot-privacy {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(250, 246, 240, 0.4);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.18s;
+  }
+  .foot-privacy:hover {
+    color: var(--paper);
   }
 </style>

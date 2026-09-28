@@ -75,6 +75,21 @@ export interface UiDictionary {
     linkedinTitle: string;
     linkedinSub: string;
     footerCopy: string;
+    privacyLink: string;
+  };
+  cookieConsent: {
+    message: string;
+    accept: string;
+    reject: string;
+    policyLink: string;
+  };
+  privacyPage: {
+    title: string;
+    updated: string;
+    intro: string;
+    sections: { heading: string; body: string }[];
+    managePreferences: string;
+    preferencesSaved: string;
   };
   blogPage: {
     heading: string;
