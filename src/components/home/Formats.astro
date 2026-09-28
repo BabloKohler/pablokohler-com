@@ -19,14 +19,18 @@ const tags = t.tags.map((label, i) => ({
 ---
 
 <section class="formats" id="formatos">
-  <div class="formats-head">
+  <div class="formats-head reveal" data-reveal>
     <h2>{t.headline} <span class="accent">{t.headlineAccent}</span></h2>
     <p class="formats-intro">{t.intro}</p>
   </div>
   <div class="tag-cloud">
     {
-      tags.map((tag) => (
-        <span class={`tag tag--${tag.size}`} style={`--tag-color:${tag.color}`}>
+      tags.map((tag, i) => (
+        <span
+          class={`tag tag--${tag.size} reveal`}
+          data-reveal
+          style={`--tag-color:${tag.color}; transition-delay:${(i % 8) * 0.05}s`}
+        >
           {tag.label}
         </span>
       ))

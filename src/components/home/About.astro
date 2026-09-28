@@ -14,7 +14,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
 
 <section class="about" id="sobre-mi">
   <div class="about-grid">
-    <div class="about-media">
+    <div class="about-media reveal" data-reveal>
       <div class="about-photo">
         <Image src={portrait} alt="Pablo Kohler" width={900} format="webp" quality={85} />
       </div>
@@ -30,7 +30,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       </div>
     </div>
 
-    <div class="about-text">
+    <div class="about-text reveal" data-reveal style="transition-delay: 0.1s">
       <h2>{t.headline} <span class="accent">{t.headlineAccent}</span></h2>
       {t.paragraphs.map((p) => <p set:html={mdBold(p)} />)}
       <a href="#contacto" class="about-cta">{t.cta}</a>

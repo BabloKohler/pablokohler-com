@@ -124,6 +124,30 @@ const jsonLd = {
           btn.style.setProperty('--sun-color', nextColor);
         });
       });
+
+      // Revelado en scroll: un solo observer global para cualquier [data-reveal] de la
+      // página (secciones, tarjetas, beats de Capacidades). Se agrega .is-visible una vez
+      // y se deja de observar — no repite la animación si el usuario vuelve a scrollear.
+      const revealTargets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (revealTargets.length) {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealTargets.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+          );
+          revealTargets.forEach((el) => io.observe(el));
+        }
+      }
     </script>
   </body>
 </html>
