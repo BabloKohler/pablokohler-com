@@ -172,6 +172,7 @@ const home = `/${lang}/`;
     font-size: 14px;
     color: var(--ink-60);
     text-decoration: none;
+    white-space: nowrap;
     transition: color 0.18s;
   }
   .back:hover {
@@ -278,6 +279,19 @@ const home = `/${lang}/`;
     }
     .menu-toggle {
       display: flex;
+    }
+    /* Páginas de caso: "← Back to case studies" en una sola línea (antes se partía en 3). */
+    .back-group {
+      gap: 14px;
+    }
+    .back {
+      font-size: 12px;
+      white-space: nowrap;
+    }
+  }
+  @media (max-width: 400px) {
+    .back {
+      font-size: 11px;
     }
   }
 </style>

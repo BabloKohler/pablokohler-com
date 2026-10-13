@@ -22,6 +22,39 @@ const caseSchema = z.object({
   coverFit: z.enum(['cover', 'contain']).default('cover'),
   // 'landscape' para capturas de sitios web (16:10); 'portrait' (por defecto) para posters/piezas verticales.
   galleryLayout: z.enum(['portrait', 'landscape']).default('portrait'),
+  // Casos de sitios web: enlace al sitio real + "showcase" (marcos de navegador con scroll y visor con zoom).
+  // Si hay `showcase`, reemplaza a la portada y a la galería. Las capturas se guardan a 2x (WebP).
+  liveUrl: z.string().url().optional(),
+  showcase: z
+    .object({
+      kicker: z.string(),
+      title: z.string(),
+      intro: z.string(),
+      liveLabel: z.string(),
+      ui: z.object({
+        expand: z.string(),
+        close: z.string(),
+        prev: z.string(),
+        next: z.string(),
+        zoomIn: z.string(),
+        zoomOut: z.string(),
+        fit: z.string(),
+        scrollHint: z.string(),
+        zoomHint: z.string(),
+        desktopLabel: z.string(),
+        mobileLabel: z.string(),
+      }),
+      screens: z.array(
+        z.object({
+          kind: z.enum(['desktop', 'mobile']),
+          src: z.string(),
+          alt: z.string(),
+          label: z.string(),
+          url: z.string(),
+        }),
+      ),
+    })
+    .optional(),
   // Galería opcional de piezas (caso de diseño gráfico en vez de web/contenido).
   gallery: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
   metrics: z

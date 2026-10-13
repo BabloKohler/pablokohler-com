@@ -3,8 +3,11 @@ interface Props {
   title: string;
   lead: string;
   tags: string[];
+  /** Enlace al sitio real (casos de sitios web). */
+  liveUrl?: string;
+  liveLabel?: string;
 }
-const { title, lead, tags } = Astro.props;
+const { title, lead, tags, liveUrl, liveLabel } = Astro.props;
 ---
 
 <header class="case-hero">
@@ -13,6 +16,14 @@ const { title, lead, tags } = Astro.props;
   </div>
   <h1>{title}</h1>
   <p class="case-lead">{lead}</p>
+  {
+    liveUrl && liveLabel && (
+      <a class="live-link" href={liveUrl} target="_blank" rel="noopener" data-track="live_site_click" data-track-location="case_hero">
+        {liveLabel}
+        <span aria-hidden="true">↗</span>
+      </a>
+    )
+  }
 </header>
 
 <style>
@@ -50,5 +61,27 @@ const { title, lead, tags } = Astro.props;
     line-height: 1.6;
     color: var(--ink-60);
     max-width: 60ch;
+  }
+  .live-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 12px 22px;
+    border-radius: 100px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition:
+      background 0.18s,
+      transform 0.18s;
+  }
+  .live-link:hover,
+  .live-link:focus-visible {
+    background: var(--coral);
+    transform: translateY(-2px);
   }
 </style>

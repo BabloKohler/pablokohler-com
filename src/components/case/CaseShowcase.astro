@@ -1,0 +1,783 @@
+---
+// Showcase de un sitio web: marcos de navegador/teléfono con scroll interno (se recorre la página
+// completa) + visor a pantalla completa con zoom (botones, rueda con Ctrl/⌘, doble clic, pellizco,
+// arrastre para mover y teclado). Las capturas están a 2x: el zoom llega a píxeles nativos.
+interface Screen {
+  kind: 'desktop' | 'mobile';
+  src: string;
+  alt: string;
+  label: string;
+  url: string;
+}
+interface Props {
+  data: {
+    kicker: string;
+    title: string;
+    intro: string;
+    liveLabel: string;
+    ui: {
+      expand: string;
+      close: string;
+      prev: string;
+      next: string;
+      zoomIn: string;
+      zoomOut: string;
+      fit: string;
+      scrollHint: string;
+      zoomHint: string;
+      desktopLabel: string;
+      mobileLabel: string;
+    };
+    screens: Screen[];
+  };
+  liveUrl?: string;
+}
+const { data, liveUrl } = Astro.props;
+
+// Índice global (orden del DOM = orden del visor): primero escritorio, luego móvil.
+const desktop = data.screens.filter((s) => s.kind === 'desktop');
+const mobile = data.screens.filter((s) => s.kind === 'mobile');
+const ordered = [...desktop, ...mobile];
+const indexOf = (s: Screen) => ordered.indexOf(s);
+---
+
+<section class="sc" data-showcase aria-labelledby="sc-title">
+  <header class="sc-head">
+    <p class="sc-kicker">{data.kicker}</p>
+    <h2 id="sc-title">{data.title}</h2>
+    <p class="sc-intro">{data.intro}</p>
+  </header>
+
+  {
+    desktop.length > 0 && (
+      <div class="sc-stack">
+        {desktop.map((s, i) => (
+          <figure class="frame" data-screen data-index={indexOf(s)} data-kind="desktop" data-label={s.label} data-src={s.src}>
+            <div class="frame-bar">
+              <span class="dots" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span class="url">{s.url}</span>
+              <button type="button" class="expand" data-open aria-label={`${data.ui.expand}: ${s.label}`}>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                </svg>
+                <span>{data.ui.expand}</span>
+              </button>
+            </div>
+            <div class="frame-body" tabindex="0" role="group" aria-label={s.label}>
+              <img src={s.src} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            </div>
+            <span class="hint" aria-hidden="true">{data.ui.scrollHint}</span>
+            <figcaption>{s.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    mobile.length > 0 && (
+      <div class="sc-mobile-wrap">
+        <p class="sc-sub">{data.ui.mobileLabel}</p>
+        <div class="sc-phones">
+          {mobile.map((s) => (
+            <figure class="phone" data-screen data-index={indexOf(s)} data-kind="mobile" data-label={s.label} data-src={s.src}>
+              <div class="phone-shell">
+                <span class="notch" aria-hidden="true" />
+                <div class="phone-body" tabindex="0" role="group" aria-label={s.label}>
+                  <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+                </div>
+              </div>
+              <figcaption>
+                <span>{s.label}</span>
+                <button type="button" class="expand expand--text" data-open aria-label={`${data.ui.expand}: ${s.label}`}>{data.ui.expand}</button>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<!-- Visor con zoom -->
+<div class="lb" id="sc-lb" role="dialog" aria-modal="true" aria-label={data.title} aria-hidden="true">
+  <div class="lb-bar">
+    <div class="lb-meta">
+      <span class="lb-count" aria-live="polite"></span>
+      <span class="lb-title"></span>
+    </div>
+    <div class="lb-tools">
+      <button type="button" class="lb-btn" data-act="out" aria-label={data.ui.zoomOut}>−</button>
+      <span class="lb-zoom" aria-live="polite">100%</span>
+      <button type="button" class="lb-btn" data-act="in" aria-label={data.ui.zoomIn}>+</button>
+      <button type="button" class="lb-btn lb-btn--text" data-act="fit">{data.ui.fit}</button>
+      {
+        liveUrl && (
+          <a class="lb-btn lb-btn--text lb-live" href={liveUrl} target="_blank" rel="noopener">
+            {data.liveLabel} ↗
+          </a>
+        )
+      }
+      <button type="button" class="lb-btn lb-close" data-act="close" aria-label={data.ui.close}>✕</button>
+    </div>
+  </div>
+  <div class="lb-stage" tabindex="0">
+    <img class="lb-img" alt="" draggable="false" />
+  </div>
+  <button type="button" class="lb-nav lb-prev" data-act="prev" aria-label={data.ui.prev}>←</button>
+  <button type="button" class="lb-nav lb-next" data-act="next" aria-label={data.ui.next}>→</button>
+  <p class="lb-hint">{data.ui.zoomHint}</p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-showcase]');
+  const lb = document.getElementById('sc-lb');
+
+  if (root && lb) {
+    const screens = Array.from(root.querySelectorAll<HTMLElement>('[data-screen]')).sort(
+      (a, b) => Number(a.dataset.index) - Number(b.dataset.index),
+    );
+    const stage = lb.querySelector<HTMLElement>('.lb-stage')!;
+    const img = lb.querySelector<HTMLImageElement>('.lb-img')!;
+    const titleEl = lb.querySelector<HTMLElement>('.lb-title')!;
+    const countEl = lb.querySelector<HTMLElement>('.lb-count')!;
+    const zoomEl = lb.querySelector<HTMLElement>('.lb-zoom')!;
+    const btnIn = lb.querySelector<HTMLButtonElement>('[data-act="in"]')!;
+    const btnOut = lb.querySelector<HTMLButtonElement>('[data-act="out"]')!;
+    const closeBtn = lb.querySelector<HTMLButtonElement>('[data-act="close"]')!;
+
+    const DPR = 2; // las capturas están hechas a 2x
+    let index = 0;
+    let zoom = 1;
+    let base = 0;
+    let lastFocus: HTMLElement | null = null;
+    const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+
+    // Ancho "ajustado": todo el ancho disponible sin pasar del tamaño CSS natural (móvil: algo más grande).
+    const computeBase = () => {
+      const kind = screens[index].dataset.kind;
+      const natural = img.naturalWidth / DPR;
+      const avail = stage.clientWidth - 32;
+      base = Math.max(240, Math.min(avail, kind === 'mobile' ? natural * 1.4 : natural));
+    };
+    const maxZoom = () => Math.max(2, img.naturalWidth / base);
+
+    const render = () => {
+      img.style.width = `${base * zoom}px`;
+      zoomEl.textContent = `${Math.round(zoom * 100)}%`;
+      btnIn.disabled = zoom >= maxZoom() - 0.01;
+      btnOut.disabled = zoom <= 1.01;
+      stage.classList.toggle('is-zoomed', zoom > 1.01);
+    };
+
+    // Cambia el zoom manteniendo fijo el punto (cx, cy) de la pantalla bajo el cursor/dedo.
+    const setZoom = (next: number, cx?: number, cy?: number) => {
+      const rect = stage.getBoundingClientRect();
+      const ax = (cx ?? rect.left + rect.width / 2) - rect.left;
+      const ay = (cy ?? rect.top + rect.height / 2) - rect.top;
+      const prevW = img.clientWidth || base;
+      const prevH = img.clientHeight || base;
+      const offL = Math.max(0, (stage.clientWidth - prevW) / 2);
+      const u = (stage.scrollLeft + ax - offL) / prevW;
+      const v = (stage.scrollTop + ay - 16) / prevH;
+      zoom = clamp(next, 1, maxZoom());
+      render();
+      const newW = img.clientWidth;
+      const newH = img.clientHeight;
+      stage.scrollLeft = Math.max(0, u * newW - ax + Math.max(0, (stage.clientWidth - newW) / 2));
+      stage.scrollTop = Math.max(0, v * newH - ay + 16);
+    };
+
+    const show = (i: number) => {
+      index = (i + screens.length) % screens.length;
+      const s = screens[index];
+      titleEl.textContent = s.dataset.label ?? '';
+      countEl.textContent = `${index + 1} / ${screens.length}`;
+      const alt = s.querySelector('img')?.getAttribute('alt') ?? '';
+      img.alt = alt;
+      zoom = 1;
+      img.style.width = '';
+      const onLoad = () => {
+        computeBase();
+        zoom = 1;
+        render();
+        stage.scrollTop = 0;
+        stage.scrollLeft = 0;
+      };
+      img.onload = onLoad;
+      img.src = s.dataset.src ?? '';
+      if (img.complete && img.naturalWidth) onLoad();
+    };
+
+    const open = (i: number) => {
+      lastFocus = document.activeElement as HTMLElement | null;
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      show(i);
+      closeBtn.focus();
+    };
+    const close = () => {
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lastFocus?.focus();
+    };
+
+    screens.forEach((s, i) => {
+      s.querySelectorAll<HTMLElement>('[data-open]').forEach((b) => b.addEventListener('click', () => open(i)));
+      s.querySelector('img')?.addEventListener('click', () => open(i));
+      // El aviso "desplázate" desaparece al primer scroll dentro del marco.
+      const body = s.querySelector<HTMLElement>('.frame-body, .phone-body');
+      body?.addEventListener(
+        'scroll',
+        () => {
+          if (body.scrollTop > 30) s.classList.add('seen');
+        },
+        { passive: true },
+      );
+    });
+
+    lb.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const act = t.closest<HTMLElement>('[data-act]')?.dataset.act;
+      if (act === 'close' || t === stage) close();
+      else if (act === 'in') setZoom(zoom * 1.4);
+      else if (act === 'out') setZoom(zoom / 1.4);
+      else if (act === 'fit') setZoom(1);
+      else if (act === 'prev') show(index - 1);
+      else if (act === 'next') show(index + 1);
+    });
+
+    // Ctrl/⌘ + rueda = zoom hacia el cursor (la rueda sola desplaza la página).
+    stage.addEventListener(
+      'wheel',
+      (e) => {
+        if (!(e.ctrlKey || e.metaKey)) return;
+        e.preventDefault();
+        setZoom(zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY);
+      },
+      { passive: false },
+    );
+
+    stage.addEventListener('dblclick', (e) => {
+      if (zoom > 1.01) setZoom(1);
+      else setZoom(Math.min(2.5, maxZoom()), e.clientX, e.clientY);
+    });
+
+    // Arrastrar para mover (ratón) y pellizcar para hacer zoom (táctil).
+    const pointers = new Map<number, { x: number; y: number }>();
+    let pinchStart = 0;
+    let zoomStart = 1;
+    let dragged = false;
+    stage.addEventListener('pointerdown', (e) => {
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 2) {
+        const [a, b] = Array.from(pointers.values());
+        pinchStart = Math.hypot(a.x - b.x, a.y - b.y);
+        zoomStart = zoom;
+      }
+      dragged = false;
+    });
+    stage.addEventListener('pointermove', (e) => {
+      const p = pointers.get(e.pointerId);
+      if (!p) return;
+      if (pointers.size === 2) {
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        const [a, b] = Array.from(pointers.values());
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pinchStart) setZoom(zoomStart * (dist / pinchStart), (a.x + b.x) / 2, (a.y + b.y) / 2);
+        return;
+      }
+      if (e.pointerType === 'mouse' && e.buttons === 1) {
+        const dx = e.clientX - p.x;
+        const dy = e.clientY - p.y;
+        if (Math.abs(dx) + Math.abs(dy) > 2) dragged = true;
+        stage.scrollLeft -= dx;
+        stage.scrollTop -= dy;
+        stage.classList.add('is-dragging');
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      }
+    });
+    const endPointer = (e: PointerEvent) => {
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) pinchStart = 0;
+      stage.classList.remove('is-dragging');
+    };
+    stage.addEventListener('pointerup', endPointer);
+    stage.addEventListener('pointercancel', endPointer);
+    // Un arrastre no debe contar como "clic en el fondo" que cierra el visor.
+    stage.addEventListener('click', (e) => {
+      if (dragged) e.stopPropagation();
+    }, true);
+
+    window.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(index - 1);
+      else if (e.key === 'ArrowRight') show(index + 1);
+      else if (e.key === '+' || e.key === '=') setZoom(zoom * 1.4);
+      else if (e.key === '-' || e.key === '_') setZoom(zoom / 1.4);
+      else if (e.key === '0') setZoom(1);
+      else if (e.key === 'Tab') {
+        // Mantener el foco dentro del visor.
+        const focusables = Array.from(lb.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex="0"]'));
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (!lb.classList.contains('open') || !img.naturalWidth) return;
+      computeBase();
+      render();
+    });
+  }
+</script>
+
+<style>
+  .sc {
+    position: relative;
+    z-index: 2;
+    max-width: 1320px;
+    margin: clamp(32px, 6vh, 72px) auto clamp(48px, 8vh, 96px);
+    padding: 0 clamp(16px, 4vw, 64px);
+  }
+  .sc-head {
+    max-width: 760px;
+    margin: 0 auto clamp(28px, 4vh, 48px);
+    text-align: center;
+  }
+  .sc-kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 14px;
+  }
+  .sc-head h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 44px);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 14px;
+  }
+  .sc-intro {
+    font-size: clamp(16px, 1.3vw, 18px);
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+  .sc-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    padding: 12px 22px;
+    border-radius: 100px;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition:
+      background 0.18s,
+      color 0.18s;
+  }
+  .sc-live:hover,
+  .sc-live:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* ---- Marco de navegador ---- */
+  .frame {
+    position: relative;
+    margin: 0;
+    min-width: 0;
+  }
+  .frame-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 14px;
+    background: #efe9e0;
+    border: 1px solid var(--ink-12);
+    border-bottom: 0;
+    border-radius: 16px 16px 0 0;
+  }
+  .dots {
+    display: inline-flex;
+    gap: 7px;
+    flex: none;
+  }
+  .dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #d6cdc0;
+    display: block;
+  }
+  .url {
+    flex: 1;
+    min-width: 0;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-60);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .expand {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--ink-12);
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition:
+      background 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .expand:hover,
+  .expand:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .frame-body {
+    height: min(80vh, 820px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 30px 80px rgba(20, 18, 16, 0.14);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(20, 18, 16, 0.3) transparent;
+  }
+  .frame-body:focus-visible,
+  .phone-body:focus-visible {
+    outline: 3px solid var(--coral);
+    outline-offset: 2px;
+  }
+  .frame-body img,
+  .phone-body img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+  .hint {
+    position: absolute;
+    left: 50%;
+    bottom: 56px;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: rgba(20, 18, 16, 0.82);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 12px;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .frame.seen .hint,
+  .phone.seen .hint {
+    opacity: 0;
+  }
+  figcaption {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-60);
+    text-align: center;
+  }
+  .sc-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(36px, 6vh, 72px);
+  }
+
+  /* ---- Teléfonos ---- */
+  .sc-mobile-wrap {
+    margin-top: clamp(48px, 8vh, 96px);
+  }
+  .sc-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-60);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .sc-phones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 300px));
+    justify-content: center;
+    gap: clamp(24px, 4vw, 56px);
+  }
+  .phone {
+    margin: 0;
+  }
+  .phone-shell {
+    position: relative;
+    padding: 12px;
+    background: #1b1714;
+    border-radius: 40px;
+    box-shadow: 0 30px 70px rgba(20, 18, 16, 0.22);
+  }
+  .notch {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 74px;
+    height: 20px;
+    border-radius: 100px;
+    background: #1b1714;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .phone-body {
+    height: min(68vh, 620px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+    border-radius: 30px;
+    scrollbar-width: none;
+  }
+  .phone-body::-webkit-scrollbar {
+    display: none;
+  }
+  .phone figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .expand--text {
+    padding: 4px 10px;
+  }
+
+  /* Tablet y móvil: las ventanas de escritorio pasan a vista previa recortada (el scroll interno de una
+     captura de 1440 px en 330 px de ancho sería ilegible); el detalle se ve con "Tamaño completo". */
+  @media (max-width: 860px) {
+    .frame-body {
+      height: auto;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .frame-body img {
+      cursor: zoom-in;
+    }
+    .hint {
+      display: none;
+    }
+    .frame-bar {
+      justify-content: space-between;
+    }
+    .url {
+      display: none;
+    }
+    .expand {
+      padding: 8px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+  }
+
+  /* ---- Visor ---- */
+  .lb {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    background: #12100d;
+    color: #faf6f0;
+  }
+  .lb.open {
+    display: flex;
+  }
+  .lb-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px clamp(12px, 3vw, 28px);
+    border-bottom: 1px solid rgba(250, 246, 240, 0.12);
+  }
+  .lb-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-width: 0;
+  }
+  .lb-count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(250, 246, 240, 0.55);
+    flex: none;
+  }
+  .lb-title {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lb-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+  .lb-btn {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid rgba(250, 246, 240, 0.25);
+    background: rgba(250, 246, 240, 0.06);
+    color: #faf6f0;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background 0.15s,
+      border-color 0.15s;
+  }
+  .lb-btn--text {
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .lb-btn:hover:not(:disabled),
+  .lb-btn:focus-visible {
+    background: rgba(250, 246, 240, 0.18);
+    border-color: rgba(250, 246, 240, 0.5);
+  }
+  .lb-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .lb-zoom {
+    min-width: 52px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .lb-stage {
+    flex: 1;
+    overflow: auto;
+    padding: 16px;
+    cursor: zoom-in;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: contain;
+  }
+  .lb-stage.is-zoomed {
+    cursor: grab;
+  }
+  .lb-stage.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+  .lb-img {
+    display: block;
+    margin: 0 auto;
+    height: auto;
+    max-width: none;
+    background: #fff;
+    border-radius: 6px;
+    user-select: none;
+  }
+  .lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(250, 246, 240, 0.3);
+    background: rgba(18, 15, 13, 0.7);
+    color: #faf6f0;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .lb-nav:hover,
+  .lb-nav:focus-visible {
+    background: rgba(250, 246, 240, 0.2);
+  }
+  .lb-prev {
+    left: 14px;
+  }
+  .lb-next {
+    right: 14px;
+  }
+  .lb-hint {
+    padding: 8px 16px 12px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(250, 246, 240, 0.5);
+  }
+  @media (max-width: 700px) {
+    .lb-live,
+    .lb-hint {
+      display: none;
+    }
+    .lb-nav {
+      width: 40px;
+      height: 40px;
+      top: auto;
+      bottom: 52px;
+      transform: none;
+    }
+    .lb-title {
+      max-width: 40vw;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hint,
+    .live-link,
+    .sc-live {
+      transition: none;
+    }
+  }
+</style>
