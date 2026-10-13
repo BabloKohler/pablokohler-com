@@ -1,19 +1,87 @@
 ---
 import Star from '../Star.astro';
+import { STAR_PATH, STAR_VIEWBOX } from '../star-path';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
   t: UiDictionary['hero'];
 }
 const { t } = Astro.props;
+
+// Tamaño responsive a partir del tamaño máximo en escritorio (px): clamp(mín, vw, máx).
+const sz = (max: number, minRatio = 0.6) => `clamp(${Math.round(max * minRatio)}px, ${(max / 14.4).toFixed(2)}vw, ${max}px)`;
+
+/**
+ * Los soles del hero. 3 planos de profundidad:
+ *  - Gigantes (2): ~8x los soles originales (150px / 96px). Fondo monumental, recortado por los bordes,
+ *    se mueven despacio (profundidad lejana).
+ *  - Medianos y pequeños (8): cerca de la cámara, se mueven más rápido y reaccionan más al cursor.
+ * `speed` = factor de desplazamiento vertical con el scroll (negativo = sube mientras se hace scroll abajo),
+ * `depth` = cuánto responde al parallax del mouse, `rot` = grados de rotación extra por px de scroll.
+ * `spin` = segundos por vuelta (CSS), `rev` = sentido antihorario.
+ */
+const suns = [
+  // Gigantes: viven en el borde derecho e inferior; la columna del texto (izquierda) queda sobre fondo limpio.
+  { size: 'clamp(520px, 84vw, 1200px)', color: 'var(--coral)', pos: 'top:-36%;right:-46%', mpos: 'top:-52%;right:-46%', spin: 150, rev: false, speed: 0.1, depth: 0.5, rot: 0.012, giant: true },
+  { size: 'clamp(360px, 60vw, 860px)', color: 'var(--amber)', pos: 'bottom:-78%;left:36%', mpos: 'bottom:-36%;left:-14%', spin: 190, rev: true, speed: 0.18, depth: 0.7, rot: -0.016, giant: true },
+  // Medianos
+  { size: sz(150), color: 'var(--magenta)', pos: 'top:60%;right:9%', mpos: 'top:78%;right:8%', spin: 108, rev: false, speed: 0.42, depth: 1.2, rot: 0.05 },
+  { size: sz(110), color: 'var(--amber)', pos: 'top:9%;left:47%', mpos: 'top:14%;left:42%', spin: 90, rev: true, speed: -0.14, depth: 1.0, rot: -0.04 },
+  { size: sz(96), color: 'var(--coral)', pos: 'bottom:7%;right:30%', mpos: 'bottom:5%;right:30%', spin: 77, rev: true, speed: 0.62, depth: 1.5, rot: 0.06 },
+  // Pequeños
+  { size: sz(72), color: 'var(--magenta)', pos: 'top:12%;left:8%', mpos: 'top:15%;left:6%', spin: 64, rev: false, speed: 0.3, depth: 1.8, rot: -0.07 },
+  { size: sz(52), color: 'var(--coral)', pos: 'top:44%;left:55%', mpos: 'top:24%;left:12%', spin: 52, rev: true, speed: -0.28, depth: 2.2, rot: 0.08 },
+  { size: sz(40), color: 'var(--amber)', pos: 'bottom:22%;left:36%', mpos: 'top:84%;left:10%', spin: 46, rev: false, speed: 0.85, depth: 2.6, rot: -0.09 },
+  { size: sz(30), color: 'var(--magenta)', pos: 'top:24%;right:33%', mpos: 'top:21%;left:34%', spin: 38, rev: true, speed: -0.5, depth: 3.0, rot: 0.1 },
+  { size: sz(60), color: 'var(--amber)', pos: 'top:80%;left:25%', mpos: 'top:72%;left:72%', spin: 58, rev: false, speed: 0.55, depth: 2.0, rot: 0.07 },
+];
+
+// Posiciones y tamaños en CSS (escritorio + móvil). En móvil el hero es alto y angosto: los soles se
+// reparten arriba y abajo para no pisar el texto. `!important` porque se resetean los 4 lados.
+const sunCss = suns
+  .map(
+    (s, i) =>
+      `.hero .sun[data-i="${i}"]{${s.pos};width:${s.size}}` +
+      `@media (max-width:700px){.hero .sun[data-i="${i}"]{top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;${s.mpos.replace(/;/g, ' !important;')} !important}}`,
+  )
+  .join('');
+
 ---
 
 <header class="hero">
-  <div class="star-edge star-edge--tr" data-parallax="0.3">
-    <Star class="star-mark" size="clamp(100px, 11vw, 150px)" color="var(--coral)" spin duration={108} />
-  </div>
-  <div class="star-edge star-edge--bl" data-parallax="0.18">
-    <Star class="star-echo" size="clamp(64px, 7vw, 96px)" color="var(--amber)" spin duration={77} reverse />
+  <!-- Una sola definición de la estrella, reutilizada por los 10 soles con <use> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="hero-sun" viewBox={STAR_VIEWBOX}><path d={STAR_PATH}></path></symbol>
+    </defs>
+  </svg>
+
+  <style is:inline set:html={sunCss}></style>
+
+  <div class="suns" aria-hidden="true">
+    {
+      suns.map((s, i) => (
+        <div
+          class:list={['sun', { 'sun--giant': s.giant }]}
+          style={`--i:${i}`}
+          data-i={i}
+          data-speed={s.speed}
+          data-depth={s.depth}
+          data-rot={s.rot}
+        >
+          <div class="sun-pos">
+            <div class="sun-pop">
+              <svg
+                viewBox={STAR_VIEWBOX}
+                style={`fill:${s.color};animation:${s.rev ? 'star-spin-rev' : 'star-spin'} ${s.spin}s linear infinite`}
+              >
+                <use href="#hero-sun" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ))
+    }
   </div>
 
   <div class="hero-inner">
@@ -29,29 +97,122 @@ const { t } = Astro.props;
 </header>
 
 <script>
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const edges = document.querySelectorAll<HTMLElement>('.hero .star-edge');
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.hero .sun'));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!reduceMotion && edges.length) {
-    let ticking = false;
-    const update = () => {
-      const y = window.scrollY;
-      edges.forEach((el) => {
-        const factor = parseFloat(el.dataset.parallax ?? '0');
-        el.style.transform = `translateY(${y * factor}px)`;
-      });
-      ticking = false;
-    };
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (!ticking) {
-          requestAnimationFrame(update);
-          ticking = true;
+  if (hero && nodes.length && !reduce) {
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    interface Sun {
+      pos: HTMLElement; // el que recibe el transform de JS (scroll + mouse)
+      host: HTMLElement; // .sun, sin transform: sirve para medir la posición real
+      speed: number;
+      depth: number;
+      rot: number;
+      size: number;
+      hx: number; // desplazamiento suavizado horizontal (mouse + hover)
+      hy: number;
+      sc: number; // escala suavizada
+    }
+    const suns: Sun[] = nodes.map((host) => ({
+      host,
+      pos: host.querySelector<HTMLElement>('.sun-pos')!,
+      speed: parseFloat(host.dataset.speed ?? '0'),
+      depth: parseFloat(host.dataset.depth ?? '0'),
+      rot: parseFloat(host.dataset.rot ?? '0'),
+      size: host.offsetWidth,
+      hx: 0,
+      hy: 0,
+      sc: 1,
+    }));
+
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, active: false };
+    let raf = 0;
+    let heroH = hero.offsetHeight;
+
+    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+
+    const frame = () => {
+      raf = 0;
+      const sy = window.scrollY;
+      // Si el hero ya salió de la pantalla no hay nada que animar.
+      if (sy > heroH * 1.4) return;
+
+      const mx = (mouse.x / window.innerWidth - 0.5) * 2;
+      const my = (mouse.y / window.innerHeight - 0.5) * 2;
+      let moving = false;
+
+      for (const s of suns) {
+        // Parallax con el mouse (más cerca de la cámara = se mueve más)
+        let tx = fine ? -mx * s.depth * 11 : 0;
+        let ty = fine ? -my * s.depth * 7 : 0;
+        let tsc = 1;
+
+        // Hover: si el cursor pasa sobre el sol, se aparta y crece un poco.
+        if (fine && mouse.active) {
+          const r = s.host.getBoundingClientRect();
+          const cx = r.left + r.width / 2 + s.hx;
+          const cy = r.top + r.height / 2 + sy * s.speed + s.hy;
+          const dx = mouse.x - cx;
+          const dy = mouse.y - cy;
+          const dist = Math.hypot(dx, dy) || 1;
+          const reach = s.size * 0.5 * 0.62 + 18; // cuerpo visible de la estrella + margen
+          if (dist < reach) {
+            const k = 1 - dist / reach;
+            const push = clamp(s.size * 0.16, 12, 44) * k * k + clamp(s.size * 0.05, 4, 14) * k;
+            tx += (-dx / dist) * push;
+            ty += (-dy / dist) * push;
+            tsc = 1 + 0.07 * k;
+          }
         }
+
+        // Suavizado: se acerca al objetivo en cada frame (da la sensación de resorte amortiguado)
+        s.hx += (tx - s.hx) * 0.1;
+        s.hy += (ty - s.hy) * 0.1;
+        s.sc += (tsc - s.sc) * 0.12;
+        if (Math.abs(tx - s.hx) > 0.05 || Math.abs(ty - s.hy) > 0.05 || Math.abs(tsc - s.sc) > 0.001) moving = true;
+
+        const y = sy * s.speed + s.hy;
+        s.pos.style.transform = `translate3d(${s.hx.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${(sy * s.rot).toFixed(2)}deg) scale(${s.sc.toFixed(4)})`;
+      }
+
+      // Solo se sigue animando mientras algo se esté moviendo.
+      if (moving) raf = requestAnimationFrame(frame);
+    };
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener(
+      'resize',
+      () => {
+        heroH = hero.offsetHeight;
+        suns.forEach((s) => (s.size = s.host.offsetWidth));
+        kick();
       },
       { passive: true },
     );
+    if (fine) {
+      window.addEventListener(
+        'mousemove',
+        (e) => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+          mouse.active = true;
+          kick();
+        },
+        { passive: true },
+      );
+      document.documentElement.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.x = window.innerWidth / 2;
+        mouse.y = window.innerHeight / 2;
+        kick();
+      });
+    }
+    kick();
   }
 </script>
 
@@ -66,22 +227,56 @@ const { t } = Astro.props;
     overflow: hidden;
   }
 
-  /* Los soles viven en los bordes del hero, opacidad completa, girando lento. El
-     wrapper .star-edge lleva el desplazamiento de scroll (a destiempo con el resto del
-     contenido); el <Star> dentro solo gira, así los dos transforms no se pisan. */
-  .star-edge {
+  /* Capa de soles: detrás del contenido, sin capturar el mouse (el hover se calcula por distancia).
+     Tres transforms en capas distintas para que no se pisen:
+       .sun-pos  → JS: scroll + mouse + hover
+       .sun-pop  → CSS: entrada escalonada
+       svg       → CSS: giro continuo */
+  .suns {
     position: absolute;
+    inset: 0;
     z-index: 0;
     pointer-events: none;
+  }
+  .sun {
+    position: absolute;
+  }
+  .sun-pos {
     will-change: transform;
   }
-  .star-edge--tr {
-    top: -28px;
-    right: -28px;
+  .sun-pop {
+    animation: sun-in 1.15s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+    animation-delay: calc(var(--i) * 85ms + 120ms);
+    transform-origin: center;
   }
-  .star-edge--bl {
-    bottom: -18px;
-    left: -18px;
+  .sun--giant .sun-pop {
+    animation-duration: 1.8s;
+    animation-delay: calc(var(--i) * 140ms);
+  }
+  .sun svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    will-change: transform;
+    transform-origin: center;
+  }
+  @keyframes sun-in {
+    from {
+      opacity: 0;
+      transform: scale(0.15) rotate(-120deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sun-pop {
+      animation: none;
+    }
+    .sun svg {
+      animation: none !important;
+    }
   }
 
   .hero-inner {
