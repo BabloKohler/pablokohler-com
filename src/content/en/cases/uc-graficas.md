@@ -48,5 +48,5 @@ sections:
     title: "A growing gallery of published work."
     body: "These are some of the pieces already in circulation across UC's channels and programs. The work is ongoing: every new campaign adds more pieces to this gallery. You can follow along at https://instagram.com/transferenciauc"
 nextCaseSlug: "shelovespink"
-nextCaseTitle: "She Loves Pink: website for a Bondi Junction beauty salon"
+nextCaseTitle: "She Loves Pink: website redesign for a Bondi Junction beauty salon"
 ---

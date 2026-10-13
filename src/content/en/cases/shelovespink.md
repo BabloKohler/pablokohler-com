@@ -1,14 +1,14 @@
 ---
-title: "She Loves Pink: website for a Bondi Junction beauty salon"
-lead: "A new website for a booking-only beauty salon in Bondi Junction, Sydney: the full service menu, a dedicated page for each treatment, and booking buttons that send clients straight to the salon's booking system."
-tags: ["Web Design", "Local SEO", "Beauty Salon"]
+title: "She Loves Pink: website redesign for a Bondi Junction beauty salon"
+lead: "A redesign of a salon website originally built on Wix: a faster site with a page for each treatment, an admin panel so the owners can edit prices, hours and services themselves, and the analytics and ad campaigns to bring in bookings."
+tags: ["Web Redesign", "Local SEO", "Analytics & Ads", "Beauty Salon"]
 client: "She Loves Pink Bondi"
 year: "2026"
-role: "Design + Web Development"
-scope: "Business website with service pages, price list, gallery and booking links"
+role: "Design, Web Development + Digital Marketing"
+scope: "Website redesign, admin panel, GA4 and Search Console, Google Ads and Meta Ads"
 cardMetricDescriptor: "22 pages"
-cardMetricLabel: "Live website for a Sydney beauty salon"
-cardDescription: "A new website for a Bondi Junction beauty salon: a page for each treatment, a price list and direct booking."
+cardMetricLabel: "Redesigned website for a Sydney beauty salon"
+cardDescription: "A redesign of a Bondi Junction salon's Wix site: a page for each treatment, an easy admin panel, analytics and ad campaigns."
 coverVariant: "default"
 coverImage: "/cases/shelovespink/cover.webp"
 galleryLayout: "landscape"
@@ -31,16 +31,16 @@ metrics:
 sections:
   context:
     kicker: "The starting point"
-    title: "A busy salon needed a site that sends people to book."
-    body: "She Loves Pink is a booking-only beauty salon on Oxford Street in Bondi Junction, Sydney. It offers nails, brows and lashes, facials and nurse-led cosmetic treatments. Its large service menu lives in its booking system, Fresha, and the salon needed a website that presents that menu clearly, helps local clients find the right treatment on Google, and takes them straight to book."
+    title: "A busy salon on a site that was hard to grow and hard to manage."
+    body: "She Loves Pink is a booking-only beauty salon on Oxford Street in Bondi Junction, Sydney. It offers nails, brows and lashes, facials and nurse-led cosmetic treatments. Its website had been built on Wix, and the salon needed something faster, easier to find on Google for each treatment, and simple enough for the team to keep up to date without calling a developer."
   work:
     kicker: "What I did"
-    title: "A fast site built around booking."
-    body: "I designed and built the site as a fast, static website with Astro. The service menu and price list mirror the salon's Fresha listing, so what clients read matches what they can book. Each main treatment has its own page written with local search in mind (BIAB nails, lash lift or GEL-X nails in Bondi Junction), with prices, durations and answers to common questions marked up so search engines can read them. Booking buttons are tagged with UTM parameters so the salon can see which pages send people to book. The cosmetic treatments page is led by the salon's registered nurse and carries the consultation and risk notice that these services require."
+    title: "Redesign, easy editing, and the tools to grow."
+    body: "I redesigned and rebuilt the site as a fast, static website with Astro, and redirected the old addresses with 301s so the rankings the site already had were not lost. Each main treatment now has its own page written with local search in mind (BIAB nails, lash lift or GEL-X nails in Bondi Junction), with prices, durations and answers to common questions. I built an admin panel so the salon can update prices, opening hours and services on its own, and the service menu mirrors its Fresha booking listing. I also set up Google Analytics 4 and Google Search Console, with booking buttons tagged so the salon can see which pages lead to bookings, and I run the salon's Google Ads and Meta Ads campaigns."
   result:
     kicker: "The result"
-    title: "A live site with 22 pages."
-    body: "The site is live at shelovespink.com.au with 22 pages: home, our salon, price list, gallery, contact, careers and a dedicated page for each main treatment. It also includes the team, reviews from the salon's Fresha profile and a gallery of real client work. Visit and booking numbers will be added here once there is enough data."
+    title: "A live site with 22 pages, and campaigns just getting started."
+    body: "The site is live at shelovespink.com.au with 22 pages: home, our salon, price list, gallery, contact, careers and a dedicated page for each main treatment. The salon can now manage its own prices, hours and services. Measurement is in place, and the Google Ads and Meta Ads campaigns have only just started, so visit and booking numbers will be added here once there is enough data."
 nextCaseSlug: "docomomo"
 nextCaseTitle: "Docomomo: website for an international architecture conference"
 ---
