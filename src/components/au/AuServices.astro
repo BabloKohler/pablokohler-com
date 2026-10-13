@@ -10,7 +10,15 @@ import { AU_SERVICES } from '../../data/au-services';
   <div class="au-grid">
     {
       AU_SERVICES.map((s, i) => (
-        <a href={`/en/${s.slug}/`} class="au-card reveal" data-reveal style={`transition-delay:${i * 0.06}s`}>
+        <a
+          href={`/en/${s.slug}/`}
+          class="au-card reveal"
+          data-reveal
+          style={`transition-delay:${i * 0.06}s`}
+          data-track="service_card_click"
+          data-track-service={s.cardTitle}
+          data-track-location="home"
+        >
           <h3>{s.cardTitle}</h3>
           <p>{s.cardBlurb}</p>
           <span class="au-from">{s.cardFrom}</span>

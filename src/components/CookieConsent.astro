@@ -27,6 +27,39 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
   const GA_ID = (import.meta.env.PUBLIC_GA_MEASUREMENT_ID as string | undefined)?.trim();
   const STORAGE_KEY = 'cookie_consent';
 
+  const w = window as unknown as {
+    dataLayer: unknown[];
+    trackEvent?: (name: string, params?: Record<string, unknown>) => void;
+  };
+  w.dataLayer = w.dataLayer || [];
+
+  // gtag.js solo procesa objetos `arguments`. Empujar un array (p. ej. con ...args) hace que
+  // los comandos se descarten en silencio y no salga ninguna medición. No cambiar a arrow function.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function gtag(..._args: unknown[]) {
+    w.dataLayer.push(arguments);
+  }
+
+  let gaLoaded = false;
+
+  // Eventos de conversión. Solo se envían si GA ya está cargado (o sea, con consentimiento).
+  // Uso: window.trackEvent('generate_lead', { service: 'Website redesign' }) o data-track="nombre"
+  // en cualquier elemento (ver listener más abajo).
+  w.trackEvent = (name, params = {}) => {
+    if (gaLoaded) gtag('event', name, params);
+  };
+
+  document.addEventListener('click', (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-track]');
+    if (!el) return;
+    w.trackEvent?.(el.dataset.track as string, {
+      link_text: el.textContent?.trim().slice(0, 60),
+      link_url: (el as HTMLAnchorElement).href,
+      service: el.dataset.trackService,
+      location: el.dataset.trackLocation,
+    });
+  });
+
   const loadGoogleAnalytics = () => {
     if (!GA_ID || document.getElementById('ga4-script')) return;
     const script = document.createElement('script');
@@ -35,11 +68,9 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
     document.head.appendChild(script);
 
-    const w = window as unknown as { dataLayer: unknown[][] };
-    w.dataLayer = w.dataLayer || [];
-    const gtag = (...args: unknown[]) => w.dataLayer.push(args);
     gtag('js', new Date());
     gtag('config', GA_ID);
+    gaLoaded = true;
   };
 
   const banner = document.getElementById('cookie-consent');

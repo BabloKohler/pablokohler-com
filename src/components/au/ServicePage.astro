@@ -29,7 +29,13 @@ const formStrings = JSON.stringify({
   <p class="sp-eyebrow">{s.eyebrow}</p>
   <h1>{s.h1} <span class="accent">{s.h1Accent}</span></h1>
   <p class="sp-sub">{s.sub}</p>
-  <a href="#get-in-touch" class="btn btn-primary sp-cta">
+  <a
+    href="#get-in-touch"
+    class="btn btn-primary sp-cta"
+    data-track="cta_click"
+    data-track-service={s.formService}
+    data-track-location="hero"
+  >
     <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
     <span class="btn-label">{s.cta}</span>
   </a>
@@ -106,6 +112,11 @@ const formStrings = JSON.stringify({
       data-strings={formStrings}
     >
       <input type="hidden" name="service" value={s.formService} />
+      <input type="hidden" name="landing_page" value="" />
+      <input type="hidden" name="utm_source" value="" />
+      <input type="hidden" name="utm_medium" value="" />
+      <input type="hidden" name="utm_campaign" value="" />
+      <input type="hidden" name="referrer" value="" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sp-hp" aria-hidden="true" />
       <div class="field">
         <label for="lead-name">Name</label>
@@ -166,6 +177,16 @@ const formStrings = JSON.stringify({
       statusEl.dataset.state = state;
     };
 
+    // Atribución del lead: de dónde vino (UTM del anuncio o enlace) y en qué página convirtió.
+    const params = new URLSearchParams(location.search);
+    const setHidden = (name: string, value: string) => {
+      const input = form.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+      if (input) input.value = value;
+    };
+    setHidden('landing_page', location.pathname);
+    setHidden('referrer', document.referrer);
+    ['utm_source', 'utm_medium', 'utm_campaign'].forEach((k) => setHidden(k, params.get(k) ?? ''));
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!configured) {
@@ -182,6 +203,12 @@ const formStrings = JSON.stringify({
           headers: { Accept: 'application/json' },
         });
         if (res.ok) {
+          const service = (form.querySelector('input[name="service"]') as HTMLInputElement).value;
+          (window as unknown as { trackEvent?: (n: string, p?: object) => void }).trackEvent?.('generate_lead', {
+            service,
+            form: 'service_landing',
+            currency: 'AUD',
+          });
           setStatus(strings.success, 'success');
           form.reset();
         } else {
