@@ -1,0 +1,538 @@
+---
+import { Image } from 'astro:assets';
+import Star from '../Star.astro';
+import wordmark from '../../assets/brand/wordmark-blanco.png';
+import { AU_SERVICES, type AuService } from '../../data/au-services';
+
+interface Props {
+  s: AuService;
+}
+const { s } = Astro.props;
+
+const others = AU_SERVICES.filter((o) => o.slug !== s.slug);
+
+// Mismo mecanismo que el formulario de contacto de la home: PUBLIC_FORMSPREE_ID.
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
+const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : undefined;
+const formStrings = JSON.stringify({
+  sending: 'Sending…',
+  success: 'Thanks! I’ll get back to you within a couple of business days.',
+  error: 'Something went wrong. Please try again, or email me directly.',
+  notConfigured: 'The form isn’t connected yet. Please use the booking link or LinkedIn for now.',
+});
+---
+
+<header class="sp-hero">
+  <div class="sp-hero-star" aria-hidden="true">
+    <Star size="clamp(90px, 11vw, 160px)" color="var(--coral)" spin duration={108} />
+  </div>
+  <p class="sp-eyebrow">{s.eyebrow}</p>
+  <h1>{s.h1} <span class="accent">{s.h1Accent}</span></h1>
+  <p class="sp-sub">{s.sub}</p>
+  <a href="#get-in-touch" class="btn btn-primary sp-cta">
+    <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+    <span class="btn-label">{s.cta}</span>
+  </a>
+</header>
+
+<section class="sp-block">
+  <h2 class="reveal" data-reveal>{s.problemsTitle}</h2>
+  <ul class="sp-list">
+    {s.problems.map((p) => <li class="reveal" data-reveal>{p}</li>)}
+  </ul>
+</section>
+
+<section class="sp-block">
+  <h2 class="reveal" data-reveal>{s.stepsTitle}</h2>
+  <ol class="sp-steps">
+    {
+      s.steps.map((st, i) => (
+        <li class="sp-step reveal" data-reveal style={`transition-delay:${i * 0.08}s`}>
+          <span class="sp-step-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{st.title}</h3>
+          <p>{st.desc}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<section class="sp-block">
+  <h2 class="reveal" data-reveal>{s.plansTitle}</h2>
+  <div class="sp-plans" data-count={s.plans.length}>
+    {
+      s.plans.map((p) => (
+        <article class:list={['sp-plan', 'reveal', { featured: p.featured }]} data-reveal>
+          <h3>{p.name}</h3>
+          <p class="sp-price">
+            {p.unit && /^from$/.test(p.unit) && <span class="sp-from">from </span>}
+            <strong>{p.price}</strong>
+            {p.unit && !/^from$/.test(p.unit) && <span class="sp-unit"> {p.unit}</span>}
+          </p>
+          <p class="sp-blurb">{p.blurb}</p>
+          <ul>
+            {p.features.map((f) => <li>{f}</li>)}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+  <p class="sp-note">{s.plansNote}</p>
+</section>
+
+<section class="sp-block sp-faq">
+  <h2 class="reveal" data-reveal>Questions</h2>
+  {
+    s.faq.map((f) => (
+      <details class="reveal" data-reveal>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))
+  }
+</section>
+
+<section class="sp-contact" id="get-in-touch">
+  <div class="sp-contact-inner">
+    <h2>{s.formTitle}</h2>
+    <p class="sp-contact-sub">{s.formSub}</p>
+
+    <form
+      class="sp-form"
+      id="lead-form"
+      action={formAction}
+      method="POST"
+      data-configured={formAction ? 'true' : 'false'}
+      data-strings={formStrings}
+    >
+      <input type="hidden" name="service" value={s.formService} />
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sp-hp" aria-hidden="true" />
+      <div class="field">
+        <label for="lead-name">Name</label>
+        <input id="lead-name" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="lead-email">Email</label>
+        <input id="lead-email" name="email" type="email" autocomplete="email" required />
+      </div>
+      {
+        s.askWebsite && (
+          <div class="field">
+            <label for="lead-site">Website address</label>
+            <input id="lead-site" name="website" type="text" inputmode="url" placeholder="yourbusiness.com.au" required />
+          </div>
+        )
+      }
+      <div class="field">
+        <label for="lead-msg">Anything I should know? (optional)</label>
+        <textarea id="lead-msg" name="message" rows="3"></textarea>
+      </div>
+      <button class="btn btn-primary sp-submit" type="submit">
+        <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+        <span class="btn-label">{s.submitLabel}</span>
+      </button>
+      <p class="form-status" role="status" aria-live="polite"></p>
+      <span class="form-note">I only use your details to reply to you. See the <a href="/en/privacy/">privacy policy</a>.</span>
+    </form>
+
+    <div class="sp-more">
+      <p class="sp-more-label">Other services</p>
+      <div class="sp-more-links">
+        {others.map((o) => <a href={`/en/${o.slug}/`}>{o.cardTitle}</a>)}
+      </div>
+    </div>
+  </div>
+
+  <footer class="sp-footer">
+    <a href="/en/" class="sp-foot-brand">
+      <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
+    </a>
+    <span class="sp-foot-copy">&copy; Pablo Kohler. Sydney, Australia.</span>
+    <a href="/en/privacy/" class="sp-foot-link">Privacy</a>
+  </footer>
+</section>
+
+<script>
+  const form = document.getElementById('lead-form') as HTMLFormElement | null;
+  if (form) {
+    const statusEl = form.querySelector('.form-status') as HTMLElement;
+    const btn = form.querySelector('.sp-submit') as HTMLButtonElement;
+    const label = btn.querySelector('.btn-label') as HTMLElement;
+    const original = label.textContent ?? '';
+    const strings = JSON.parse(form.dataset.strings ?? '{}');
+    const configured = form.dataset.configured === 'true';
+    const setStatus = (text: string, state: string) => {
+      statusEl.textContent = text;
+      statusEl.dataset.state = state;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!configured) {
+        setStatus(strings.notConfigured, 'info');
+        return;
+      }
+      btn.disabled = true;
+      label.textContent = strings.sending;
+      setStatus('', 'info');
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          setStatus(strings.success, 'success');
+          form.reset();
+        } else {
+          setStatus(strings.error, 'error');
+        }
+      } catch {
+        setStatus(strings.error, 'error');
+      } finally {
+        btn.disabled = false;
+        label.textContent = original;
+      }
+    });
+  }
+</script>
+
+<style>
+  .sp-hero {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(130px, 18vh, 200px) clamp(24px, 5vw, 72px) clamp(40px, 6vh, 70px);
+  }
+  .sp-hero-star {
+    position: absolute;
+    top: clamp(90px, 12vh, 130px);
+    right: clamp(8px, 4vw, 60px);
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .sp-eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 18px;
+  }
+  .sp-hero h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    max-width: min(14em, calc(100% - clamp(110px, 13vw, 190px)));
+    margin-bottom: 24px;
+  }
+  @media (max-width: 700px) {
+    .sp-hero-star {
+      display: none;
+    }
+    .sp-hero h1 {
+      max-width: 100%;
+    }
+  }
+  .sp-sub {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.6;
+    color: var(--ink-60);
+    max-width: 38em;
+    margin-bottom: 32px;
+  }
+  .sp-cta {
+    display: inline-flex;
+  }
+
+  .sp-block {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(40px, 7vh, 80px) clamp(24px, 5vw, 72px);
+  }
+  .sp-block h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 40px);
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+  }
+
+  .sp-list {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+  .sp-list li {
+    position: relative;
+    padding: 16px 20px 16px 48px;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 14px;
+    font-size: 16px;
+  }
+  .sp-list li::before {
+    content: '\2726';
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    color: var(--coral);
+    font-size: 13px;
+  }
+
+  .sp-steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+  }
+  .sp-step {
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 18px;
+    padding: 26px 24px;
+  }
+  .sp-step-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--coral);
+  }
+  .sp-step h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    margin: 12px 0 8px;
+  }
+  .sp-step p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+
+  .sp-plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .sp-plans[data-count='1'] {
+    grid-template-columns: minmax(250px, 420px);
+  }
+  .sp-plan {
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 20px;
+    padding: 30px 28px;
+  }
+  .sp-plan.featured {
+    border-color: var(--coral);
+    box-shadow: 0 16px 40px rgba(232, 93, 42, 0.12);
+  }
+  .sp-plan h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .sp-price {
+    margin-bottom: 8px;
+  }
+  .sp-price strong {
+    font-family: var(--display);
+    font-size: clamp(32px, 3.4vw, 42px);
+    letter-spacing: -0.03em;
+  }
+  .sp-from,
+  .sp-unit {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-60);
+  }
+  .sp-blurb {
+    font-size: 15px;
+    color: var(--ink-60);
+    margin-bottom: 18px;
+  }
+  .sp-plan ul {
+    list-style: none;
+    display: grid;
+    gap: 9px;
+  }
+  .sp-plan li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 14px;
+  }
+  .sp-plan li::before {
+    content: '\2726';
+    position: absolute;
+    left: 0;
+    color: var(--coral);
+    font-size: 11px;
+    top: 2px;
+  }
+  .sp-note {
+    margin-top: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-60);
+  }
+
+  .sp-faq details {
+    border-top: 1px solid var(--ink-12);
+    padding: 18px 0;
+  }
+  .sp-faq details:last-child {
+    border-bottom: 1px solid var(--ink-12);
+  }
+  .sp-faq summary {
+    cursor: pointer;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .sp-faq details p {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-60);
+    max-width: 40em;
+  }
+
+  .sp-contact {
+    background: var(--ink);
+    color: var(--paper);
+    margin-top: clamp(30px, 5vh, 60px);
+    padding: clamp(60px, 9vh, 110px) clamp(24px, 5vw, 72px) 0;
+  }
+  .sp-contact-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .sp-contact h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(30px, 4.4vw, 52px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .sp-contact-sub {
+    color: rgba(250, 246, 240, 0.65);
+    margin-bottom: 36px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .field label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(250, 246, 240, 0.5);
+    margin-bottom: 8px;
+  }
+  .field input,
+  .field textarea {
+    background: rgba(250, 246, 240, 0.06);
+    border: 1px solid rgba(250, 246, 240, 0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--paper);
+    font-family: var(--body);
+    font-size: 15px;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .field input::placeholder {
+    color: rgba(250, 246, 240, 0.3);
+  }
+  .sp-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .sp-submit {
+    border: 1px solid var(--paper);
+    cursor: pointer;
+  }
+  .form-status {
+    font-family: var(--mono);
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 1em;
+  }
+  .form-status[data-state='success'] {
+    color: var(--amber);
+  }
+  .form-status[data-state='error'],
+  .form-status[data-state='info'] {
+    color: var(--coral);
+  }
+  .form-note {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(250, 246, 240, 0.5);
+    margin-top: 8px;
+  }
+  .form-note a {
+    color: inherit;
+  }
+
+  .sp-more {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(250, 246, 240, 0.15);
+  }
+  .sp-more-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(250, 246, 240, 0.5);
+    margin-bottom: 14px;
+  }
+  .sp-more-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+  }
+  .sp-more-links a {
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(250, 246, 240, 0.3);
+  }
+  .sp-more-links a:hover {
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .sp-footer {
+    max-width: 1100px;
+    margin: clamp(50px, 8vh, 90px) auto 0;
+    padding: 24px 0 28px;
+    border-top: 1px solid rgba(250, 246, 240, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(250, 246, 240, 0.5);
+  }
+  .sp-foot-link {
+    color: inherit;
+  }
+</style>

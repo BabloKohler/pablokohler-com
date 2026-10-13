@@ -1,0 +1,30 @@
+---
+// Landing pages de servicios: SOLO se generan en el build AU (SITE_TARGET=au).
+// En el build principal getStaticPaths devuelve [] y no existe ninguna de estas rutas.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServicePage from '../../components/au/ServicePage.astro';
+import { getDictionary } from '../../i18n';
+import { IS_AU } from '../../site-target';
+import { AU_SERVICES } from '../../data/au-services';
+
+export function getStaticPaths() {
+  if (!IS_AU) return [];
+  return AU_SERVICES.map((s) => ({ params: { service: s.slug }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const t = getDictionary('en');
+const href = `/en/${s.slug}/`;
+---
+
+<BaseLayout
+  lang="en"
+  title={s.metaTitle}
+  description={s.metaDescription}
+  navDict={t.nav}
+  cookieDict={t.cookieConsent}
+  esHref={href}
+  enHref={href}
+>
+  <ServicePage s={s} />
+</BaseLayout>

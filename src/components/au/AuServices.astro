@@ -1,0 +1,89 @@
+---
+import { AU_SERVICES } from '../../data/au-services';
+---
+
+<section class="au-services" id="au-services">
+  <div class="au-head reveal" data-reveal>
+    <h2>How I can help <span class="accent">your business</span></h2>
+    <p>Websites that work, someone to look after them, and an extra pair of hands for the admin.</p>
+  </div>
+  <div class="au-grid">
+    {
+      AU_SERVICES.map((s, i) => (
+        <a href={`/en/${s.slug}/`} class="au-card reveal" data-reveal style={`transition-delay:${i * 0.06}s`}>
+          <h3>{s.cardTitle}</h3>
+          <p>{s.cardBlurb}</p>
+          <span class="au-from">{s.cardFrom}</span>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .au-services {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(60px, 9vh, 110px) clamp(24px, 5vw, 72px) 0;
+  }
+  .au-head {
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+  .au-head h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+    margin-bottom: 14px;
+  }
+  .au-head p {
+    font-size: clamp(16px, 1.4vw, 19px);
+    color: var(--ink-60);
+  }
+  .au-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+  }
+  .au-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 20px;
+    padding: 26px 24px;
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      transform 0.22s ease,
+      box-shadow 0.22s ease,
+      border-color 0.22s ease;
+  }
+  .au-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(20, 18, 16, 0.1);
+    border-color: rgba(232, 93, 42, 0.35);
+  }
+  .au-card h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 21px;
+    margin-bottom: 10px;
+  }
+  .au-card p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-60);
+    margin-bottom: 18px;
+  }
+  .au-from {
+    margin-top: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--coral);
+  }
+</style>

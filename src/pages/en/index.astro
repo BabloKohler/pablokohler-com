@@ -8,7 +8,9 @@ import Formats from '../../components/home/Formats.astro';
 import Cases from '../../components/home/Cases.astro';
 import About from '../../components/home/About.astro';
 import Contact from '../../components/home/Contact.astro';
+import AuServices from '../../components/au/AuServices.astro';
 import { getDictionary } from '../../i18n';
+import { IS_AU } from '../../site-target';
 
 const t = getDictionary('en');
 
@@ -31,6 +33,7 @@ const cases = order
   <Hero t={t.hero} />
   <TrustMarquee t={t.trust} />
   <Capabilities t={t.caps} />
+  {IS_AU && <AuServices />}
   <Formats t={t.formats} />
   <Cases t={t.cases} lang="en" cases={cases} />
   <About t={t.about} />
