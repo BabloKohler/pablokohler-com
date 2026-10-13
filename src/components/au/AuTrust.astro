@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../../assets/about/pablo-kohler.jpg';
+
+// Solo hechos verificables (ver src/i18n/en.ts "about" y los casos en src/content/en/cases).
+// NO agregar reseñas, cifras de clientes ni logos sin respaldo real.
+const work = [
+  { href: '/en/cases/docomomo/', label: 'Docomomo', desc: 'website for an international architecture conference' },
+  { href: '/en/cases/uc-graficas/', label: 'UC Chile', desc: 'campaign graphics for innovation and education programs' },
+  { href: '/en/cases/one-health/', label: 'One Health', desc: 'science communication article' },
+];
+---
+
+<aside class="trust reveal" data-reveal aria-label="About Pablo">
+  <Image class="trust-photo" src={portrait} alt="Pablo Kohler" width={160} height={160} format="webp" quality={85} />
+  <div class="trust-body">
+    <p class="trust-lead">
+      <strong>Hi, I’m Pablo.</strong> I’m a Sydney-based digital marketing and web consultant, bilingual in English and
+      Spanish, with 9+ years of experience building websites and digital systems for universities and organisations.
+      When you work with me, you deal with me directly.
+    </p>
+    <p class="trust-work">
+      <span>Recent work:</span>
+      {
+        work.map((w, i) => (
+          <>
+            <a href={w.href}>{w.label}</a>
+            <span class="trust-desc"> ({w.desc})</span>
+            {i < work.length - 1 && <span class="trust-sep"> · </span>}
+          </>
+        ))
+      }
+    </p>
+  </div>
+</aside>
+
+<style>
+  .trust {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 clamp(24px, 5vw, 72px);
+    display: flex;
+    gap: 22px;
+    align-items: center;
+  }
+  .trust-photo {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    border: 2px solid var(--ink-12);
+  }
+  .trust-lead {
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .trust-work {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+  .trust-work a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-underline-offset: 3px;
+  }
+  .trust-desc,
+  .trust-sep {
+    color: var(--ink-60);
+  }
+  @media (max-width: 600px) {
+    .trust {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

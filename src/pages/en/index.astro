@@ -23,8 +23,12 @@ const cases = order
 
 <BaseLayout
   lang="en"
-  title="Pablo Kohler: Digital Marketing & Communications Consultant"
-  description="Digital marketing and communications consultant for clients across Latin America and Australia. One person to think through your strategy and build all of it: websites, SEO, and automation."
+  title={IS_AU
+    ? 'Pablo Kohler | Website Design, Redesign & Care for Sydney Small Businesses'
+    : 'Pablo Kohler: Digital Marketing & Communications Consultant'}
+  description={IS_AU
+    ? 'Sydney-based web designer and digital marketing consultant. Website redesign, new websites, care plans and virtual assistant services for small businesses in Sydney and across Australia.'
+    : 'Digital marketing and communications consultant for clients across Latin America and Australia. One person to think through your strategy and build all of it: websites, SEO, and automation.'}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref="/es/"

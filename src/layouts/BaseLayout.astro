@@ -61,6 +61,48 @@ const jsonLd = {
     },
   ],
 };
+
+// Build AU: negocio de servicio local en Sydney (sin dirección pública) y sin mencionar Chile.
+// `url` y el @id usan Astro.site, que en AU es https://pablokohler.com.au.
+const auJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${Astro.site}#pablo-kohler`,
+      name: 'Pablo Kohler',
+      url: String(Astro.site),
+      image: String(ogImageUrl),
+      jobTitle: 'Web designer and digital marketing consultant',
+      knowsLanguage: ['en', 'es'],
+      sameAs: ['https://www.linkedin.com/in/pablo-kohler/'],
+    },
+    {
+      '@type': 'ProfessionalService',
+      '@id': `${Astro.site}#business`,
+      name: 'Pablo Kohler',
+      url: String(Astro.site),
+      image: String(ogImageUrl),
+      description:
+        'Website redesign, new websites, website care plans and virtual assistant services for small businesses in Sydney and across Australia.',
+      founder: { '@id': `${Astro.site}#pablo-kohler` },
+      areaServed: [
+        { '@type': 'City', name: 'Sydney' },
+        { '@type': 'AdministrativeArea', name: 'New South Wales' },
+        { '@type': 'Country', name: 'Australia' },
+      ],
+      address: { '@type': 'PostalAddress', addressLocality: 'Sydney', addressRegion: 'NSW', addressCountry: 'AU' },
+      makesOffer: [
+        'Website redesign',
+        'Website care plans',
+        'Free website audit',
+        'New website design',
+        'Virtual assistant services',
+      ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+    },
+  ],
+};
+const structuredData = IS_AU ? auJsonLd : jsonLd;
 ---
 
 <!doctype html>
@@ -100,7 +142,7 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

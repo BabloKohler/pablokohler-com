@@ -2,12 +2,20 @@
 import { Image } from 'astro:assets';
 import Star from '../Star.astro';
 import wordmark from '../../assets/brand/wordmark-blanco.png';
+import AuTrust from './AuTrust.astro';
 import { AU_SERVICES, type AuService } from '../../data/au-services';
 
 interface Props {
   s: AuService;
 }
 const { s } = Astro.props;
+
+const calendly = 'https://calendly.com/pablokohlerlara/30min';
+// WhatsApp opcional: define PUBLIC_WHATSAPP_NUMBER (solo dígitos con código de país, ej. 61412345678).
+const wa = String(import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? '').replace(/\D/g, '');
+const waHref = wa
+  ? `https://wa.me/${wa}?text=${encodeURIComponent(`Hi Pablo, I'm interested in: ${s.formService}`)}`
+  : undefined;
 
 const others = AU_SERVICES.filter((o) => o.slug !== s.slug);
 
@@ -39,7 +47,12 @@ const formStrings = JSON.stringify({
     <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
     <span class="btn-label">{s.cta}</span>
   </a>
+  <a href={calendly} class="sp-secondary" data-track="booking_click" data-track-location="hero" target="_blank" rel="noopener">
+    or book a free 30-min call
+  </a>
 </header>
+
+<AuTrust />
 
 <section class="sp-block">
   <h2 class="reveal" data-reveal>{s.problemsTitle}</h2>
@@ -102,6 +115,20 @@ const formStrings = JSON.stringify({
   <div class="sp-contact-inner">
     <h2>{s.formTitle}</h2>
     <p class="sp-contact-sub">{s.formSub}</p>
+
+    <div class="sp-quick">
+      <p class="sp-quick-label">Prefer to talk?</p>
+      <a href={calendly} data-track="booking_click" data-track-location="contact" target="_blank" rel="noopener">
+        Book a free 30-min call
+      </a>
+      {
+        waHref && (
+          <a href={waHref} data-track="whatsapp_click" data-track-service={s.formService} data-track-location="contact" target="_blank" rel="noopener">
+            Message me on WhatsApp
+          </a>
+        )
+      }
+    </div>
 
     <form
       class="sp-form"
@@ -272,6 +299,55 @@ const formStrings = JSON.stringify({
   }
   .sp-cta {
     display: inline-flex;
+  }
+  .sp-secondary {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-underline-offset: 4px;
+  }
+  .sp-secondary:hover {
+    color: var(--coral);
+  }
+  @media (max-width: 600px) {
+    .sp-secondary {
+      display: block;
+      margin: 18px 0 0;
+    }
+  }
+  .sp-quick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    margin-bottom: 32px;
+    padding: 16px 20px;
+    border: 1px solid rgba(250, 246, 240, 0.15);
+    border-radius: 14px;
+  }
+  .sp-quick-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(250, 246, 240, 0.5);
+  }
+  .sp-quick a {
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(250, 246, 240, 0.35);
+  }
+  .sp-quick a:hover {
+    color: var(--amber);
+    border-color: var(--amber);
   }
 
   .sp-block {
