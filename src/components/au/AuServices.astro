@@ -1,15 +1,32 @@
 ---
-import { AU_SERVICES } from '../../data/au-services';
+import { AU_SERVICES, type AuService } from '../../data/au-services';
+
+interface Props {
+  items?: AuService[];
+  id?: string;
+  headline?: string;
+  accent?: string;
+  intro?: string;
+  location?: string;
+}
+const {
+  items = AU_SERVICES,
+  id = 'au-services',
+  headline = 'How I can help',
+  accent = 'your business',
+  intro = 'Websites that work, someone to look after them, and an extra pair of hands for the admin.',
+  location = 'home',
+} = Astro.props;
 ---
 
-<section class="au-services" id="au-services">
+<section class="au-services" id={id}>
   <div class="au-head reveal" data-reveal>
-    <h2>How I can help <span class="accent">your business</span></h2>
-    <p>Websites that work, someone to look after them, and an extra pair of hands for the admin.</p>
+    <h2>{headline} <span class="accent">{accent}</span></h2>
+    <p>{intro}</p>
   </div>
   <div class="au-grid">
     {
-      AU_SERVICES.map((s, i) => (
+      items.map((s, i) => (
         <a
           href={`/en/${s.slug}/`}
           class="au-card reveal"
@@ -17,7 +34,7 @@ import { AU_SERVICES } from '../../data/au-services';
           style={`transition-delay:${i * 0.06}s`}
           data-track="service_card_click"
           data-track-service={s.cardTitle}
-          data-track-location="home"
+          data-track-location={location}
         >
           <h3>{s.cardTitle}</h3>
           <p>{s.cardBlurb}</p>

@@ -9,6 +9,7 @@ import Cases from '../../components/home/Cases.astro';
 import About from '../../components/home/About.astro';
 import Contact from '../../components/home/Contact.astro';
 import AuServices from '../../components/au/AuServices.astro';
+import { AU_INDUSTRIES } from '../../data/au-industries';
 import { getDictionary } from '../../i18n';
 import { IS_AU } from '../../site-target';
 
@@ -38,6 +39,18 @@ const cases = order
   <TrustMarquee t={t.trust} />
   <Capabilities t={t.caps} />
   {IS_AU && <AuServices />}
+  {
+    IS_AU && (
+      <AuServices
+        items={AU_INDUSTRIES}
+        id="au-industries"
+        headline="Websites built for"
+        accent="your industry"
+        intro="Different businesses need different things from a website. Here is what I focus on for Sydney businesses in these industries."
+        location="home_industries"
+      />
+    )
+  }
   <Formats t={t.formats} />
   <Cases t={t.cases} lang="en" cases={cases} />
   <About t={t.about} />
