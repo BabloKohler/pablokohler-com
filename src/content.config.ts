@@ -20,6 +20,8 @@ const caseSchema = z.object({
   coverImage: z.string().optional(),
   // 'contain' evita recortar piezas gráficas verticales (posters, flyers) en el cover 16:9.
   coverFit: z.enum(['cover', 'contain']).default('cover'),
+  // 'landscape' para capturas de sitios web (16:10); 'portrait' (por defecto) para posters/piezas verticales.
+  galleryLayout: z.enum(['portrait', 'landscape']).default('portrait'),
   // Galería opcional de piezas (caso de diseño gráfico en vez de web/contenido).
   gallery: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
   metrics: z

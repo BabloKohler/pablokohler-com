@@ -6,13 +6,14 @@ interface Item {
 interface Props {
   label: string;
   images: Item[];
+  layout?: 'portrait' | 'landscape';
 }
-const { label, images } = Astro.props;
+const { label, images, layout = 'portrait' } = Astro.props;
 ---
 
 <section class="case-gallery">
   <span class="gallery-label">{label}</span>
-  <div class="gallery-grid" id="case-gallery-grid">
+  <div class:list={['gallery-grid', { 'gallery-grid--landscape': layout === 'landscape' }]} id="case-gallery-grid">
     {
       images.map((img, i) => (
         <button type="button" class="gallery-item" data-index={i} aria-label={img.alt}>
@@ -131,6 +132,13 @@ const { label, images } = Astro.props;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+  /* Capturas de sitios web: 16:10, sin recorte. */
+  .gallery-grid--landscape {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+  .gallery-grid--landscape .gallery-item {
+    aspect-ratio: 16 / 10;
   }
 
   .gallery-lightbox {

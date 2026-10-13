@@ -15,7 +15,10 @@ import { IS_AU } from '../../site-target';
 
 const t = getDictionary('en');
 
-const order = ['docomomo', 'one-health', 'uc-graficas'];
+// En el build AU el caso más cercano al mercado (salón en Sydney) va primero.
+const order = IS_AU
+  ? ['shelovespink', 'docomomo', 'one-health', 'uc-graficas']
+  : ['docomomo', 'one-health', 'uc-graficas', 'shelovespink'];
 const allCases = await getCollection('cases-en');
 const cases = order
   .map((slug) => allCases.find((c) => c.id === slug))
