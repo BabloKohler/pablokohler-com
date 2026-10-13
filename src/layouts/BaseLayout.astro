@@ -4,6 +4,7 @@ import Nav from '../components/Nav.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import portrait from '../assets/about/pablo-kohler.jpg';
 import type { Lang, UiDictionary } from '../i18n';
+import { IS_AU } from '../site-target';
 import '../styles/global.css';
 
 interface Props {
@@ -71,9 +72,20 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalHref} />
-    <link rel="alternate" hreflang="es" href={new URL(esHref, Astro.site)} />
-    <link rel="alternate" hreflang="en" href={new URL(enHref, Astro.site)} />
-    <link rel="alternate" hreflang="x-default" href={new URL(esHref, Astro.site)} />
+    {
+      IS_AU ? (
+        <>
+          <link rel="alternate" hreflang="en-AU" href={new URL(enHref, Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(enHref, Astro.site)} />
+        </>
+      ) : (
+        <>
+          <link rel="alternate" hreflang="es" href={new URL(esHref, Astro.site)} />
+          <link rel="alternate" hreflang="en" href={new URL(enHref, Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(esHref, Astro.site)} />
+        </>
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Pablo Kohler" />
@@ -82,7 +94,7 @@ const jsonLd = {
     <meta property="og:url" content={canonicalHref} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:locale" content={lang === 'es' ? 'es_CL' : 'en_AU'} />
-    <meta property="og:locale:alternate" content={lang === 'es' ? 'en_AU' : 'es_CL'} />
+    {!IS_AU && <meta property="og:locale:alternate" content={lang === 'es' ? 'en_AU' : 'es_CL'} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -99,7 +111,7 @@ const jsonLd = {
   </head>
   <body>
     <div class="grain"></div>
-    <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} />
+    <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} showLangSwitch={!IS_AU} />
     <slot />
     <CookieConsent lang={lang} t={cookieDict} />
 

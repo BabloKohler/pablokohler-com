@@ -13,9 +13,11 @@ interface Props {
    * (variante usada en las páginas de detalle de caso).
    */
   back?: { href: string; label: string };
+  /** false en el build AU (solo inglés): oculta el switch ES/EN. */
+  showLangSwitch?: boolean;
 }
 
-const { lang, t, otherLangHref, back } = Astro.props;
+const { lang, t, otherLangHref, back, showLangSwitch = true } = Astro.props;
 const home = `/${lang}/`;
 ---
 
@@ -30,9 +32,11 @@ const home = `/${lang}/`;
         <a href={back.href} class="back">
           {back.label}
         </a>
-        <a href={otherLangHref} class="lang">
-          <b>{t.langLabel}</b> / <span>{lang === 'es' ? 'EN' : 'ES'}</span>
-        </a>
+        {showLangSwitch && (
+          <a href={otherLangHref} class="lang">
+            <b>{t.langLabel}</b> / <span>{lang === 'es' ? 'EN' : 'ES'}</span>
+          </a>
+        )}
       </div>
     ) : (
       <>
@@ -50,9 +54,11 @@ const home = `/${lang}/`;
           <a href={`${home}#sobre-mi`}>{t.about}</a>
           <a href={`${home}#contacto`}>{t.contact}</a>
         </div>
-        <a href={otherLangHref} class="lang">
-          <b>{t.langLabel}</b> / <span>{lang === 'es' ? 'EN' : 'ES'}</span>
-        </a>
+        {showLangSwitch && (
+          <a href={otherLangHref} class="lang">
+            <b>{t.langLabel}</b> / <span>{lang === 'es' ? 'EN' : 'ES'}</span>
+          </a>
+        )}
       </>
     )
   }

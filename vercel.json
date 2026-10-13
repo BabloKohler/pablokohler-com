@@ -1,6 +1,71 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/es/", "permanent": true },
+    {
+      "source": "/",
+      "destination": "/es/",
+      "permanent": true,
+      "missing": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
+    {
+      "source": "/es",
+      "destination": "/en/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
+    {
+      "source": "/es/",
+      "destination": "/en/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
+    {
+      "source": "/es/casos/:slug",
+      "destination": "/en/cases/:slug",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
+    {
+      "source": "/es/privacidad",
+      "destination": "/en/privacy",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
+    {
+      "source": "/es/blog",
+      "destination": "/en/blog",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
+    },
     {
       "source": "/docomomo-web-design-for-an-international-architecture-conference/",
       "destination": "/es/casos/docomomo",
@@ -55,6 +120,18 @@
       "source": "/author/pablo-kohler/",
       "destination": "/es/#sobre-mi",
       "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/en/",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?pablokohler\\.com\\.au"
+        }
+      ]
     }
   ]
 }
