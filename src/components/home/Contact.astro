@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Star from '../Star.astro';
 import wordmark from '../../assets/brand/wordmark-blanco.png';
+import FooterSuns from './FooterSuns.astro';
 import type { Lang, UiDictionary } from '../../i18n';
 
 interface Props {
@@ -95,6 +96,8 @@ const formStrings = JSON.stringify({
       </div>
     </div>
   </div>
+
+  <FooterSuns />
 
   <footer class="site-footer">
     <div class="foot-brand">

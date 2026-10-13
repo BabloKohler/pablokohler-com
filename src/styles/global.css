@@ -170,3 +170,17 @@ body {
     transition: none !important;
   }
 }
+
+/* ---- Soles interactivos (hero y footer): cursor de arrastre y sin selección mientras se arrastra ---- */
+[data-sun-cursor='grab'],
+[data-sun-cursor='grab'] *:not(a):not(a *):not(button):not(button *):not(input):not(textarea):not(select):not(label) {
+  cursor: grab;
+}
+[data-sun-cursor='grabbing'],
+[data-sun-cursor='grabbing'] * {
+  cursor: grabbing !important;
+}
+body.sun-dragging {
+  -webkit-user-select: none;
+  user-select: none;
+}

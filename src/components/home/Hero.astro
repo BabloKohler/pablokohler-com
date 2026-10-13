@@ -17,23 +17,23 @@ const sz = (max: number, minRatio = 0.6) => `clamp(${Math.round(max * minRatio)}
  *    se mueven despacio (profundidad lejana).
  *  - Medianos y pequeños (8): cerca de la cámara, se mueven más rápido y reaccionan más al cursor.
  * `speed` = factor de desplazamiento vertical con el scroll (negativo = sube mientras se hace scroll abajo),
- * `depth` = cuánto responde al parallax del mouse, `rot` = grados de rotación extra por px de scroll.
+ * `rot` = grados de rotación extra por px de scroll.
  * `spin` = segundos por vuelta (CSS), `rev` = sentido antihorario.
  */
 const suns = [
   // Gigantes: viven en el borde derecho e inferior; la columna del texto (izquierda) queda sobre fondo limpio.
-  { size: 'clamp(520px, 84vw, 1200px)', color: 'var(--coral)', pos: 'top:-36%;right:-46%', mpos: 'top:-52%;right:-46%', spin: 150, rev: false, speed: 0.1, depth: 0.5, rot: 0.012, giant: true },
-  { size: 'clamp(360px, 60vw, 860px)', color: 'var(--amber)', pos: 'bottom:-78%;left:36%', mpos: 'bottom:-36%;left:-14%', spin: 190, rev: true, speed: 0.18, depth: 0.7, rot: -0.016, giant: true },
+  { size: 'clamp(520px, 84vw, 1200px)', color: 'var(--coral)', pos: 'top:-36%;right:-46%', mpos: 'top:-52%;right:-46%', spin: 150, rev: false, speed: 0.1, rot: 0.012, giant: true },
+  { size: 'clamp(360px, 60vw, 860px)', color: 'var(--amber)', pos: 'bottom:-78%;left:36%', mpos: 'bottom:-36%;left:-14%', spin: 190, rev: true, speed: 0.18, rot: -0.016, giant: true },
   // Medianos
-  { size: sz(150), color: 'var(--magenta)', pos: 'top:60%;right:9%', mpos: 'top:78%;right:8%', spin: 108, rev: false, speed: 0.42, depth: 1.2, rot: 0.05 },
-  { size: sz(110), color: 'var(--amber)', pos: 'top:9%;left:47%', mpos: 'top:14%;left:42%', spin: 90, rev: true, speed: -0.14, depth: 1.0, rot: -0.04 },
-  { size: sz(96), color: 'var(--coral)', pos: 'bottom:7%;right:30%', mpos: 'bottom:5%;right:30%', spin: 77, rev: true, speed: 0.62, depth: 1.5, rot: 0.06 },
+  { size: sz(150), color: 'var(--magenta)', pos: 'top:60%;right:9%', mpos: 'top:78%;right:8%', spin: 108, rev: false, speed: 0.42, rot: 0.05 },
+  { size: sz(110), color: 'var(--amber)', pos: 'top:9%;left:47%', mpos: 'top:14%;left:42%', spin: 90, rev: true, speed: -0.14, rot: -0.04 },
+  { size: sz(96), color: 'var(--coral)', pos: 'bottom:7%;right:30%', mpos: 'bottom:5%;right:30%', spin: 77, rev: true, speed: 0.62, rot: 0.06 },
   // Pequeños
-  { size: sz(72), color: 'var(--magenta)', pos: 'top:12%;left:8%', mpos: 'top:15%;left:6%', spin: 64, rev: false, speed: 0.3, depth: 1.8, rot: -0.07 },
-  { size: sz(52), color: 'var(--coral)', pos: 'top:44%;left:55%', mpos: 'top:24%;left:12%', spin: 52, rev: true, speed: -0.28, depth: 2.2, rot: 0.08 },
-  { size: sz(40), color: 'var(--amber)', pos: 'bottom:22%;left:36%', mpos: 'top:84%;left:10%', spin: 46, rev: false, speed: 0.85, depth: 2.6, rot: -0.09 },
-  { size: sz(30), color: 'var(--magenta)', pos: 'top:24%;right:33%', mpos: 'top:21%;left:34%', spin: 38, rev: true, speed: -0.5, depth: 3.0, rot: 0.1 },
-  { size: sz(60), color: 'var(--amber)', pos: 'top:80%;left:25%', mpos: 'top:72%;left:72%', spin: 58, rev: false, speed: 0.55, depth: 2.0, rot: 0.07 },
+  { size: sz(72), color: 'var(--magenta)', pos: 'top:12%;left:8%', mpos: 'top:15%;left:6%', spin: 64, rev: false, speed: 0.3, rot: -0.07 },
+  { size: sz(52), color: 'var(--coral)', pos: 'top:44%;left:55%', mpos: 'top:24%;left:12%', spin: 52, rev: true, speed: -0.28, rot: 0.08 },
+  { size: sz(40), color: 'var(--amber)', pos: 'bottom:22%;left:36%', mpos: 'top:84%;left:10%', spin: 46, rev: false, speed: 0.85, rot: -0.09 },
+  { size: sz(30), color: 'var(--magenta)', pos: 'top:24%;right:33%', mpos: 'top:21%;left:34%', spin: 38, rev: true, speed: -0.5, rot: 0.1 },
+  { size: sz(60), color: 'var(--amber)', pos: 'top:80%;left:25%', mpos: 'top:72%;left:72%', spin: 58, rev: false, speed: 0.55, rot: 0.07 },
 ];
 
 // Posiciones y tamaños en CSS (escritorio + móvil). En móvil el hero es alto y angosto: los soles se
@@ -66,7 +66,6 @@ const sunCss = suns
           style={`--i:${i}`}
           data-i={i}
           data-speed={s.speed}
-          data-depth={s.depth}
           data-rot={s.rot}
         >
           <div class="sun-pos">
@@ -97,123 +96,11 @@ const sunCss = suns
 </header>
 
 <script>
+  import { initSunField } from '../../scripts/sun-field';
+
   const hero = document.querySelector<HTMLElement>('.hero');
-  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.hero .sun'));
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (hero && nodes.length && !reduce) {
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-    interface Sun {
-      pos: HTMLElement; // el que recibe el transform de JS (scroll + mouse)
-      host: HTMLElement; // .sun, sin transform: sirve para medir la posición real
-      speed: number;
-      depth: number;
-      rot: number;
-      size: number;
-      hx: number; // desplazamiento suavizado horizontal (mouse + hover)
-      hy: number;
-      sc: number; // escala suavizada
-    }
-    const suns: Sun[] = nodes.map((host) => ({
-      host,
-      pos: host.querySelector<HTMLElement>('.sun-pos')!,
-      speed: parseFloat(host.dataset.speed ?? '0'),
-      depth: parseFloat(host.dataset.depth ?? '0'),
-      rot: parseFloat(host.dataset.rot ?? '0'),
-      size: host.offsetWidth,
-      hx: 0,
-      hy: 0,
-      sc: 1,
-    }));
-
-    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, active: false };
-    let raf = 0;
-    let heroH = hero.offsetHeight;
-
-    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
-
-    const frame = () => {
-      raf = 0;
-      const sy = window.scrollY;
-      // Si el hero ya salió de la pantalla no hay nada que animar.
-      if (sy > heroH * 1.4) return;
-
-      const mx = (mouse.x / window.innerWidth - 0.5) * 2;
-      const my = (mouse.y / window.innerHeight - 0.5) * 2;
-      let moving = false;
-
-      for (const s of suns) {
-        // Parallax con el mouse (más cerca de la cámara = se mueve más)
-        let tx = fine ? -mx * s.depth * 11 : 0;
-        let ty = fine ? -my * s.depth * 7 : 0;
-        let tsc = 1;
-
-        // Hover: si el cursor pasa sobre el sol, se aparta y crece un poco.
-        if (fine && mouse.active) {
-          const r = s.host.getBoundingClientRect();
-          const cx = r.left + r.width / 2 + s.hx;
-          const cy = r.top + r.height / 2 + sy * s.speed + s.hy;
-          const dx = mouse.x - cx;
-          const dy = mouse.y - cy;
-          const dist = Math.hypot(dx, dy) || 1;
-          const reach = s.size * 0.5 * 0.62 + 18; // cuerpo visible de la estrella + margen
-          if (dist < reach) {
-            const k = 1 - dist / reach;
-            const push = clamp(s.size * 0.16, 12, 44) * k * k + clamp(s.size * 0.05, 4, 14) * k;
-            tx += (-dx / dist) * push;
-            ty += (-dy / dist) * push;
-            tsc = 1 + 0.07 * k;
-          }
-        }
-
-        // Suavizado: se acerca al objetivo en cada frame (da la sensación de resorte amortiguado)
-        s.hx += (tx - s.hx) * 0.1;
-        s.hy += (ty - s.hy) * 0.1;
-        s.sc += (tsc - s.sc) * 0.12;
-        if (Math.abs(tx - s.hx) > 0.05 || Math.abs(ty - s.hy) > 0.05 || Math.abs(tsc - s.sc) > 0.001) moving = true;
-
-        const y = sy * s.speed + s.hy;
-        s.pos.style.transform = `translate3d(${s.hx.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${(sy * s.rot).toFixed(2)}deg) scale(${s.sc.toFixed(4)})`;
-      }
-
-      // Solo se sigue animando mientras algo se esté moviendo.
-      if (moving) raf = requestAnimationFrame(frame);
-    };
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(frame);
-    };
-
-    window.addEventListener('scroll', kick, { passive: true });
-    window.addEventListener(
-      'resize',
-      () => {
-        heroH = hero.offsetHeight;
-        suns.forEach((s) => (s.size = s.host.offsetWidth));
-        kick();
-      },
-      { passive: true },
-    );
-    if (fine) {
-      window.addEventListener(
-        'mousemove',
-        (e) => {
-          mouse.x = e.clientX;
-          mouse.y = e.clientY;
-          mouse.active = true;
-          kick();
-        },
-        { passive: true },
-      );
-      document.documentElement.addEventListener('mouseleave', () => {
-        mouse.active = false;
-        mouse.x = window.innerWidth / 2;
-        mouse.y = window.innerHeight / 2;
-        kick();
-      });
-    }
-    kick();
-  }
+  const root = hero?.querySelector<HTMLElement>('.suns');
+  if (hero && root) initSunField({ root, section: hero, mode: 'hero' });
 </script>
 
 <style>
@@ -283,6 +170,9 @@ const sunCss = suns
     position: relative;
     z-index: 2;
     max-width: 1000px;
+    /* El texto del hero no se selecciona (así no estorba al arrastrar los soles). El botón sigue funcionando. */
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   h1 {
