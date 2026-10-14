@@ -85,10 +85,10 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Locked out of your website?',
     cardBlurb: 'Your developer disappeared or nobody has the logins. I help you get your domain and website back in your name.',
-    cardFrom: 'from A$290',
+    cardFrom: 'from A$420',
     metaTitle: 'Locked Out of Your Website? Access Rescue | Sydney | Pablo Kohler',
     metaDescription:
-      'Lost the logins to your website or domain? Your developer stopped replying? Access Rescue for Sydney and Australian small businesses: find who holds what and get everything set up in your name. From A$290.',
+      'Lost the logins to your website or domain? Your developer stopped replying? Access Rescue for Sydney and Australian small businesses: find who holds what and get everything set up in your name. From A$420.',
     eyebrow: 'Access Rescue',
     h1: 'Locked out of your own',
     h1Accent: 'website?',
@@ -113,7 +113,7 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Access Rescue',
-        price: 'A$290',
+        price: 'A$420',
         unit: 'from',
         blurb: 'One fixed fee to find out who holds what and get you back in control.',
         features: [
@@ -191,16 +191,16 @@ export const AU_RESCUE: AuService[] = [
       },
       {
         name: '5-edit pack',
-        price: 'A$125',
-        unit: 'A$25 each',
+        price: 'A$140',
+        unit: 'A$28 each',
         blurb: 'The most popular for regular small changes.',
         features: ['5 small edits to use as you need', 'Lower price per edit', 'Email requests, quick confirmation'],
         featured: true,
       },
       {
         name: '10-edit pack',
-        price: 'A$225',
-        unit: 'A$22.50 each',
+        price: 'A$260',
+        unit: 'A$26 each',
         blurb: 'Best value if your site changes often.',
         features: ['10 small edits to use as you need', 'Lowest price per edit', 'Email requests, quick confirmation'],
       },
@@ -234,9 +234,9 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Learn to edit your website',
     cardBlurb: 'A friendly 60-minute session on your real site, so you can make simple changes yourself.',
-    cardFrom: 'from A$99',
+    cardFrom: 'from A$115',
     metaTitle: 'Learn to Edit Your Own Website | 1:1 Training | Pablo Kohler',
-    metaDescription: `One-on-one website training for Sydney and Australian business owners on ${PLATFORMS}. Learn to change text, photos, hours and prices yourself. From A$99.`,
+    metaDescription: `One-on-one website training for Sydney and Australian business owners on ${PLATFORMS}. Learn to change text, photos, hours and prices yourself. From A$115.`,
     eyebrow: 'Website training',
     h1: 'Learn to edit your own',
     h1Accent: 'website.',
@@ -261,14 +261,14 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Live session',
-        price: 'A$99',
+        price: 'A$115',
         unit: '60 minutes',
         blurb: 'Learn by doing, on your own site.',
         features: ['60 minutes online, one on one', 'I review your site beforehand', 'You make real edits with my help'],
       },
       {
         name: 'Session + 3 videos',
-        price: 'A$149',
+        price: 'A$175',
         unit: 'recommended',
         blurb: 'So you never forget how.',
         features: ['Everything in the live session', '3 short videos made on your own site', 'A one-page how-to cheat sheet'],
@@ -303,10 +303,10 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Website hacked or broken?',
     cardBlurb: 'Strange redirects, a “Not secure” warning, or broken after an update. I find the cause and fix it.',
-    cardFrom: 'from A$150',
+    cardFrom: 'from A$235',
     metaTitle: 'Hacked or Broken Website Repair | Sydney | Pablo Kohler',
     metaDescription:
-      'Website hacked, broken after an update, or showing "Not secure"? Repair for Sydney and Australian small businesses. Quick fixes from A$150, hacked-site cleanup from A$350.',
+      'Website hacked, broken after an update, or showing "Not secure"? Repair for Sydney and Australian small businesses. Quick fixes from A$235, hacked-site cleanup from A$1,250.',
     eyebrow: 'Website repair',
     h1: 'Website hacked, broken or',
     h1Accent: 'showing “Not secure”?',
@@ -331,14 +331,14 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Quick fix',
-        price: 'A$150',
+        price: 'A$235',
         unit: 'from',
         blurb: 'For a contained problem.',
         features: ['Broken page after an update', 'Expired or misconfigured security certificate', 'Common errors and settings problems'],
       },
       {
         name: 'Hacked site cleanup',
-        price: 'A$350',
+        price: 'A$1,250',
         unit: 'from',
         blurb: 'For a compromised site.',
         features: ['Find and remove malware and spam', 'Restore clean files and content', 'Close the way in and harden the site', 'A written report of what happened'],
@@ -374,10 +374,10 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Website with no one looking after it',
     cardBlurb: 'Built years ago and left alone? I take it over, bring it up to date and put everything in your name.',
-    cardFrom: 'from A$390',
+    cardFrom: 'from A$590',
     metaTitle: 'Website Takeover for Small Business | Sydney | Pablo Kohler',
     metaDescription:
-      'Website built years ago and nobody looks after it? I audit it, move it into accounts in your name, update it, set up backups and hand it over. Sydney and Australia, from A$390.',
+      'Website built years ago and nobody looks after it? I audit it, move it into accounts in your name, update it, set up backups and hand it over. Sydney and Australia, from A$590.',
     eyebrow: 'Website takeover',
     h1: 'Your website has no one',
     h1Accent: 'looking after it.',
@@ -402,7 +402,7 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Website Takeover',
-        price: 'A$390',
+        price: 'A$590',
         unit: 'from',
         blurb: 'Bring an abandoned site back under your control.',
         features: [
@@ -443,10 +443,10 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Move off Wix or Squarespace',
     cardBlurb: 'Outgrown your site builder? I rebuild on a platform you control and keep your Google rankings.',
-    cardFrom: 'from A$1,500',
+    cardFrom: 'from A$2,200',
     metaTitle: 'Move Off Wix or Squarespace | Sydney & Australia | Pablo Kohler',
     metaDescription:
-      'Want to move your website off Wix or Squarespace without losing your Google rankings? Rebuild on a platform you control, with redirects and easy editing. Sydney and Australia, from A$1,500.',
+      'Want to move your website off Wix or Squarespace without losing your Google rankings? Rebuild on a platform you control, with redirects and easy editing. Sydney and Australia, from A$2,200.',
     eyebrow: 'Move off Wix or Squarespace',
     h1: 'Move off Wix or Squarespace',
     h1Accent: 'without losing your rankings.',
@@ -471,7 +471,7 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Move off Wix or Squarespace',
-        price: 'A$1,500',
+        price: 'A$2,200',
         unit: 'from',
         blurb: 'A rebuild you own, with your rankings protected.',
         features: [
