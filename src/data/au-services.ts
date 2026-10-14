@@ -15,6 +15,8 @@ export interface Plan {
 
 export interface AuService {
   slug: string;
+  /** 'rescue' = landing para quienes ya tienen sitio y no lo controlan (src/data/au-rescue.ts). */
+  group?: 'rescue';
   /** Texto corto para la lista de servicios del home y los links entre páginas. */
   cardTitle: string;
   cardBlurb: string;

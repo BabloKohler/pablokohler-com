@@ -7,10 +7,11 @@ import { getDictionary } from '../../i18n';
 import { IS_AU } from '../../site-target';
 import { AU_SERVICES } from '../../data/au-services';
 import { AU_INDUSTRIES } from '../../data/au-industries';
+import { AU_RESCUE } from '../../data/au-rescue';
 
 export function getStaticPaths() {
   if (!IS_AU) return [];
-  return [...AU_SERVICES, ...AU_INDUSTRIES].map((s) => ({ params: { service: s.slug }, props: { s } }));
+  return [...AU_SERVICES, ...AU_RESCUE, ...AU_INDUSTRIES].map((s) => ({ params: { service: s.slug }, props: { s } }));
 }
 
 const { s } = Astro.props;

@@ -10,6 +10,7 @@ import About from '../../components/home/About.astro';
 import Contact from '../../components/home/Contact.astro';
 import AuServices from '../../components/au/AuServices.astro';
 import { AU_INDUSTRIES } from '../../data/au-industries';
+import { AU_RESCUE } from '../../data/au-rescue';
 import { getDictionary } from '../../i18n';
 import { IS_AU } from '../../site-target';
 
@@ -42,6 +43,18 @@ const cases = order
   <TrustMarquee t={t.trust} />
   <Capabilities t={t.caps} />
   {IS_AU && <AuServices />}
+  {
+    IS_AU && (
+      <AuServices
+        items={AU_RESCUE}
+        id="au-rescue"
+        headline="Already have a website"
+        accent="you can’t manage?"
+        intro="Built years ago, lost the logins, or just don’t know how to edit it? Start with a free check of who controls what."
+        location="home_rescue"
+      />
+    )
+  }
   {
     IS_AU && (
       <AuServices

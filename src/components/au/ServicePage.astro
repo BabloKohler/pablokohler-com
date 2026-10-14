@@ -4,6 +4,7 @@ import Star from '../Star.astro';
 import wordmark from '../../assets/brand/wordmark-blanco.png';
 import AuTrust from './AuTrust.astro';
 import { AU_SERVICES, type AuService } from '../../data/au-services';
+import { AU_RESCUE } from '../../data/au-rescue';
 
 interface Props {
   s: AuService;
@@ -17,7 +18,8 @@ const waHref = wa
   ? `https://wa.me/${wa}?text=${encodeURIComponent(`Hi Pablo, I'm interested in: ${s.formService}`)}`
   : undefined;
 
-const others = AU_SERVICES.filter((o) => o.slug !== s.slug);
+// Las páginas de rescate se enlazan entre sí; el resto enlaza a los servicios principales.
+const others = (s.group === 'rescue' ? AU_RESCUE : AU_SERVICES).filter((o) => o.slug !== s.slug);
 
 // Mismo mecanismo que el formulario de contacto de la home: PUBLIC_FORMSPREE_ID.
 const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
