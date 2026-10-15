@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /tasmania/
 
 Sitemap: https://pablokohler.com/sitemap-index.xml

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Tasmania · Group Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="login" hidden>
+  <form id="loginForm">
+    <h1>Tasmania</h1>
+    <p>Group map: jobs and accommodation</p>
+    <label>Your name<input id="lgName" required autocomplete="given-name" maxlength="30"></label>
+    <label>Group password<input id="lgPass" type="password" required autocomplete="current-password"></label>
+    <button class="primary">Enter</button>
+    <div id="lgErr" class="err"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <aside id="panel">
+    <header>
+      <h2>Tasmania</h2>
+      <span id="who"></span>
+      <button id="logout" class="ghost" title="Log out">Log out</button>
+    </header>
+    <div class="row">
+      <button id="addWork" class="primary work">+ Job</button>
+      <button id="addStay" class="primary stay">+ Stay</button>
+    </div>
+    <form id="search" class="row"><input id="q" placeholder="Search an address or paste a Google Maps link"><button class="ghost">Go</button></form>
+    <div class="layers">
+      <label><input type="checkbox" id="lyStops" checked> Bus stops</label>
+      <label><input type="checkbox" id="lyWalk"> Walking range (10 min)</label>
+    </div>
+    <div class="filters">
+      <select id="fKind"><option value="">All</option><option value="trabajo">Jobs</option><option value="hospedaje">Stays</option></select>
+      <select id="fStatus"><option value="">Any status</option></select>
+      <select id="fSort"><option value="new">Newest</option><option value="votes">Most starred</option></select>
+    </div>
+    <div id="list"></div>
+    <footer><button id="csv" class="ghost">Export CSV</button><span id="sync"></span></footer>
+  </aside>
+  <div id="map"></div>
+  <button id="togglePanel" class="ghost">☰</button>
+  <div id="hint" hidden></div>
+</div>
+
+<dialog id="dlg">
+  <form id="pinForm" method="dialog">
+    <h3 id="dlgTitle">New pin</h3>
+    <label>Type<select id="pKind"><option value="trabajo">Job</option><option value="hospedaje">Stay</option></select></label>
+    <label>Name<input id="pTitle" required maxlength="120" placeholder="E.g. Cherry picking, Hobart hostel"></label>
+    <label>Listing link<input id="pUrl" type="url" placeholder="https://..."></label>
+    <label>Google Maps link<input id="pGmaps" placeholder="Paste the full link to adjust the location"></label>
+    <label>Price / pay<input id="pPrice" maxlength="60" placeholder="E.g. $32/h, $180/week"></label>
+    <label>Status<select id="pStatus"></select></label>
+    <label>Notes<textarea id="pNotes" rows="3" maxlength="1000"></textarea></label>
+    <div id="pLoc" class="muted"></div>
+    <div class="row end">
+      <button type="button" id="pDel" class="danger" hidden>Delete</button>
+      <button type="button" id="pCancel" class="ghost">Cancel</button>
+      <button class="primary" value="ok">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
