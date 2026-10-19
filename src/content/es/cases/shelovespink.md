@@ -1,5 +1,5 @@
 ---
-title: "She Loves Pink: rediseño web para un salón de belleza en Bondi Junction"
+title: "She Loves Pink: rediseño web para un salón de belleza en Sídney"
 seoTitle: "She Loves Pink: rediseño web de salón"
 lead: "El rediseño del sitio de un salón, creado originalmente en Wix: una web más rápida con una página por tratamiento, un panel de administración para que sus dueñas editen precios, horarios y servicios por sí mismas, y la analítica y las campañas publicitarias para atraer reservas."
 tags: ["Rediseño Web", "SEO Local", "Analítica y Publicidad", "Salón de Belleza"]
@@ -9,7 +9,7 @@ role: "Diseño, Desarrollo Web + Marketing Digital"
 scope: "Rediseño web, panel de administración, GA4 y Search Console, Google Ads y Meta Ads"
 cardMetricDescriptor: "22 páginas"
 cardMetricLabel: "Sitio rediseñado para un salón de belleza en Sídney"
-cardDescription: "El rediseño del sitio en Wix de un salón en Bondi Junction: una página por tratamiento, un panel de administración fácil, analítica y campañas."
+cardDescription: "El rediseño del sitio en Wix de un salón en Sídney: una página por tratamiento, un panel de administración fácil, analítica y campañas."
 coverVariant: "default"
 coverImage: "/cases/shelovespink/cover.webp"
 liveUrl: "https://shelovespink.com.au"
@@ -40,7 +40,7 @@ showcase:
       src: "/cases/shelovespink/biab-desktop.webp"
       url: "shelovespink.com.au/services/biab-nails-bondi-junction/"
       label: "Página del servicio de uñas BIAB"
-      alt: "Página del servicio de uñas BIAB en Bondi Junction, con precio, duración, botón de reserva y respuestas a preguntas frecuentes"
+      alt: "Página del servicio de uñas BIAB, con precio, duración, botón de reserva y respuestas a preguntas frecuentes"
     - kind: desktop
       src: "/cases/shelovespink/cosmetic-desktop.webp"
       url: "shelovespink.com.au/services/cosmetic-treatments-bondi-junction/"
@@ -77,11 +77,11 @@ sections:
   context:
     kicker: "El punto de partida"
     title: "Un salón muy solicitado con un sitio difícil de hacer crecer y de administrar."
-    body: "She Loves Pink es un salón de belleza con reserva previa en Oxford Street, Bondi Junction, Sídney. Ofrece uñas, cejas y pestañas, faciales y tratamientos cosméticos a cargo de una enfermera. Su sitio estaba hecho en Wix, y el salón necesitaba algo más rápido, más fácil de encontrar en Google para cada tratamiento y lo bastante simple como para que el equipo lo mantuviera al día sin llamar a un desarrollador."
+    body: "She Loves Pink es un salón de belleza con reserva previa en Sídney. Ofrece uñas, cejas y pestañas, faciales y tratamientos cosméticos a cargo de una enfermera. Su sitio estaba hecho en Wix, y el salón necesitaba algo más rápido, más fácil de encontrar en Google para cada tratamiento y lo bastante simple como para que el equipo lo mantuviera al día sin llamar a un desarrollador."
   work:
     kicker: "Lo que hice"
     title: "Rediseño, edición sencilla y las herramientas para crecer."
-    body: "Rediseñé y reconstruí el sitio como una web estática y rápida con Astro, y redirigí las direcciones antiguas con 301 para no perder el posicionamiento que el sitio ya tenía. Cada tratamiento principal tiene ahora su propia página escrita pensando en la búsqueda local (uñas BIAB, lash lift o uñas GEL-X en Bondi Junction), con precios, duraciones y respuestas a preguntas frecuentes. Construí un panel de administración para que el salón actualice por su cuenta precios, horarios y servicios, y el menú de servicios refleja su listado de reservas en Fresha. También configuré Google Analytics 4 y Google Search Console, con los botones de reserva marcados para que el salón vea qué páginas llevan a reservar, y gestiono las campañas de Google Ads y Meta Ads del salón."
+    body: "Rediseñé y reconstruí el sitio como una web estática y rápida con Astro, y redirigí las direcciones antiguas con 301 para no perder el posicionamiento que el sitio ya tenía. Cada tratamiento principal tiene ahora su propia página escrita pensando en la búsqueda local (uñas BIAB, lash lift o uñas GEL-X en Sídney), con precios, duraciones y respuestas a preguntas frecuentes. Construí un panel de administración para que el salón actualice por su cuenta precios, horarios y servicios, y el menú de servicios refleja su listado de reservas en Fresha. También configuré Google Analytics 4 y Google Search Console, con los botones de reserva marcados para que el salón vea qué páginas llevan a reservar, y gestiono las campañas de Google Ads y Meta Ads del salón."
   result:
     kicker: "El resultado"
     title: "Un sitio en vivo con 22 páginas y campañas que recién comienzan."

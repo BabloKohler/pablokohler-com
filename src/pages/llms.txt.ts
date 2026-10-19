@@ -24,7 +24,7 @@ export const GET: APIRoute = ({ site }) => {
         ...AU_INDUSTRIES.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
         '',
         '## Work',
-        line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Bondi Junction beauty salon, moved off Wix, with an admin panel, GA4 and ads.'),
+        line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Sydney beauty salon, moved off Wix, with an admin panel, GA4 and ads.'),
         line('Docomomo', '/en/cases/docomomo/', 'Website and abstract submission platform for an international architecture conference.'),
         '',
       ].join('\n')
@@ -36,7 +36,7 @@ export const GET: APIRoute = ({ site }) => {
         '## Pages',
         line('Inicio (español)', '/es/', 'Consultor de marketing digital y comunicaciones: sitios web, SEO y automatización.'),
         line('Home (English)', '/en/', 'Digital marketing and communications consultant: websites, SEO and automation.'),
-        line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Bondi Junction beauty salon.'),
+        line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Sydney beauty salon.'),
         line('Docomomo', '/en/cases/docomomo/', 'Website for an international architecture conference.'),
         line('One Health', '/en/cases/one-health/', 'Science communication article for UC Chile.'),
         line('UC Chile graphics', '/en/cases/uc-graficas/', 'Campaign graphics for innovation and education programs.'),

@@ -49,5 +49,5 @@ sections:
     title: "Una galería creciente de piezas en circulación."
     body: "Estas son algunas de las piezas que ya circularon en las redes de la UC y sus distintos programas. El trabajo sigue activo: cada campaña nueva suma piezas a esta galería. Se pueden consultar en https://instagram.com/transferenciauc"
 nextCaseSlug: "shelovespink"
-nextCaseTitle: "She Loves Pink: rediseño web para un salón de belleza en Bondi Junction"
+nextCaseTitle: "She Loves Pink: rediseño web para un salón de belleza en Sídney"
 ---

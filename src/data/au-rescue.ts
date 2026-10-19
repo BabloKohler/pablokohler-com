@@ -450,7 +450,7 @@ export const AU_RESCUE: AuService[] = [
     eyebrow: 'Move off Wix or Squarespace',
     h1: 'Move off Wix or Squarespace',
     h1Accent: 'without losing your rankings.',
-    sub: 'Outgrown your site builder? I rebuild your site on a platform you control, redirect your old addresses so you keep your rankings, and give you a simple way to edit it yourself. It is what I did for She Loves Pink in Bondi Junction.',
+    sub: 'Outgrown your site builder? I rebuild your site on a platform you control, redirect your old addresses so you keep your rankings, and give you a simple way to edit it yourself. It is what I did for She Loves Pink in Sydney.',
     cta: 'Start with a free control check',
     problemsTitle: 'Why people move',
     problems: [
