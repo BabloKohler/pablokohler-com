@@ -1,5 +1,6 @@
 ---
 title: "Docomomo: sitio web para una conferencia internacional de arquitectura"
+seoTitle: "Docomomo: sitio web para conferencia"
 lead: "Diseño y construcción del sitio oficial de la 18ª Conferencia Internacional Docomomo, la primera edición de este evento realizada en Sudamérica, de la estructura inicial hasta la puesta en línea."
 tags: ["Diseño Web", "Arquitectura", "Evento académico"]
 client: "Docomomo Chile"

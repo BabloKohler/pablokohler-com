@@ -21,11 +21,11 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
   <div class="cases-grid" data-count={cases.length}>
     {
       cases.map((c, i) => (
-        <a href={`/${lang}/${casesPathSegment}/${c.id}`} class="case reveal" data-reveal style={`transition-delay:${i * 0.08}s`}>
+        <a href={`/${lang}/${casesPathSegment}/${c.id}/`} class="case reveal" data-reveal style={`transition-delay:${i * 0.08}s`}>
           <div class={`case-media ${c.data.coverVariant === 'alt' ? 'alt' : ''}`}>
             {
               c.data.coverImage ? (
-                <img class="case-img" src={c.data.coverImage} alt="" />
+                <img class="case-img" src={c.data.coverImage} alt="" loading="lazy" decoding="async" />
               ) : (
                 <Star class="case-star" color={c.data.coverVariant === 'alt' ? 'var(--magenta)' : 'var(--coral)'} opacity={0.5} />
               )

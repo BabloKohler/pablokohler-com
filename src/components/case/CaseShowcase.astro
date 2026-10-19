@@ -39,6 +39,10 @@ const desktop = data.screens.filter((s) => s.kind === 'desktop');
 const mobile = data.screens.filter((s) => s.kind === 'mobile');
 const ordered = [...desktop, ...mobile];
 const indexOf = (s: Screen) => ordered.indexOf(s);
+// Los marcos muestran la versión liviana (-1x); el visor con zoom carga la de 2x (data-src) solo al abrirse.
+const lite = (src: string) => src.replace(/\.webp$/, '-1x.webp');
+// En pantallas chicas el marco recorta la parte superior (4:3): se sirve solo ese recorte.
+const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
 ---
 
 <section class="sc" data-showcase aria-labelledby="sc-title">
@@ -68,7 +72,10 @@ const indexOf = (s: Screen) => ordered.indexOf(s);
               </button>
             </div>
             <div class="frame-body" tabindex="0" role="group" aria-label={s.label}>
-              <img src={s.src} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              <picture>
+                <source media="(max-width: 860px)" srcset={small(s.src)} />
+                <img src={lite(s.src)} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'low'} decoding="async" />
+              </picture>
             </div>
             <span class="hint" aria-hidden="true">{data.ui.scrollHint}</span>
             <figcaption>{s.label}</figcaption>
@@ -88,7 +95,7 @@ const indexOf = (s: Screen) => ordered.indexOf(s);
               <div class="phone-shell">
                 <span class="notch" aria-hidden="true" />
                 <div class="phone-body" tabindex="0" role="group" aria-label={s.label}>
-                  <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+                  <img src={lite(s.src)} alt={s.alt} loading="lazy" fetchpriority="low" decoding="async" />
                 </div>
               </div>
               <figcaption>
@@ -364,7 +371,7 @@ const indexOf = (s: Screen) => ordered.indexOf(s);
     font-size: 12px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--coral);
+    color: var(--coral-ink);
     margin-bottom: 14px;
   }
   .sc-head h2 {

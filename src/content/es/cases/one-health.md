@@ -1,5 +1,6 @@
 ---
 title: "\"One Health\": ¿cómo prevenir una nueva pandemia?"
+seoTitle: "One Health: comunicación científica"
 lead: "Investigación y redacción de un artículo de divulgación científica, publicado en el sitio oficial de la UC, que traduce un tema complejo (la prevención de pandemias bajo el enfoque One Health) en un lenguaje accesible y movilizador."
 tags: ["Contenido", "Divulgación científica"]
 client: "Pontificia Universidad Católica de Chile (UC)"
@@ -10,7 +11,7 @@ cardMetricDescriptor: "Artículo de divulgación"
 cardMetricLabel: "Comunicación de ciencia compleja a público amplio"
 cardDescription: "Investigación y redacción de un artículo que traduce un tema científico complejo a un lenguaje accesible y movilizador."
 coverVariant: "alt"
-coverImage: "/cases/one-health-cover.jpg"
+coverImage: "/cases/one-health-cover.webp"
 metrics:
   - value: null
     label: "Lecturas del artículo"

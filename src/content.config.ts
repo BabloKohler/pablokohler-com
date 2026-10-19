@@ -7,6 +7,8 @@ import { glob } from 'astro/loaders';
 // Nunca se debe inventar un valor aquí.
 const caseSchema = z.object({
   title: z.string(),
+  // Título corto para <title> y migas de pan (≤ 45 caracteres + " | Pablo Kohler"); el H1 usa `title`.
+  seoTitle: z.string().optional(),
   lead: z.string(),
   tags: z.array(z.string()),
   client: z.string(),

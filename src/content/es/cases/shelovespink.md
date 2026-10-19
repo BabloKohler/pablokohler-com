@@ -1,5 +1,6 @@
 ---
 title: "She Loves Pink: rediseño web para un salón de belleza en Bondi Junction"
+seoTitle: "She Loves Pink: rediseño web de salón"
 lead: "El rediseño del sitio de un salón, creado originalmente en Wix: una web más rápida con una página por tratamiento, un panel de administración para que sus dueñas editen precios, horarios y servicios por sí mismas, y la analítica y las campañas publicitarias para atraer reservas."
 tags: ["Rediseño Web", "SEO Local", "Analítica y Publicidad", "Salón de Belleza"]
 client: "She Loves Pink Bondi"

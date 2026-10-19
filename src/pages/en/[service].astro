@@ -8,6 +8,7 @@ import { IS_AU } from '../../site-target';
 import { AU_SERVICES } from '../../data/au-services';
 import { AU_INDUSTRIES } from '../../data/au-industries';
 import { AU_RESCUE } from '../../data/au-rescue';
+import { AU_SEO } from '../../data/au-seo';
 
 export function getStaticPaths() {
   if (!IS_AU) return [];
@@ -21,8 +22,9 @@ const href = `/en/${s.slug}/`;
 
 <BaseLayout
   lang="en"
-  title={s.metaTitle}
-  description={s.metaDescription}
+  title={AU_SEO[s.slug]?.title ?? s.metaTitle}
+  description={AU_SEO[s.slug]?.description ?? s.metaDescription}
+  breadcrumb={[{ name: s.cardTitle, url: href }]}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref={href}

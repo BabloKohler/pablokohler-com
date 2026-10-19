@@ -1,5 +1,5 @@
 ---
-import { STAR_PATH, STAR_VIEWBOX } from '../star-path';
+import { STAR_VIEWBOX } from '../star-path';
 
 /**
  * Estrellitas de la banda inferior de la sección de contacto (detrás del footer), con la misma
@@ -20,19 +20,13 @@ const suns = [
 ---
 
 <div class="foot-field" aria-hidden="true">
-  <!-- Definición propia de la estrella (el id no se comparte con el hero) -->
-  <svg width="0" height="0" style="position:absolute" focusable="false">
-    <defs>
-      <symbol id="footer-sun" viewBox={STAR_VIEWBOX}><path d={STAR_PATH}></path></symbol>
-    </defs>
-  </svg>
   {
     suns.map((s, i) => (
       <div class="sun" style={`${s.pos};width:${s.size}px;--i:${i}`} data-speed={s.speed} data-rot={s.rot} data-hide-mobile={s.hideMobile ? '' : undefined}>
         <div class="sun-pos">
           <div class="sun-pop">
             <svg viewBox={STAR_VIEWBOX} style={`fill:${s.color};animation:${s.rev ? 'star-spin-rev' : 'star-spin'} ${s.spin}s linear infinite`}>
-              <use href="#footer-sun" />
+              <use href="#slp-star" />
             </svg>
           </div>
         </div>
@@ -47,7 +41,16 @@ const suns = [
   const root = document.querySelector<HTMLElement>('.foot-field');
   if (root) {
     // La interacción vale en toda la sección de contacto (que es la que recorta), no solo en la banda.
-    initSunField({ root, section: root, bounds: root.closest<HTMLElement>('.contact') ?? root, mode: 'section' });
+    // Se inicia solo cuando la banda está cerca de verse (no cuesta nada durante la carga).
+    const initIO = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        initIO.disconnect();
+        initSunField({ root, section: root, bounds: root.closest<HTMLElement>('.contact') ?? root, mode: 'section' });
+      },
+      { rootMargin: '700px 0px' },
+    );
+    initIO.observe(root);
     // La entrada escalonada empieza cuando la banda aparece en pantalla.
     const io = new IntersectionObserver(
       (entries) => {

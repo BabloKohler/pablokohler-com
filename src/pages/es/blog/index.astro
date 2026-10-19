@@ -9,6 +9,7 @@ const posts = (await getCollection('blog-es')).filter((p) => !p.data.draft);
 
 <BaseLayout
   lang="es"
+  noindex={posts.length === 0}
   title={`${t.blogPage.heading} | Pablo Kohler`}
   description={t.blogPage.empty}
   navDict={t.nav}

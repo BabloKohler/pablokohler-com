@@ -121,7 +121,7 @@ export const es = {
     message: 'Uso cookies para entender cómo se usa este sitio. Puedes aceptarlas o rechazarlas — no cambia lo que puedes ver o hacer acá.',
     accept: 'Aceptar',
     reject: 'Rechazar',
-    policyLink: 'Más detalles',
+    policyLink: 'Ver política de privacidad',
   },
   privacyPage: {
     title: 'Privacidad y cookies',

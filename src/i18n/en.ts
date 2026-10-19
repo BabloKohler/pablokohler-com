@@ -123,7 +123,7 @@ export const en = {
     message: "I use cookies to understand how this site gets used. You can accept or decline — either way, you'll see and can do the same things here.",
     accept: 'Accept',
     reject: 'Decline',
-    policyLink: 'Learn more',
+    policyLink: 'Read our privacy policy',
   },
   privacyPage: {
     title: 'Privacy & cookies',

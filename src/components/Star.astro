@@ -1,5 +1,5 @@
 ---
-import { STAR_PATH, STAR_VIEWBOX } from './star-path';
+import { STAR_VIEWBOX } from './star-path';
 
 interface Props {
   /** Ancho del SVG (cualquier valor CSS válido: '520px', '46vw', '100%'...) */
@@ -38,5 +38,5 @@ const style = [
 ---
 
 <svg class={className} viewBox={STAR_VIEWBOX} style={style} aria-hidden="true">
-  <path d={STAR_PATH} />
+  <use href="#slp-star" />
 </svg>

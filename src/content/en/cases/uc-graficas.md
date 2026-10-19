@@ -1,5 +1,6 @@
 ---
 title: "Graphic design for UC campaigns"
+seoTitle: "UC Chile: Graphic Design for Campaigns"
 lead: "Social media graphics — posters, posts, and a podcast cover — for innovation and education programs at Pontificia Universidad Católica de Chile, made in Adobe Photoshop with AI-assisted illustration for some pieces."
 tags: ["Graphic Design", "Social Media", "Photoshop"]
 client: "Pontificia Universidad Católica de Chile (UC)"

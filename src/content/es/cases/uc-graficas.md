@@ -1,5 +1,6 @@
 ---
 title: "Diseño gráfico para campañas de la UC"
+seoTitle: "UC: diseño gráfico para campañas"
 lead: "Piezas gráficas para redes sociales — afiches, posts y una portada de podcast — para programas de innovación y educación de la Pontificia Universidad Católica de Chile, hechas en Adobe Photoshop con apoyo de IA para algunas ilustraciones."
 tags: ["Diseño Gráfico", "Redes Sociales", "Photoshop"]
 client: "Pontificia Universidad Católica de Chile (UC)"

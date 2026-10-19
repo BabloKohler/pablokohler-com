@@ -22,12 +22,22 @@ interface Props {
 const { lang, entry, t, esHref, enHref, nextHref } = Astro.props;
 const d = entry.data;
 const backHref = `/${lang}/#trabajo`;
+
+// <title> ≤ 60 y meta description ≤ 155 caracteres, para que Google no los corte en los resultados.
+const clip = (s: string, n: number) => {
+  if (s.length <= n) return s;
+  const cut = s.slice(0, n - 1);
+  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,.;:\-—\s]+$/, '') + '…';
+};
+const shortTitle = d.seoTitle ?? d.title;
+const pagePath = lang === 'es' ? esHref : enHref;
 ---
 
 <BaseLayout
   lang={lang}
-  title={`${d.title} | Pablo Kohler`}
-  description={d.lead}
+  title={`${shortTitle} | Pablo Kohler`}
+  description={clip(d.lead, 155)}
+  breadcrumb={[{ name: shortTitle, url: pagePath }]}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref={esHref}

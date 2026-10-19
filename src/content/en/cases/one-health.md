@@ -1,5 +1,6 @@
 ---
 title: "\"One Health\": how do you prevent the next pandemic?"
+seoTitle: "One Health: Science Communication Article"
 lead: "Research and writing for a science communication piece, published on UC Chile's official site, that translates a complex topic (pandemic prevention through the One Health approach) into language that's accessible and compelling for a general audience."
 tags: ["Content", "Science Communication"]
 client: "Pontificia Universidad Católica de Chile (UC)"
@@ -10,7 +11,7 @@ cardMetricDescriptor: "Science communication piece"
 cardMetricLabel: "Complex science for a general audience"
 cardDescription: "Research and writing for an article that translates a complex scientific topic into language that's accessible and compelling."
 coverVariant: "alt"
-coverImage: "/cases/one-health-cover.jpg"
+coverImage: "/cases/one-health-cover.webp"
 metrics:
   - value: null
     label: "Article reads"

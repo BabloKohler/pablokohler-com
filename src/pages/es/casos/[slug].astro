@@ -17,9 +17,9 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const t = getDictionary('es');
-const esHref = `/es/casos/${entry.id}`;
-const enHref = `/en/cases/${entry.id}`;
-const nextHref = `/es/casos/${entry.data.nextCaseSlug}`;
+const esHref = `/es/casos/${entry.id}/`;
+const enHref = `/en/cases/${entry.id}/`;
+const nextHref = `/es/casos/${entry.data.nextCaseSlug}/`;
 ---
 
 <CaseLayout lang="es" entry={entry} t={t} esHref={esHref} enHref={enHref} nextHref={nextHref} />

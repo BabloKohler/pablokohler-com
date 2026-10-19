@@ -1,5 +1,6 @@
 ---
 title: "Docomomo: website for an international architecture conference"
+seoTitle: "Docomomo: Conference Website Design"
 lead: "Design and build of the official site for the 18th Docomomo International Conference, the first edition of this event held in South America, from initial structure to launch."
 tags: ["Web Design", "Architecture", "Academic Event"]
 client: "Docomomo Chile"

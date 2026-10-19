@@ -1,6 +1,6 @@
 ---
 import Star from '../Star.astro';
-import { STAR_PATH, STAR_VIEWBOX } from '../star-path';
+import { STAR_VIEWBOX } from '../star-path';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
@@ -49,12 +49,6 @@ const sunCss = suns
 ---
 
 <header class="hero">
-  <!-- Una sola definición de la estrella, reutilizada por los 10 soles con <use> -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <defs>
-      <symbol id="hero-sun" viewBox={STAR_VIEWBOX}><path d={STAR_PATH}></path></symbol>
-    </defs>
-  </svg>
 
   <style is:inline set:html={sunCss}></style>
 
@@ -74,7 +68,7 @@ const sunCss = suns
                 viewBox={STAR_VIEWBOX}
                 style={`fill:${s.color};animation:${s.rev ? 'star-spin-rev' : 'star-spin'} ${s.spin}s linear infinite`}
               >
-                <use href="#hero-sun" />
+                <use href="#slp-star" />
               </svg>
             </div>
           </div>
@@ -84,7 +78,7 @@ const sunCss = suns
   </div>
 
   <div class="hero-inner">
-    <h1>{t.headline} <span class="accent">{t.headlineAccent}</span></h1>
+    <h1>{t.headline}{/^[,.;:]/.test(t.headlineAccent) ? '' : ' '}<span class="accent">{t.headlineAccent}</span></h1>
     <p class="sub">{t.sub}</p>
     <div class="cta-row">
       <a href="#contacto" class="btn btn-primary">
@@ -100,7 +94,12 @@ const sunCss = suns
 
   const hero = document.querySelector<HTMLElement>('.hero');
   const root = hero?.querySelector<HTMLElement>('.suns');
-  if (hero && root) initSunField({ root, section: hero, mode: 'hero' });
+  if (hero && root) {
+    const start = () => initSunField({ root, section: hero, mode: 'hero' });
+    const idle = (cb: () => void) => ('requestIdleCallback' in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 300));
+    if (document.readyState === 'complete') idle(start);
+    else window.addEventListener('load', () => idle(start), { once: true });
+  }
 </script>
 
 <style>
