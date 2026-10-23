@@ -1,0 +1,30 @@
+---
+// Páginas privadas para clientes (no enlazadas, noindex, fuera del sitemap): SOLO se generan en el build AU
+// (SITE_TARGET=au). En el build principal getStaticPaths devuelve [] y no existe ninguna de estas rutas.
+// Para sumar otra: agregar su slug aquí y un componente en src/components/au/.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EricProposal from '../../components/au/EricProposal.astro';
+import { getDictionary } from '../../i18n';
+import { IS_AU } from '../../site-target';
+
+export function getStaticPaths() {
+  if (!IS_AU) return [];
+  return [{ params: { client: 'eric' } }];
+}
+
+const t = getDictionary('en');
+const href = '/eric/';
+---
+
+<BaseLayout
+  lang="en"
+  title="A proposal for Eric | Pablo Kohler"
+  description="A remote working proposal for Sydney Painters."
+  navDict={t.nav}
+  cookieDict={t.cookieConsent}
+  esHref={href}
+  enHref={href}
+  noindex
+>
+  <EricProposal />
+</BaseLayout>

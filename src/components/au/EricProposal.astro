@@ -1,0 +1,427 @@
+---
+import Star from '../Star.astro';
+
+const calendly = 'https://calendly.com/pablokohlerlara/30min';
+
+const steps = [
+  {
+    title: 'Same workflow as today',
+    desc: 'Nothing changes on your side. I build each site on a staging address, you review it, and it only goes live once you say so.',
+  },
+  {
+    title: 'One fixed price per site',
+    desc: 'A$800 for each site I deliver. No hours to track and no surprises: the price is for the finished site.',
+  },
+  {
+    title: 'You approve, then it goes live',
+    desc: 'After your OK I switch the site over and redirect the old addresses, so the rankings it already has are not lost.',
+  },
+  {
+    title: 'Invoiced when it is live',
+    desc: 'I invoice each site once it is live. We can work in waves, a few sites at a time, at whatever pace suits you.',
+  },
+];
+
+const included = [
+  'A design of its own, not a reskin of another site',
+  'Copy written for one specific search intent',
+  'On-page SEO: titles, descriptions, headings and schema with real business details only',
+  '301 redirects from the old WordPress addresses',
+  'Contact form, sitemap, robots file and a fast static build',
+  'Review on staging and one round of changes',
+  'Live deployment on your hosting',
+];
+
+const notIncluded = [
+  'Hosting, domains and their renewals, which stay with you',
+  'Photos, finished-job examples and reviews. You provide real ones; I never invent them',
+  'Further rounds of changes, and edits after launch, which I quote separately',
+  'Ongoing maintenance',
+];
+
+const extras = [
+  { name: 'Analytics & tracking', desc: 'See which site and which page bring calls and quote requests.' },
+  { name: 'Google Ads', desc: 'Search campaigns for the services that already bring you work.' },
+  { name: 'Meta Ads', desc: 'Facebook and Instagram campaigns, set up and managed.' },
+  { name: 'Graphic design', desc: 'Logos, signage, vehicle and uniform artwork.' },
+  { name: 'Editorial design', desc: 'Brochures, proposals, reports and other printed material.' },
+  { name: 'Apps & tools', desc: 'Quote calculators, booking forms and small internal tools.' },
+];
+
+const faq = [
+  {
+    q: 'Is the price the same whatever the size of the site?',
+    a: 'Yes, for a site scoped like the ones we have been building: a home page plus its service pages. If a site is much bigger than that, I tell you before I start and we agree the price first.',
+  },
+  {
+    q: 'Do I have to commit to all the sites?',
+    a: 'No. Each site is its own delivery, so you can start with a few and decide on the rest as you see the results.',
+  },
+  {
+    q: 'What if I do not like how a site turns out?',
+    a: 'That is what the staging review is for. Nothing goes live until you have approved it, and one round of changes is included.',
+  },
+  {
+    q: 'What currency are the prices in?',
+    a: 'Australian dollars.',
+  },
+];
+---
+
+<header class="ep-hero">
+  <div class="ep-hero-star" aria-hidden="true">
+    <Star size="clamp(90px, 11vw, 160px)" color="var(--coral)" spin duration={108} />
+  </div>
+  <p class="ep-eyebrow">Prepared for Eric · Sydney Painters</p>
+  <h1>One site, one price, <span class="accent">delivered and live.</span></h1>
+  <p class="ep-sub">
+    A simple remote working model: I keep working the way we already do, and you pay a fixed A$800 for each site I
+    deliver.
+  </p>
+  <a href={calendly} class="btn btn-primary ep-cta" target="_blank" rel="noopener">
+    <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+    <span class="btn-label">Book a call to talk it through</span>
+  </a>
+</header>
+
+<section class="ep-block">
+  <h2 class="reveal" data-reveal>How it works</h2>
+  <ol class="ep-steps">
+    {
+      steps.map((st, i) => (
+        <li class="ep-step reveal" data-reveal style={`transition-delay:${i * 0.08}s`}>
+          <span class="ep-step-num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{st.title}</h3>
+          <p>{st.desc}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<section class="ep-block">
+  <h2 class="reveal" data-reveal>The price</h2>
+  <div class="ep-pricing">
+    <article class="ep-plan reveal" data-reveal>
+      <h3>Delivered site</h3>
+      <p class="ep-price"><strong>A$800</strong> <span class="ep-unit">per site, fixed</span></p>
+      <p class="ep-blurb">You pay for a finished, live site, not for hours.</p>
+      <ul>
+        {included.map((f) => <li>{f}</li>)}
+      </ul>
+    </article>
+
+    <article class="ep-plan ep-plan--out reveal" data-reveal>
+      <h3>Not included</h3>
+      <p class="ep-blurb">So there are no surprises later.</p>
+      <ul>
+        {notIncluded.map((f) => <li>{f}</li>)}
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="ep-block">
+  <h2 class="reveal" data-reveal>Other things I can do for you</h2>
+  <p class="ep-lead reveal" data-reveal>
+    Only if and when you want them. They are quoted separately and are never bundled into the price of a site.
+  </p>
+  <ul class="ep-extras">
+    {
+      extras.map((e) => (
+        <li class="reveal" data-reveal>
+          <h3>{e.name}</h3>
+          <p>{e.desc}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<section class="ep-block ep-faq">
+  <h2 class="reveal" data-reveal>Questions</h2>
+  {
+    faq.map((f) => (
+      <details class="reveal" data-reveal>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))
+  }
+</section>
+
+<section class="ep-close">
+  <div class="ep-close-inner">
+    <h2>If this works for you, we start with the next site.</h2>
+    <p>Reply to my message or book a short call and we will settle the details.</p>
+    <a href={calendly} class="ep-close-link" target="_blank" rel="noopener">Book a free 30-min call</a>
+    <p class="ep-private">This page was prepared for Eric and is not meant to be shared.</p>
+  </div>
+  <footer class="ep-footer">
+    <span>&copy; Pablo Kohler. Sydney, Australia.</span>
+  </footer>
+</section>
+
+<style>
+  .ep-hero {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(130px, 18vh, 200px) clamp(24px, 5vw, 72px) clamp(40px, 6vh, 70px);
+  }
+  .ep-hero-star {
+    position: absolute;
+    top: clamp(90px, 12vh, 130px);
+    right: clamp(8px, 4vw, 60px);
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .ep-eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral-ink);
+    margin-bottom: 18px;
+  }
+  .ep-hero h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    max-width: min(14em, calc(100% - clamp(110px, 13vw, 190px)));
+    margin-bottom: 24px;
+  }
+  @media (max-width: 700px) {
+    .ep-hero-star {
+      display: none;
+    }
+    .ep-hero h1 {
+      max-width: 100%;
+    }
+  }
+  .ep-sub {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.6;
+    color: var(--ink-60);
+    max-width: 38em;
+    margin-bottom: 32px;
+  }
+  .ep-cta {
+    display: inline-flex;
+  }
+
+  .ep-block {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(40px, 7vh, 80px) clamp(24px, 5vw, 72px);
+  }
+  .ep-block h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 40px);
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+  }
+  .ep-lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-60);
+    max-width: 38em;
+    margin: -12px 0 28px;
+  }
+
+  .ep-steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+  }
+  .ep-step {
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 18px;
+    padding: 26px 24px;
+  }
+  .ep-step-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--coral);
+  }
+  .ep-step h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    margin: 12px 0 8px;
+  }
+  .ep-step p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-60);
+  }
+
+  .ep-pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+  .ep-plan {
+    background: #fff;
+    border: 1px solid var(--coral);
+    border-radius: 20px;
+    padding: 30px 28px;
+    box-shadow: 0 16px 40px rgba(232, 93, 42, 0.12);
+  }
+  .ep-plan--out {
+    border-color: var(--ink-12);
+    box-shadow: none;
+  }
+  .ep-plan h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .ep-price {
+    margin-bottom: 8px;
+  }
+  .ep-price strong {
+    font-family: var(--display);
+    font-size: clamp(32px, 3.4vw, 42px);
+    letter-spacing: -0.03em;
+  }
+  .ep-unit {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-60);
+  }
+  .ep-blurb {
+    font-size: 15px;
+    color: var(--ink-60);
+    margin-bottom: 18px;
+  }
+  .ep-plan ul {
+    list-style: none;
+    display: grid;
+    gap: 9px;
+  }
+  .ep-plan li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .ep-plan li::before {
+    content: '\2726';
+    position: absolute;
+    left: 0;
+    color: var(--coral);
+    font-size: 11px;
+    top: 2px;
+  }
+  .ep-plan--out li::before {
+    content: '\2013';
+    color: var(--ink-60);
+    font-size: 14px;
+    top: 0;
+  }
+
+  .ep-extras {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+  }
+  .ep-extras li {
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .ep-extras h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .ep-extras p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-60);
+  }
+
+  .ep-faq details {
+    border-top: 1px solid var(--ink-12);
+    padding: 18px 0;
+  }
+  .ep-faq details:last-child {
+    border-bottom: 1px solid var(--ink-12);
+  }
+  .ep-faq summary {
+    cursor: pointer;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .ep-faq details p {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-60);
+    max-width: 40em;
+  }
+
+  .ep-close {
+    background: var(--ink);
+    color: var(--paper);
+    margin-top: clamp(30px, 5vh, 60px);
+    padding: clamp(60px, 9vh, 110px) clamp(24px, 5vw, 72px) 0;
+  }
+  .ep-close-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: clamp(40px, 6vh, 70px);
+  }
+  .ep-close h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(30px, 4.4vw, 52px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .ep-close-inner > p {
+    color: rgba(250, 246, 240, 0.65);
+    margin-bottom: 28px;
+  }
+  .ep-close-link {
+    display: inline-block;
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 17px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(250, 246, 240, 0.35);
+  }
+  .ep-close-link:hover {
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+  .ep-close-inner > .ep-private {
+    margin: 40px 0 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(250, 246, 240, 0.5);
+  }
+  .ep-footer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 0;
+    border-top: 1px solid rgba(250, 246, 240, 0.12);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(250, 246, 240, 0.5);
+  }
+</style>

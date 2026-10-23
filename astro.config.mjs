@@ -20,5 +20,10 @@ export default defineConfig({
 
   // En AU el español no se publica: se excluye del sitemap (y vercel.json lo redirige a /en/).
   // El blog está vacío (noindex): fuera del sitemap hasta que haya artículos. Quitar `/blog/` de este filtro al publicar el primero.
-  integrations: [sitemap({ filter: (page) => !page.includes('/blog/') && !(isAU && page.includes('/es/')) })],
+  // /eric/ es una página privada para un cliente (noindex): tampoco va en el sitemap.
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/blog/') && !page.includes('/eric/') && !(isAU && page.includes('/es/')),
+    }),
+  ],
 });
