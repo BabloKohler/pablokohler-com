@@ -136,7 +136,7 @@
   ],
   "headers": [
     {
-      "source": "/eric/:path*",
+      "source": "/eric(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",
