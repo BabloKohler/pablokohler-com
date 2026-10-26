@@ -86,6 +86,6 @@ sections:
     kicker: "El resultado"
     title: "Un sitio en vivo con 22 páginas y campañas que recién comienzan."
     body: "El sitio está en vivo en shelovespink.com.au con 22 páginas: inicio, el salón, lista de precios, galería, contacto, trabajo y una página propia para cada tratamiento principal. El salón ya puede administrar sus propios precios, horarios y servicios. La medición está activa, y las campañas de Google Ads y Meta Ads recién comenzaron, así que las cifras de visitas y reservas se agregarán aquí cuando haya datos suficientes."
-nextCaseSlug: "docomomo"
-nextCaseTitle: "Docomomo: sitio web para una conferencia internacional de arquitectura"
+nextCaseSlug: "heritagepainting"
+nextCaseTitle: "Heritage Painting Services: un sitio especializado para un nicho patrimonial"
 ---

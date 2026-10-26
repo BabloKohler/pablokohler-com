@@ -25,6 +25,8 @@ export const GET: APIRoute = ({ site }) => {
         '',
         '## Work',
         line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Sydney beauty salon, moved off Wix, with an admin panel, GA4 and ads.'),
+        line('Bondi Painters', '/en/cases/bondipainters/', 'Local SEO website for a Sydney painter: a landing page for each of 44 Eastern Suburbs, with Google Analytics and Search Console.'),
+        line('Heritage Painting Services', '/en/cases/heritagepainting/', 'Specialist website for a Sydney heritage painter: a landing page for each heritage service, with Google Analytics and Search Console.'),
         line('Docomomo', '/en/cases/docomomo/', 'Website and abstract submission platform for an international architecture conference.'),
         '',
       ].join('\n')
@@ -37,6 +39,9 @@ export const GET: APIRoute = ({ site }) => {
         line('Inicio (español)', '/es/', 'Consultor de marketing digital y comunicaciones: sitios web, SEO y automatización.'),
         line('Home (English)', '/en/', 'Digital marketing and communications consultant: websites, SEO and automation.'),
         line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Sydney beauty salon.'),
+        line('Saludamente', '/en/cases/saludamente/', 'Website for a mental health centre in Chile with a fully self-managed admin console.'),
+        line('Heritage Painting Services', '/en/cases/heritagepainting/', 'Specialist website for a Sydney heritage painter, with SEO landing pages.'),
+        line('Bondi Painters', '/en/cases/bondipainters/', 'Local SEO website for a Sydney painter, with a landing page for each suburb.'),
         line('Docomomo', '/en/cases/docomomo/', 'Website for an international architecture conference.'),
         line('One Health', '/en/cases/one-health/', 'Science communication article for UC Chile.'),
         line('UC Chile graphics', '/en/cases/uc-graficas/', 'Campaign graphics for innovation and education programs.'),

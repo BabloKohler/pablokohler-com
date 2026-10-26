@@ -77,6 +77,18 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
   .cases-grid[data-count='4'] {
     grid-template-columns: repeat(2, 1fr);
   }
+  /* Con 7 casos (3+3+1) el último va centrado en vez de quedar huérfano a la izquierda. */
+  @media (min-width: 1200px) {
+    .cases-grid[data-count='7'] {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .cases-grid[data-count='7'] .case {
+      grid-column: span 2;
+    }
+    .cases-grid[data-count='7'] .case:last-child {
+      grid-column: 3 / span 2;
+    }
+  }
   @media (max-width: 760px) {
     .cases-grid,
     .cases-grid[data-count='4'] {
