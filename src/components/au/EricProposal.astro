@@ -35,7 +35,14 @@ const included = [
   'A final polish before it goes live',
 ];
 
-const extras = ['Graphic design', 'Editorial design', 'Apps', 'Analytics', 'Google Ads', 'Meta Ads'];
+const products = [
+  { name: 'Graphic design', price: 'from A$50', desc: 'Logos, flyers, social media posts and more.' },
+  { name: 'Google Ads', price: 'A$200 per campaign', desc: 'A search campaign, set up and ready to run. The ad budget itself is separate.' },
+  { name: 'Editorial design', desc: 'Brochures, proposals and other printed material.' },
+  { name: 'Apps', desc: 'Quote calculators, booking forms and small tools made for the way you work.' },
+  { name: 'Analytics', desc: 'See which of your sites bring in calls and enquiries.' },
+  { name: 'Meta Ads', desc: 'Facebook and Instagram campaigns, set up and managed.' },
+];
 
 const scenes = [
   { id: 'hello', label: 'Hello' },
@@ -67,7 +74,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         <div class="stack">
           <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
           <p class="msg msg--big">Hi Eric.</p>
-          <p class="msg">I have an idea for how we could work from now on.</p>
+          <p class="msg">This is to go deeper into something we have already talked about.</p>
         </div>
       </div>
       <a href="#idea" class="hint" aria-label="Scroll down"><span>Scroll down</span><i aria-hidden="true"></i></a>
@@ -102,13 +109,29 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
       <ol class="timeline" data-timeline>
         {
           steps.map((st, i) => (
-            <li class="tl-step" data-step>
-              <span class="tl-dot" aria-hidden="true">{i + 1}</span>
-              <div class="tl-body">
-                <h3>{st.title}</h3>
-                <p>{st.desc}</p>
-              </div>
-            </li>
+            <>
+              <li class="tl-step" data-step>
+                <span class="tl-dot" aria-hidden="true">{i + 1}</span>
+                <div class="tl-body">
+                  <h3>{st.title}</h3>
+                  <p>{st.desc}</p>
+                </div>
+              </li>
+              {i === 1 && (
+                <li class="tl-step tl-step--note" data-step>
+                  <span class="tl-dot" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 10h17M8 3v4M16 3v4" /></svg>
+                  </span>
+                  <div class="tl-body">
+                    <h3>In between: a meeting or a call</h3>
+                    <p>
+                      We can book a meeting or a call and work on the site at the same time.
+                      <a href={calendly} class="tl-link" target="_blank" rel="noopener" data-track="booking_click" data-track-location="eric_timeline">Pick a time</a>
+                    </p>
+                  </div>
+                </li>
+              )}
+            </>
           ))
         }
       </ol>
@@ -131,6 +154,9 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         </div>
         <p class="price-num"><span class="accent">A$<span data-count="800">800</span></span></p>
         <p class="price-unit">per site, delivered and live</p>
+        <p class="price-why">
+          That is roughly two days of work, and it is still below the market price of a website.
+        </p>
         <ul class="check" data-check>
           {
             included.map((t) => (
@@ -162,13 +188,23 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         <Image {...img} class="avatar" />
         <div class="stack">
           <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-          <p class="msg">And if you ever need more than websites, I can also help with:</p>
+          <p class="msg">I can also take on specific products, one at a time. Here is some of what I can do:</p>
         </div>
       </div>
-      <ul class="chips" data-chips>
-        {extras.map((e) => <li>{e}</li>)}
+      <ul class="products" data-chips>
+        {
+          products.map((p) => (
+            <li class:list={['prod', { 'prod--priced': p.price }]}>
+              <div class="prod-top">
+                <h3>{p.name}</h3>
+                <span class="prod-price">{p.price ?? 'Quoted per project'}</span>
+              </div>
+              <p>{p.desc}</p>
+            </li>
+          ))
+        }
       </ul>
-      <p class="chips-note">Quoted separately, and only if you want them.</p>
+      <p class="chips-note">All prices in Australian dollars. These are separate from the price of a site, and only if you want them.</p>
     </div>
   </section>
 
@@ -353,12 +389,19 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
   // Extras: aparecen de a uno.
   const chips = document.querySelector<HTMLElement>('[data-chips]');
   if (chips) {
-    watch(
-      [chips],
+    // La lista es más alta que una pantalla de teléfono: umbral bajo y respaldo al hacer scroll.
+    const revealChips = () => {
+      if (chips.dataset.in) return;
+      chips.dataset.in = '1';
+      [...chips.children].forEach((c, i) => setTimeout(() => c.classList.add('is-in'), reduce ? 0 : i * 110));
+    };
+    watch([chips], revealChips, 0.12);
+    window.addEventListener(
+      'scroll',
       () => {
-        [...chips.children].forEach((c, i) => setTimeout(() => c.classList.add('is-in'), reduce ? 0 : i * 110));
+        if (chips.getBoundingClientRect().top < window.innerHeight * 0.8) revealChips();
       },
-      0.5,
+      { passive: true },
     );
   }
 
@@ -710,6 +753,26 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     transform: none;
   }
 
+  .tl-dot svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tl-step--note .tl-dot {
+    border-style: dashed;
+  }
+  .tl-link {
+    margin-left: 6px;
+    color: var(--coral-ink);
+    font-weight: 600;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+
   /* Precio */
   .price-card {
     position: relative;
@@ -738,6 +801,15 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     font-size: var(--fs-lead);
     color: var(--ink-60);
     margin: 0 0 26px;
+  }
+  .price-why {
+    margin: -8px 0 24px;
+    padding: 14px 18px;
+    background: var(--paper);
+    border-radius: 12px;
+    font-size: var(--fs-body);
+    line-height: 1.45;
+    font-weight: 500;
   }
   .check {
     list-style: none;
@@ -845,31 +917,67 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     color: var(--ink);
   }
 
-  /* Extras */
-  .chips {
+  /* Productos */
+  .products {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
     margin: 0 0 0 62px;
     padding: 0;
   }
-  .chips li {
-    padding: 10px 18px;
-    border: 1.5px solid var(--ink);
-    border-radius: 100px;
+  .prod {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 22px 22px;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: 16px;
+  }
+  .prod--priced {
+    border-color: var(--coral);
+    box-shadow: 0 12px 30px rgba(232, 93, 42, 0.1);
+  }
+  .prod-top {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .prod h3 {
+    margin: 0;
     font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--fs-h4);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .prod-price {
+    font-size: var(--fs-small);
     font-weight: 600;
+    color: var(--ink-60);
+  }
+  .prod--priced .prod-price {
+    align-self: flex-start;
+    padding: 3px 12px;
+    border-radius: 100px;
+    background: var(--coral-ink);
+    color: #fff;
+  }
+  .prod p {
+    margin: 0;
     font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--ink-60);
   }
-  :global(.js) .chips li {
+  :global(.js) .prod {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
     transition:
-      opacity 0.35s ease,
-      transform 0.35s ease;
+      opacity 0.4s ease,
+      transform 0.4s ease;
   }
-  :global(.js) .chips li.is-in {
+  :global(.js) .prod.is-in {
     opacity: 1;
     transform: none;
   }
@@ -958,7 +1066,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     .hint,
     .price-card,
     .calc,
-    .chips,
+    .products,
     .replies {
       margin-left: 0;
     }
