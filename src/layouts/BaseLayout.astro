@@ -23,13 +23,15 @@ interface Props {
   esHref: string;
   enHref: string;
   back?: { href: string; label: string };
+  /** Páginas privadas de cliente: sin la barra de navegación del sitio. */
+  hideNav?: boolean;
   /** Páginas sin contenido aún (p. ej. blog vacío): no se indexan. */
   noindex?: boolean;
   /** Migas de pan después de "Inicio" (para el JSON-LD BreadcrumbList). */
   breadcrumb?: { name: string; url: string }[];
 }
 
-const { lang, title, description, navDict, cookieDict, back, noindex, breadcrumb } = Astro.props;
+const { lang, title, description, navDict, cookieDict, back, noindex, breadcrumb, hideNav } = Astro.props;
 
 // Todas las URLs terminan en "/" (así coinciden el sitemap, los enlaces internos y el canonical).
 const slash = (p: string) => (p.endsWith('/') || p.includes('#') || p.includes('?') ? p : `${p}/`);
@@ -196,7 +198,7 @@ const structuredData = {
     <!-- Estrella firma: una sola definición por página, reutilizada con <use href="#slp-star"> (Star, hero, footer) -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="slp-star" viewBox={STAR_VIEWBOX}><path d={STAR_PATH}></path></symbol></defs></svg>
     <div class="grain"></div>
-    <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} showLangSwitch={!IS_AU} />
+    {!hideNav && <Nav lang={lang} t={navDict} otherLangHref={otherLangHref} back={back} showLangSwitch={!IS_AU} />}
     <slot />
     <CookieConsent lang={lang} t={cookieDict} />
 
