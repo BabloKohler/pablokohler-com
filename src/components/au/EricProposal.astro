@@ -201,7 +201,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         <Image {...img} class="avatar" />
         <div class="stack">
           <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-          <p class="msg">And that is everything. For all of it, the price is:</p>
+          <p class="msg">And that is everything. For all of it, the price I am offering is only for you:</p>
         </div>
       </div>
 
@@ -209,6 +209,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         <div class="price-star" aria-hidden="true">
           <Star size="clamp(64px, 9vw, 110px)" color="var(--coral)" spin duration={108} />
         </div>
+        <p class="price-tag">Only for you, Eric</p>
         <p class="price-num"><span class="accent">A$<span data-count="800">800</span></span></p>
         <p class="price-unit">per site, delivered and live</p>
         <p class="price-why">
@@ -1020,6 +1021,16 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     top: clamp(14px, 3vw, 28px);
     right: clamp(14px, 3vw, 28px);
     pointer-events: none;
+  }
+  .price-tag {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    background: var(--coral-ink);
+    color: #fff;
+    font-size: var(--fs-small);
+    font-weight: 600;
   }
   .price-num {
     font-family: var(--display);
