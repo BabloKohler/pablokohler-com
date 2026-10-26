@@ -60,13 +60,13 @@ const accentColors = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
   .caps h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(30px, 4.4vw, 54px);
+    font-size: var(--fs-h2);
     line-height: 1.06;
     letter-spacing: -0.03em;
     margin-bottom: 24px;
   }
   .caps-intro {
-    font-size: clamp(16px, 1.4vw, 19px);
+    font-size: var(--fs-lead);
     line-height: 1.6;
     color: var(--ink-60);
   }
@@ -106,27 +106,27 @@ const accentColors = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
     margin-bottom: 26px;
   }
   .cap-num {
-    font-family: var(--mono);
+    font-family: var(--body);
     font-weight: 500;
-    font-size: 15px;
-    letter-spacing: 0.04em;
+    font-size: var(--fs-body);
+
   }
 
   .cap h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 24px;
+    font-size: var(--fs-h4);
     letter-spacing: -0.02em;
     margin-bottom: 8px;
   }
   .cap-lead {
-    font-size: 16px;
+    font-size: var(--fs-body);
     color: var(--ink);
     font-weight: 500;
     margin-bottom: 14px;
   }
   .cap-desc {
-    font-size: 15px;
+    font-size: var(--fs-body);
     line-height: 1.6;
     color: var(--ink-60);
     margin-bottom: 22px;
@@ -138,8 +138,8 @@ const accentColors = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
     gap: 9px;
   }
   .cap-list li {
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     padding-left: 18px;
     position: relative;
@@ -163,13 +163,13 @@ const accentColors = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
     border-top: 1px solid var(--ink-12);
   }
   .caps-foot p {
-    font-size: 16px;
+    font-size: var(--fs-body);
     color: var(--ink-60);
   }
   .caps-link {
     font-family: var(--display);
     font-weight: 600;
-    font-size: 16px;
+    font-size: var(--fs-body);
     color: var(--ink);
     text-decoration: none;
     transition: color 0.18s;

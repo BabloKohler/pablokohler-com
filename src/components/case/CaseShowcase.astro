@@ -367,23 +367,23 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     text-align: center;
   }
   .sc-kicker {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: var(--coral-ink);
     margin-bottom: 14px;
   }
   .sc-head h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(28px, 3.6vw, 44px);
+    font-size: var(--fs-h2);
     letter-spacing: -0.03em;
     line-height: 1.08;
     margin-bottom: 14px;
   }
   .sc-intro {
-    font-size: clamp(16px, 1.3vw, 18px);
+    font-size: var(--fs-body);
     line-height: 1.6;
     color: var(--ink-60);
   }
@@ -398,7 +398,7 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     color: var(--ink);
     font-family: var(--display);
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--fs-body);
     text-decoration: none;
     transition:
       background 0.18s,
@@ -447,8 +447,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     background: #fff;
     border: 1px solid var(--ink-12);
     border-radius: 8px;
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     text-align: center;
     white-space: nowrap;
@@ -465,8 +465,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     border: 1px solid var(--ink-12);
     background: #fff;
     color: var(--ink);
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     cursor: pointer;
     transition:
       background 0.15s,
@@ -511,8 +511,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     border-radius: 100px;
     background: rgba(20, 18, 16, 0.82);
     color: var(--paper);
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     pointer-events: none;
     transition: opacity 0.3s;
     white-space: nowrap;
@@ -523,8 +523,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
   }
   figcaption {
     margin-top: 14px;
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     text-align: center;
   }
@@ -539,10 +539,10 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     margin-top: clamp(48px, 8vh, 96px);
   }
   .sc-sub {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: var(--ink-60);
     text-align: center;
     margin-bottom: 28px;
@@ -652,15 +652,15 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     min-width: 0;
   }
   .lb-count {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.55);
     flex: none;
   }
   .lb-title {
     font-family: var(--display);
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--fs-body);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -691,8 +691,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
       border-color 0.15s;
   }
   .lb-btn--text {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
   }
   .lb-btn:hover:not(:disabled),
   .lb-btn:focus-visible {
@@ -706,8 +706,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
   .lb-zoom {
     min-width: 52px;
     text-align: center;
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
   }
   .lb-stage {
     flex: 1;
@@ -760,8 +760,8 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
   .lb-hint {
     padding: 8px 16px 12px;
     text-align: center;
-    font-family: var(--mono);
-    font-size: 11px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.5);
   }
   @media (max-width: 700px) {

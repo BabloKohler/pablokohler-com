@@ -54,9 +54,9 @@ const { metrics, metricLabel } = Astro.props;
     position: absolute;
     top: 12px;
     right: 12px;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.08em;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
     color: var(--ink-40);
     background: var(--paper);
     border: 1px dashed var(--ink-12);
@@ -66,7 +66,7 @@ const { metrics, metricLabel } = Astro.props;
   .metric-big {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(32px, 4vw, 46px);
+    font-size: var(--fs-h2s);
     line-height: 1;
     letter-spacing: -0.03em;
     background: linear-gradient(105deg, var(--coral), var(--amber));
@@ -76,8 +76,8 @@ const { metrics, metricLabel } = Astro.props;
     margin-bottom: 8px;
   }
   .metric-cap {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     line-height: 1.4;
   }

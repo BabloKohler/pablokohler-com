@@ -66,15 +66,15 @@ const linkify = (s: string) =>
     margin-bottom: clamp(40px, 6vh, 72px);
   }
   .meta-item .ml {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: var(--ink-40);
     margin-bottom: 6px;
   }
   .meta-item .mv {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--ink);
     font-weight: 500;
   }
@@ -86,10 +86,10 @@ const linkify = (s: string) =>
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: var(--coral);
     margin-bottom: 18px;
   }
@@ -100,13 +100,13 @@ const linkify = (s: string) =>
   .case-section h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(24px, 3vw, 34px);
+    font-size: var(--fs-h2s);
     letter-spacing: -0.02em;
     margin-bottom: 18px;
     line-height: 1.15;
   }
   .case-section p {
-    font-size: clamp(16px, 1.4vw, 18px);
+    font-size: var(--fs-body);
     line-height: 1.7;
     color: var(--ink-60);
     margin-bottom: 16px;

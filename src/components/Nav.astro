@@ -168,8 +168,8 @@ const home = `/${lang}/`;
     gap: 24px;
   }
   .back {
-    font-family: var(--mono);
-    font-size: 14px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     text-decoration: none;
     white-space: nowrap;
@@ -186,7 +186,7 @@ const home = `/${lang}/`;
   .nav-links a {
     color: var(--ink-60);
     text-decoration: none;
-    font-size: 15px;
+    font-size: var(--fs-small);
     font-weight: 500;
     transition: color 0.2s;
   }
@@ -194,8 +194,8 @@ const home = `/${lang}/`;
     color: var(--ink);
   }
   .lang {
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-40);
     border: 1px solid var(--ink-12);
     border-radius: 100px;
@@ -285,13 +285,15 @@ const home = `/${lang}/`;
       gap: 14px;
     }
     .back {
-      font-size: 12px;
+      font-size: var(--fs-small);
       white-space: nowrap;
     }
   }
   @media (max-width: 400px) {
     .back {
-      font-size: 11px;
+      font-size: var(--fs-small);
+      white-space: normal;
+      line-height: 1.2;
     }
   }
 </style>

@@ -62,7 +62,7 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
   .cases h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(30px, 4.4vw, 54px);
+    font-size: var(--fs-h2);
     line-height: 1.06;
     letter-spacing: -0.03em;
     margin-bottom: 24px;
@@ -129,8 +129,8 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
     position: absolute;
     top: 14px;
     left: 14px;
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
     background: rgba(255, 255, 255, 0.85);
     padding: 5px 10px;
@@ -147,14 +147,14 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
   .case-body h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 21px;
+    font-size: var(--fs-h4);
     line-height: 1.25;
     letter-spacing: -0.02em;
     color: var(--coral);
     margin-bottom: 12px;
   }
   .case-body p {
-    font-size: 14px;
+    font-size: var(--fs-small);
     line-height: 1.55;
     color: var(--ink-60);
     margin-bottom: 18px;
@@ -163,7 +163,7 @@ const casesPathSegment = lang === 'es' ? 'casos' : 'cases';
   .case-cta {
     font-family: var(--display);
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--coral);
     transition: transform 0.18s;
     display: inline-block;

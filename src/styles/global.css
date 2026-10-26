@@ -9,9 +9,20 @@
   --coral-ink: #c0410f; /* coral oscuro para texto pequeño sobre crema (contraste >= 4.5:1) */
   --ink-12: rgba(20, 18, 16, 0.12);
 
-  --display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
-  --body: 'Inter Variable', 'Inter', system-ui, sans-serif;
-  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+  --display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --body: 'Public Sans Variable', 'Public Sans', system-ui, sans-serif;
+
+  /* Escala tipográfica: base 17 px, razón 1,333 (cuarta justa). Mínimo absoluto: 14 px.
+     Todo tamaño de letra del sitio sale de estos tokens; no escribas px sueltos. */
+  --fs-small: 14px;
+  --fs-body: 17px;
+  --fs-lead: clamp(19px, 1.8vw, 23px);
+  --fs-h4: 23px;
+  --fs-h3: clamp(22px, 2.2vw, 30px);
+  --fs-h2s: clamp(28px, 3.2vw, 40px);
+  --fs-h2: clamp(32px, 4vw, 54px);
+  --fs-h1: clamp(36px, 5.4vw, 72px);
+  --fs-display: clamp(44px, 7.4vw, 96px);
 }
 
 * {
@@ -28,6 +39,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--body);
+  font-size: var(--fs-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -53,7 +65,7 @@ body {
 .btn {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--fs-body);
   text-decoration: none;
   padding: 15px 28px;
   border-radius: 100px;
@@ -124,8 +136,8 @@ body {
 }
 
 .mono-note {
-  font-family: var(--mono);
-  font-size: 13px;
+  font-family: var(--body);
+  font-size: var(--fs-small);
   color: var(--ink-60); /* ≥ 4.5:1 sobre el fondo crema (antes --ink-40 no pasaba el contraste mínimo) */
 }
 

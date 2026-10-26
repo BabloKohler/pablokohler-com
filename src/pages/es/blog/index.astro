@@ -44,7 +44,7 @@ const posts = (await getCollection('blog-es')).filter((p) => !p.data.draft);
   .blog h1 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(32px, 4.4vw, 54px);
+    font-size: var(--fs-h2);
     letter-spacing: -0.03em;
     margin-bottom: 24px;
   }
@@ -57,7 +57,7 @@ const posts = (await getCollection('blog-es')).filter((p) => !p.data.draft);
   .post-list a {
     font-family: var(--display);
     font-weight: 600;
-    font-size: 18px;
+    font-size: var(--fs-body);
     color: var(--ink);
     text-decoration: none;
   }

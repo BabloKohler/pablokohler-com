@@ -177,17 +177,15 @@ const faq = [
     opacity: 0.95;
   }
   .ep-eyebrow {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--coral-ink);
     margin-bottom: 18px;
   }
   .ep-hero h1 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(36px, 6vw, 72px);
+    font-size: var(--fs-h1);
     line-height: 1.04;
     letter-spacing: -0.035em;
     max-width: min(14em, calc(100% - clamp(110px, 13vw, 190px)));
@@ -202,7 +200,7 @@ const faq = [
     }
   }
   .ep-sub {
-    font-size: clamp(17px, 1.5vw, 20px);
+    font-size: var(--fs-lead);
     line-height: 1.6;
     color: var(--ink-60);
     max-width: 38em;
@@ -220,12 +218,12 @@ const faq = [
   .ep-block h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(26px, 3.4vw, 40px);
+    font-size: var(--fs-h2s);
     letter-spacing: -0.03em;
     margin-bottom: 28px;
   }
   .ep-lead {
-    font-size: 16px;
+    font-size: var(--fs-body);
     line-height: 1.6;
     color: var(--ink-60);
     max-width: 38em;
@@ -245,18 +243,18 @@ const faq = [
     padding: 26px 24px;
   }
   .ep-step-num {
-    font-family: var(--mono);
-    font-size: 14px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--coral);
   }
   .ep-step h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 20px;
+    font-size: var(--fs-h4);
     margin: 12px 0 8px;
   }
   .ep-step p {
-    font-size: 15px;
+    font-size: var(--fs-body);
     line-height: 1.6;
     color: var(--ink-60);
   }
@@ -281,7 +279,7 @@ const faq = [
   .ep-plan h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 22px;
+    font-size: var(--fs-h4);
     margin-bottom: 12px;
   }
   .ep-price {
@@ -289,16 +287,16 @@ const faq = [
   }
   .ep-price strong {
     font-family: var(--display);
-    font-size: clamp(32px, 3.4vw, 42px);
+    font-size: var(--fs-h2);
     letter-spacing: -0.03em;
   }
   .ep-unit {
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: var(--ink-60);
   }
   .ep-blurb {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--ink-60);
     margin-bottom: 18px;
   }
@@ -310,7 +308,7 @@ const faq = [
   .ep-plan li {
     position: relative;
     padding-left: 18px;
-    font-size: 14px;
+    font-size: var(--fs-small);
     line-height: 1.5;
   }
   .ep-plan li::before {
@@ -343,11 +341,11 @@ const faq = [
   .ep-extras h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 17px;
+    font-size: var(--fs-body);
     margin-bottom: 6px;
   }
   .ep-extras p {
-    font-size: 14px;
+    font-size: var(--fs-small);
     line-height: 1.55;
     color: var(--ink-60);
   }
@@ -363,11 +361,11 @@ const faq = [
     cursor: pointer;
     font-family: var(--display);
     font-weight: 600;
-    font-size: 18px;
+    font-size: var(--fs-body);
   }
   .ep-faq details p {
     margin-top: 12px;
-    font-size: 15px;
+    font-size: var(--fs-body);
     line-height: 1.65;
     color: var(--ink-60);
     max-width: 40em;
@@ -387,7 +385,7 @@ const faq = [
   .ep-close h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(30px, 4.4vw, 52px);
+    font-size: var(--fs-h2);
     letter-spacing: -0.03em;
     line-height: 1.05;
     margin-bottom: 14px;
@@ -401,7 +399,7 @@ const faq = [
     color: var(--paper);
     font-family: var(--display);
     font-weight: 600;
-    font-size: 17px;
+    font-size: var(--fs-body);
     text-decoration: none;
     border-bottom: 1px solid rgba(250, 246, 240, 0.35);
   }
@@ -411,8 +409,8 @@ const faq = [
   }
   .ep-close-inner > .ep-private {
     margin: 40px 0 0;
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.5);
   }
   .ep-footer {
@@ -420,8 +418,8 @@ const faq = [
     margin: 0 auto;
     padding: 24px 0;
     border-top: 1px solid rgba(250, 246, 240, 0.12);
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.5);
   }
 </style>

@@ -6,12 +6,10 @@ import portrait from '../assets/about/pablo-kohler.jpg';
 import type { Lang, UiDictionary } from '../i18n';
 import { IS_AU, MAIN_URL, AU_URL, isSharedEnPath } from '../site-target';
 // Fuentes autoalojadas (antes: Google Fonts, que bloqueaba el render y retrasaba FCP/LCP ~2 s en móvil).
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/inter';
-import '@fontsource-variable/jetbrains-mono';
-import spaceGroteskLatin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
-import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import jetbrainsLatin from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+import '@fontsource-variable/archivo';
+import '@fontsource-variable/public-sans';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url';
+import publicSansLatin from '@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2?url';
 import { STAR_PATH, STAR_VIEWBOX } from '../components/star-path';
 import '../styles/global.css';
 
@@ -191,9 +189,8 @@ const structuredData = {
 
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
-    <link rel="preload" href={spaceGroteskLatin} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={jetbrainsLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={publicSansLatin} as="font" type="font/woff2" crossorigin />
   </head>
   <body>
     <!-- Estrella firma: una sola definición por página, reutilizada con <use href="#slp-star"> (Star, hero, footer) -->

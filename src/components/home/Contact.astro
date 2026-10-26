@@ -231,13 +231,13 @@ const formStrings = JSON.stringify({
   .contact h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(32px, 5vw, 60px);
+    font-size: var(--fs-h2);
     line-height: 1.05;
     letter-spacing: -0.03em;
     margin-bottom: 18px;
   }
   .contact-sub {
-    font-size: clamp(16px, 1.4vw, 19px);
+    font-size: var(--fs-lead);
     color: rgba(250, 246, 240, 0.6);
     margin-bottom: 48px;
   }
@@ -261,10 +261,10 @@ const formStrings = JSON.stringify({
     flex-direction: column;
   }
   .field label {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: rgba(250, 246, 240, 0.5);
     margin-bottom: 8px;
   }
@@ -276,7 +276,7 @@ const formStrings = JSON.stringify({
     padding: 14px 16px;
     color: var(--paper);
     font-family: var(--body);
-    font-size: 15px;
+    font-size: var(--fs-body);
     transition: border-color 0.18s;
   }
   .field input:focus,
@@ -294,8 +294,8 @@ const formStrings = JSON.stringify({
     margin-top: 4px;
   }
   .form-status {
-    font-family: var(--mono);
-    font-size: 13px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     margin-top: 12px;
     min-height: 1em;
   }
@@ -308,17 +308,17 @@ const formStrings = JSON.stringify({
   }
   .form-note {
     display: block;
-    font-family: var(--mono);
-    font-size: 11px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.5);
     margin-top: 8px;
   }
 
   .direct-label {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-family: var(--body);
+    font-size: var(--fs-small);
+
+
     color: rgba(250, 246, 240, 0.5);
     margin-bottom: 16px;
   }
@@ -350,7 +350,7 @@ const formStrings = JSON.stringify({
     display: block;
   }
   .direct-link span {
-    font-size: 14px;
+    font-size: var(--fs-small);
     line-height: 1.4;
     color: rgba(250, 246, 240, 0.7);
   }
@@ -382,13 +382,13 @@ const formStrings = JSON.stringify({
     height: 16px;
   }
   .foot-copy {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.62);
   }
   .foot-privacy {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--body);
+    font-size: var(--fs-small);
     color: rgba(250, 246, 240, 0.62);
     text-decoration: underline;
     text-underline-offset: 2px;

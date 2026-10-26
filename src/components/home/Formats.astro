@@ -54,13 +54,13 @@ const tags = t.tags.map((label, i) => ({
   .formats h2 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(28px, 4vw, 46px);
+    font-size: var(--fs-h2);
     line-height: 1.1;
     letter-spacing: -0.03em;
     margin-bottom: 16px;
   }
   .formats-intro {
-    font-size: clamp(16px, 1.4vw, 19px);
+    font-size: var(--fs-lead);
     line-height: 1.6;
     color: var(--ink-60);
   }
@@ -90,15 +90,15 @@ const tags = t.tags.map((label, i) => ({
     transform: translateY(-2px);
   }
   .tag--sm {
-    font-size: 14px;
+    font-size: var(--fs-small);
     padding: 7px 16px;
   }
   .tag--md {
-    font-size: 16px;
+    font-size: var(--fs-body);
     padding: 9px 20px;
   }
   .tag--lg {
-    font-size: 20px;
+    font-size: var(--fs-h4);
     padding: 11px 24px;
   }
 </style>
