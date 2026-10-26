@@ -2,8 +2,23 @@
 import { Image } from 'astro:assets';
 import Star from '../Star.astro';
 import portrait from '../../assets/about/pablo-kohler.jpg';
+import shotShe from '../../assets/eric/shelovespink.jpg';
+import shotBondi from '../../assets/eric/bondipainters.jpg';
+import shotHeritage from '../../assets/eric/heritagepainting.jpg';
+import shotIndustrial from '../../assets/eric/industrialpainters.jpg';
 
 const calendly = 'https://calendly.com/pablokohlerlara/30min';
+
+// Cuando Eric responde "Sounds good", el formulario del sitio (Formspree) avisa a Pablo por correo.
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
+const notifyUrl = formspreeId ? `https://formspree.io/f/${formspreeId}` : undefined;
+
+const sites = [
+  { name: 'She Loves Pink', url: 'shelovespink.com.au', img: shotShe },
+  { name: 'Bondi Painters', url: 'bondipainters.com.au', img: shotBondi },
+  { name: 'Heritage Painting', url: 'heritagepaintingservices.com.au', img: shotHeritage },
+  { name: 'Industrial Painters', url: 'industrialpainters.com.au', img: shotIndustrial },
+];
 
 const steps = [
   {
@@ -88,6 +103,48 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         <div class="stack">
           <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
           <p class="msg">We have already worked together quite a lot.</p>
+        </div>
+      </div>
+
+      <div class="shots" data-shots>
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="browser-url" data-url>{sites[0].url}</span>
+            <a class="browser-visit" data-visit href={`https://${sites[0].url}`} target="_blank" rel="noopener">Visit site</a>
+          </div>
+          <div class="browser-screen">
+            {
+              sites.map((st, i) => (
+                <Image
+                  src={st.img}
+                  width={1100}
+                  format="webp"
+                  quality={82}
+                  alt={`${st.name} website`}
+                  class={`shot${i === 0 ? ' is-active' : ''}`}
+                  data-shot
+                />
+              ))
+            }
+          </div>
+        </div>
+        <div class="shot-tabs" role="group" aria-label="Sites">
+          {
+            sites.map((st, i) => (
+              <button type="button" class={`shot-tab${i === 0 ? ' is-active' : ''}`} data-tab={i} data-site={st.url} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {st.name}
+              </button>
+            ))
+          }
+        </div>
+        <p class="shots-note">A few of the sites I have built.</p>
+      </div>
+
+      <div class="group group--cont" data-group>
+        <Image {...img} class="avatar" />
+        <div class="stack">
+          <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
           <p class="msg">So I would like to try a new way of working: pay per delivered product.</p>
           <p class="msg">In other words:</p>
           <p class="msg msg--hl">a finished website, ready and live.</p>
@@ -218,7 +275,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         </div>
       </div>
 
-      <div class="replies" data-replies>
+      <div class="replies" data-replies data-notify={notifyUrl}>
         <button type="button" class="reply-btn" data-reply="yes">Sounds good</button>
         <button type="button" class="reply-btn" data-reply="question">I have a question</button>
       </div>
@@ -230,7 +287,8 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
             <Image {...img} class="avatar" />
             <div class="stack">
               <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-              <p class="msg">Great. Let us pick the first site and set a start date.</p>
+              <p class="msg">Great. I will get in touch with you soon to pick the first site and set a start date.</p>
+              <p class="msg">If you would rather choose a time yourself:</p>
               <div class="msg msg--cta">
                 <a href={calendly} class="btn btn-primary" target="_blank" rel="noopener" data-track="booking_click" data-track-location="eric_yes">
                   <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
@@ -386,6 +444,53 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     });
   }
 
+  // Galería de sitios: pestañas, cambio automático y pausa al interactuar.
+  const shots = document.querySelector<HTMLElement>('[data-shots]');
+  if (shots) {
+    const imgs = [...shots.querySelectorAll<HTMLElement>('[data-shot]')];
+    const tabs = [...shots.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const urlEl = shots.querySelector<HTMLElement>('[data-url]');
+    const visit = shots.querySelector<HTMLAnchorElement>('[data-visit]');
+    let cur = 0;
+    let timer: number | undefined;
+    const show = (i: number) => {
+      cur = i;
+      imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
+      tabs.forEach((t, k) => {
+        t.classList.toggle('is-active', k === i);
+        t.setAttribute('aria-pressed', String(k === i));
+      });
+      const url = tabs[i].dataset.site as string;
+      if (urlEl) urlEl.textContent = url;
+      if (visit) visit.href = 'https://' + url;
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+    const start = () => {
+      if (reduce || timer || shots.dataset.manual) return;
+      timer = window.setInterval(() => show((cur + 1) % imgs.length), 3800);
+    };
+    tabs.forEach((t, i) =>
+      t.addEventListener('click', () => {
+        shots.dataset.manual = '1';
+        stop();
+        show(i);
+      }),
+    );
+    shots.addEventListener('mouseenter', stop);
+    shots.addEventListener('mouseleave', start);
+    watch(
+      [shots],
+      () => {
+        shots.classList.add('is-in');
+        start();
+      },
+      0.3,
+    );
+  }
+
   // Extras: aparecen de a uno.
   const chips = document.querySelector<HTMLElement>('[data-chips]');
   if (chips) {
@@ -405,6 +510,18 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     );
   }
 
+  // Aviso: cuando Eric responde "Sounds good", llega un correo a Pablo (Formspree).
+  const notify = (url: string | undefined) => {
+    if (!url) return;
+    const fd = new FormData();
+    fd.append('name', 'Eric (proposal page)');
+    fd.append('_subject', 'Eric replied "Sounds good" on your proposal page');
+    fd.append('message', 'Eric clicked "Sounds good" on the proposal page. Please get in touch with him.');
+    fd.append('page', location.href);
+    fd.append('sent_at', new Date().toISOString());
+    fetch(url, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).catch(() => {});
+  };
+
   // Respuesta: Eric elige y Pablo contesta.
   const replies = document.querySelector<HTMLElement>('[data-replies]');
   replies?.querySelectorAll<HTMLButtonElement>('[data-reply]').forEach((btn) => {
@@ -415,6 +532,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
         b.classList.toggle('is-chosen', b === btn);
       });
       replies.classList.add('is-done');
+      if (choice === 'yes') notify(replies.dataset.notify);
       const block = document.querySelector<HTMLElement>(`[data-block="${choice}"]`);
       if (!block) return;
       block.hidden = false;
@@ -633,6 +751,120 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
   :global(.js) .msg.is-in {
     opacity: 1;
     transform: none;
+  }
+
+  /* Capturas de sitios */
+  .shots {
+    margin-left: 62px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .browser {
+    border: 1px solid var(--ink-12);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(20, 18, 16, 0.12);
+  }
+  :global(.js) .shots {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  :global(.js) .shots.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #f1ebe1;
+    border-bottom: 1px solid var(--ink-12);
+  }
+  .browser-dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .browser-dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ink-12);
+  }
+  .browser-url {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px 14px;
+    background: #fff;
+    border-radius: 100px;
+    font-size: var(--fs-small);
+    color: var(--ink-60);
+  }
+  .browser-visit {
+    flex: 0 0 auto;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--coral-ink);
+    text-underline-offset: 3px;
+  }
+  .browser-screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #fff;
+  }
+  .browser-screen :global(.shot) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .browser-screen :global(.shot.is-active) {
+    opacity: 1;
+  }
+  .shot-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .shot-tab {
+    appearance: none;
+    padding: 9px 16px;
+    border: 1.5px solid var(--ink);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    cursor: pointer;
+    transition:
+      background 0.18s ease,
+      color 0.18s ease;
+  }
+  .shot-tab:hover,
+  .shot-tab.is-active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .shots-note {
+    margin: 0;
+    font-size: var(--fs-small);
+    color: var(--ink-60);
+  }
+  .group--cont :global(.avatar) {
+    visibility: hidden;
   }
 
   /* Indicador de scroll */
@@ -1067,6 +1299,7 @@ const img = { src: portrait, width: 96, height: 96, format: 'webp' as const, qua
     .price-card,
     .calc,
     .products,
+    .shots,
     .replies {
       margin-left: 0;
     }
