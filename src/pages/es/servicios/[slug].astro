@@ -1,0 +1,41 @@
+---
+// Landing pages de marketing (SEO, Google Ads, redes) del sitio principal, en español.
+// SOLO se generan en el build principal; en el build AU (solo inglés) las rutas devuelven [].
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ServicePage from '../../../components/au/ServicePage.astro';
+import { getDictionary } from '../../../i18n';
+import { IS_AU } from '../../../site-target';
+import { MKT, mktHref } from '../../../data/marketing';
+import { serviceGraph } from '../../../data/schema-service';
+
+export function getStaticPaths() {
+  if (IS_AU) return [];
+  return MKT.map((m) => ({ params: { slug: m.es.slug }, props: { m } }));
+}
+
+const { m } = Astro.props;
+const t = getDictionary('es');
+const s = m.es;
+const enHref = mktHref('en', m.en);
+const esHref = mktHref('es', m.es);
+const others = MKT.filter((o) => o.id !== m.id).map((o) => ({ href: mktHref('es', o.es), label: o.es.cardTitle }));
+const extraGraph = serviceGraph(s, new URL(esHref, Astro.site).href, String(Astro.site), [
+  { '@type': 'Country', name: 'Chile' },
+  { '@type': 'Place', name: 'Latinoamérica' },
+  { '@type': 'Country', name: 'Australia' },
+]);
+---
+
+<BaseLayout
+  lang="es"
+  title={s.metaTitle}
+  description={s.metaDescription}
+  breadcrumb={[{ name: s.cardTitle, url: esHref }]}
+  extraGraph={extraGraph}
+  navDict={t.nav}
+  cookieDict={t.cookieConsent}
+  esHref={esHref}
+  enHref={enHref}
+>
+  <ServicePage s={s} lang="es" trust={false} location="" currency="" others={others} homeHref="/es/" privacyHref="/es/privacidad/" />
+</BaseLayout>

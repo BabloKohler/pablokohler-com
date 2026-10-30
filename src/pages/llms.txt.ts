@@ -3,6 +3,8 @@ import { IS_AU } from '../site-target';
 import { AU_SERVICES } from '../data/au-services';
 import { AU_RESCUE } from '../data/au-rescue';
 import { AU_INDUSTRIES } from '../data/au-industries';
+import { AU_MARKETING } from '../data/au-marketing';
+import { MKT, mktHref } from '../data/marketing';
 
 // Resumen para buscadores con IA (llms.txt). Solo hechos reales del sitio; se genera por dominio.
 export const GET: APIRoute = ({ site }) => {
@@ -16,6 +18,9 @@ export const GET: APIRoute = ({ site }) => {
         '',
         '## Services',
         ...AU_SERVICES.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
+        '',
+        '## Get found and get customers (SEO, Google Ads, Meta Ads)',
+        ...AU_MARKETING.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
         '',
         '## Already have a website you cannot manage?',
         ...AU_RESCUE.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
@@ -38,6 +43,10 @@ export const GET: APIRoute = ({ site }) => {
         '## Pages',
         line('Inicio (español)', '/es/', 'Consultor de marketing digital y comunicaciones: sitios web, SEO y automatización.'),
         line('Home (English)', '/en/', 'Digital marketing and communications consultant: websites, SEO and automation.'),
+        ...MKT.flatMap((m) => [
+          line(`${m.en.cardTitle} (English)`, mktHref('en', m.en), m.en.cardBlurb),
+          line(`${m.es.cardTitle} (español)`, mktHref('es', m.es), m.es.cardBlurb),
+        ]),
         line('She Loves Pink', '/en/cases/shelovespink/', 'Website redesign for a Sydney beauty salon.'),
         line('Saludamente', '/en/cases/saludamente/', 'Website for a mental health centre in Chile with a fully self-managed admin console.'),
         line('Heritage Painting Services', '/en/cases/heritagepainting/', 'Specialist website for a Sydney heritage painter, with SEO landing pages.'),

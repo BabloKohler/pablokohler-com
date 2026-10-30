@@ -4,6 +4,11 @@ import portrait from '../../assets/about/pablo-kohler.jpg';
 
 // Solo hechos verificables (ver src/i18n/en.ts "about" y los casos en src/content/en/cases).
 // NO agregar reseñas, cifras de clientes ni logos sin respaldo real.
+interface Props {
+  /** Dónde está basado Pablo según la página (las páginas antiguas dicen Sydney). */
+  base?: string;
+}
+const { base = 'Sydney' } = Astro.props;
 const work = [
   { href: '/en/cases/shelovespink/', label: 'She Loves Pink', desc: 'website redesign, analytics and ads for a Sydney salon' },
   { href: '/en/cases/docomomo/', label: 'Docomomo', desc: 'website for an international architecture conference' },
@@ -16,7 +21,7 @@ const work = [
   <Image class="trust-photo" src={portrait} alt="Pablo Kohler" width={160} height={160} format="webp" quality={85} />
   <div class="trust-body">
     <p class="trust-lead">
-      <strong>Hi, I’m Pablo.</strong> I’m a Sydney-based digital marketing and web consultant, bilingual in English and
+      <strong>Hi, I’m Pablo.</strong> I’m a {base}-based digital marketing and web consultant, bilingual in English and
       Spanish, with 9+ years of experience building websites and digital systems for universities and organisations.
       When you work with me, you deal with me directly.
     </p>

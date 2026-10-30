@@ -8,6 +8,8 @@ import Formats from '../../components/home/Formats.astro';
 import Cases from '../../components/home/Cases.astro';
 import About from '../../components/home/About.astro';
 import Contact from '../../components/home/Contact.astro';
+import AuServices from '../../components/au/AuServices.astro';
+import { MKT, mktHref } from '../../data/marketing';
 import { getDictionary } from '../../i18n';
 
 const t = getDictionary('es');
@@ -32,6 +34,15 @@ const cases = order
   <Hero t={t.hero} />
   <TrustMarquee t={t.trust} />
   <Capabilities t={t.caps} />
+  <AuServices
+    items={MKT.map((m) => m.es)}
+    hrefOf={(s) => mktHref('es', s)}
+    id="marketing"
+    headline="Que te encuentren y"
+    accent="te consulten"
+    intro="SEO, Google Ads y anuncios en redes, armados en cuentas que son tuyas, con una cotización por escrito después de una revisión gratis."
+    location="home_marketing"
+  />
   <Formats t={t.formats} />
   <Cases t={t.cases} lang="es" cases={cases} />
   <About t={t.about} />

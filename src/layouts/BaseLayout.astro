@@ -29,9 +29,11 @@ interface Props {
   noindex?: boolean;
   /** Migas de pan después de "Inicio" (para el JSON-LD BreadcrumbList). */
   breadcrumb?: { name: string; url: string }[];
+  /** Nodos extra del JSON-LD (p. ej. Service y FAQPage de una landing). */
+  extraGraph?: object[];
 }
 
-const { lang, title, description, navDict, cookieDict, back, noindex, breadcrumb, hideNav } = Astro.props;
+const { lang, title, description, navDict, cookieDict, back, noindex, breadcrumb, hideNav, extraGraph = [] } = Astro.props;
 
 // Todas las URLs terminan en "/" (así coinciden el sitemap, los enlaces internos y el canonical).
 const slash = (p: string) => (p.endsWith('/') || p.includes('#') || p.includes('?') ? p : `${p}/`);
@@ -160,7 +162,7 @@ const breadcrumbNode = crumbs
   : null;
 const structuredData = {
   '@context': 'https://schema.org',
-  '@graph': [...baseGraph, ...(breadcrumbNode ? [breadcrumbNode] : [])],
+  '@graph': [...baseGraph, ...(breadcrumbNode ? [breadcrumbNode] : []), ...extraGraph],
 };
 ---
 

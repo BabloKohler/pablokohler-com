@@ -11,6 +11,8 @@ import Contact from '../../components/home/Contact.astro';
 import AuServices from '../../components/au/AuServices.astro';
 import { AU_INDUSTRIES } from '../../data/au-industries';
 import { AU_RESCUE } from '../../data/au-rescue';
+import { AU_MARKETING } from '../../data/au-marketing';
+import { MKT, mktHref } from '../../data/marketing';
 import { AU_HOME_SEO } from '../../data/au-seo';
 import { getDictionary } from '../../i18n';
 import { IS_AU } from '../../site-target';
@@ -44,6 +46,31 @@ const cases = order
   <TrustMarquee t={t.trust} />
   <Capabilities t={t.caps} />
   {IS_AU && <AuServices />}
+  {
+    IS_AU && (
+      <AuServices
+        items={AU_MARKETING}
+        id="au-marketing"
+        headline="Get found and"
+        accent="get customers"
+        intro="SEO, Google Ads and Meta Ads for small businesses in Tasmania and across Australia, set up in accounts you own."
+        location="home_marketing"
+      />
+    )
+  }
+  {
+    !IS_AU && (
+      <AuServices
+        items={MKT.map((m) => m.en)}
+        hrefOf={(s) => mktHref('en', s)}
+        id="marketing"
+        headline="Get found and"
+        accent="get enquiries"
+        intro="SEO, Google Ads and social media ads, set up in accounts you own, with a written quote after a free check."
+        location="home_marketing"
+      />
+    )
+  }
   {
     IS_AU && (
       <AuServices

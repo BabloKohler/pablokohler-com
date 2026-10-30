@@ -8,6 +8,8 @@ interface Props {
   accent?: string;
   intro?: string;
   location?: string;
+  /** Ruta de cada tarjeta. Por defecto, la del .com.au (/en/<slug>/). */
+  hrefOf?: (s: AuService) => string;
 }
 const {
   items = AU_SERVICES,
@@ -16,6 +18,7 @@ const {
   accent = 'your business',
   intro = 'Websites that work, someone to look after them, and an extra pair of hands for the admin.',
   location = 'home',
+  hrefOf = (s: AuService) => `/en/${s.slug}/`,
 } = Astro.props;
 ---
 
@@ -28,7 +31,7 @@ const {
     {
       items.map((s, i) => (
         <a
-          href={`/en/${s.slug}/`}
+          href={hrefOf(s)}
           class="au-card reveal"
           data-reveal
           style={`transition-delay:${i * 0.06}s`}

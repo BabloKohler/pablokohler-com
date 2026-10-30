@@ -88,6 +88,23 @@ export const AU_SEO: Record<string, { title: string; description: string }> = {
     description:
       'Credible, clear websites for Sydney accountants, lawyers, consultants and agents, built to generate enquiries. New sites from A$1,500.',
   },
+
+  // Marketing (SEO, Google Ads, Meta Ads)
+  'local-seo': {
+    title: 'Local SEO for Tasmanian Small Business | Pablo Kohler',
+    description:
+      'Local SEO for small businesses in Tasmania and across Australia: Google Business Profile, page fixes, local landing pages and Search Console. From A$450.',
+  },
+  'google-ads': {
+    title: 'Google Ads Management Tasmania & Australia | Pablo Kohler',
+    description:
+      'Google Ads for small businesses in Tasmania and across Australia: campaigns set up in your own account, with tracked calls and enquiries. From A$200 a campaign.',
+  },
+  'social-media-ads': {
+    title: 'Social Media Ads & Meta Ads Tasmania | Pablo Kohler',
+    description:
+      'Facebook and Instagram setup and Meta Ads for small businesses in Tasmania and across Australia. Accounts in your name, tracked enquiries. From A$150.',
+  },
 };
 
 export const AU_HOME_SEO = {

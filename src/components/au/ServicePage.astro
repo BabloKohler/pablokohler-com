@@ -5,31 +5,100 @@ import wordmark from '../../assets/brand/wordmark-blanco.png';
 import AuTrust from './AuTrust.astro';
 import { AU_SERVICES, type AuService } from '../../data/au-services';
 import { AU_RESCUE } from '../../data/au-rescue';
+import { AU_MARKETING } from '../../data/au-marketing';
 
 interface Props {
   s: AuService;
+  lang?: 'en' | 'es';
+  /** Ubicación del pie. Las páginas antiguas del .com.au dicen "Sydney, Australia". Vacío = sin ubicación. */
+  location?: string;
+  /** Dónde está basado Pablo en el recuadro de confianza (solo en inglés). */
+  base?: string;
+  /** Muestra el recuadro de confianza (solo inglés). */
+  trust?: boolean;
+  /** Enlaces a otros servicios. Por defecto, los del mismo grupo en el .com.au. */
+  others?: { href: string; label: string }[];
+  homeHref?: string;
+  privacyHref?: string;
+  /** Moneda del evento generate_lead. Vacío = sin moneda (páginas sin precios). */
+  currency?: string;
 }
-const { s } = Astro.props;
+const {
+  s,
+  lang = 'en',
+  location = 'Sydney, Australia',
+  base = 'Sydney',
+  trust = true,
+  homeHref = '/en/',
+  privacyHref = '/en/privacy/',
+  currency = 'AUD',
+} = Astro.props;
+
+// Textos fijos de la plantilla, por idioma.
+const STRINGS = {
+  en: {
+    orBook: 'or book a free 30-min call',
+    questions: 'Questions',
+    preferTalk: 'Prefer to talk?',
+    book: 'Book a free 30-min call',
+    whatsapp: 'Message me on WhatsApp',
+    waText: (svc: string) => `Hi Pablo, I'm interested in: ${svc}`,
+    name: 'Name',
+    email: 'Email',
+    website: 'Website address',
+    websitePh: 'yourbusiness.com.au',
+    message: 'Anything I should know? (optional)',
+    privacyPre: 'I only use your details to reply to you. See the ',
+    privacy: 'privacy policy',
+    privacyLink: 'Privacy',
+    other: 'Other services',
+    from: 'from ',
+    form: {
+      sending: 'Sending…',
+      success: 'Thanks! I’ll get back to you within a couple of business days.',
+      error: 'Something went wrong. Please try again, or email me directly.',
+      notConfigured: 'The form isn’t connected yet. Please use the booking link or LinkedIn for now.',
+    },
+  },
+  es: {
+    orBook: 'o agenda una llamada gratis de 30 min',
+    questions: 'Preguntas',
+    preferTalk: '¿Prefieres conversar?',
+    book: 'Agenda una llamada gratis de 30 min',
+    whatsapp: 'Escríbeme por WhatsApp',
+    waText: (svc: string) => `Hola Pablo, me interesa: ${svc}`,
+    name: 'Nombre',
+    email: 'Correo',
+    website: 'Dirección de tu sitio',
+    websitePh: 'tusitio.com',
+    message: '¿Algo que deba saber? (opcional)',
+    privacyPre: 'Solo uso tus datos para responderte. Mira la ',
+    privacy: 'política de privacidad',
+    privacyLink: 'Privacidad',
+    other: 'Otros servicios',
+    from: 'desde ',
+    form: {
+      sending: 'Enviando…',
+      success: '¡Gracias! Te respondo en un par de días hábiles.',
+      error: 'Algo salió mal. Inténtalo de nuevo o escríbeme directo por correo.',
+      notConfigured: 'El formulario aún no está conectado. Por ahora usa el enlace para agendar o LinkedIn.',
+    },
+  },
+}[lang];
 
 const calendly = 'https://calendly.com/pablokohlerlara/30min';
 // WhatsApp opcional: define PUBLIC_WHATSAPP_NUMBER (solo dígitos con código de país, ej. 61412345678).
 const wa = String(import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? '').replace(/\D/g, '');
-const waHref = wa
-  ? `https://wa.me/${wa}?text=${encodeURIComponent(`Hi Pablo, I'm interested in: ${s.formService}`)}`
-  : undefined;
+const waHref = wa ? `https://wa.me/${wa}?text=${encodeURIComponent(STRINGS.waText(s.formService))}` : undefined;
 
 // Las páginas de rescate se enlazan entre sí; el resto enlaza a los servicios principales.
-const others = (s.group === 'rescue' ? AU_RESCUE : AU_SERVICES).filter((o) => o.slug !== s.slug);
+const defaultGroup = s.group === 'rescue' ? AU_RESCUE : s.group === 'marketing' ? AU_MARKETING : AU_SERVICES;
+const others = Astro.props.others ?? defaultGroup.filter((o) => o.slug !== s.slug).map((o) => ({ href: `/en/${o.slug}/`, label: o.cardTitle }));
 
 // Mismo mecanismo que el formulario de contacto de la home: PUBLIC_FORMSPREE_ID.
 const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
 const formAction = formspreeId ? `https://formspree.io/f/${formspreeId}` : undefined;
-const formStrings = JSON.stringify({
-  sending: 'Sending…',
-  success: 'Thanks! I’ll get back to you within a couple of business days.',
-  error: 'Something went wrong. Please try again, or email me directly.',
-  notConfigured: 'The form isn’t connected yet. Please use the booking link or LinkedIn for now.',
-});
+const formStrings = JSON.stringify(STRINGS.form);
 ---
 
 <header class="sp-hero">
@@ -50,11 +119,11 @@ const formStrings = JSON.stringify({
     <span class="btn-label">{s.cta}</span>
   </a>
   <a href={calendly} class="sp-secondary" data-track="booking_click" data-track-location="hero" target="_blank" rel="noopener">
-    or book a free 30-min call
+    {STRINGS.orBook}
   </a>
 </header>
 
-<AuTrust />
+{trust && <AuTrust base={base} />}
 
 <section class="sp-block">
   <h2 class="reveal" data-reveal>{s.problemsTitle}</h2>
@@ -86,9 +155,9 @@ const formStrings = JSON.stringify({
         <article class:list={['sp-plan', 'reveal', { featured: p.featured }]} data-reveal>
           <h3>{p.name}</h3>
           <p class="sp-price">
-            {p.unit && /^from$/.test(p.unit) && <span class="sp-from">from </span>}
-            <strong>{p.price}</strong>
-            {p.unit && !/^from$/.test(p.unit) && <span class="sp-unit"> {p.unit}</span>}
+            {p.price && p.unit && /^from$/.test(p.unit) && <span class="sp-from">{STRINGS.from}</span>}
+            {p.price ? <strong>{p.price}</strong> : <strong class="sp-quote">{p.unit}</strong>}
+            {p.price && p.unit && !/^from$/.test(p.unit) && <span class="sp-unit"> {p.unit}</span>}
           </p>
           <p class="sp-blurb">{p.blurb}</p>
           <ul>
@@ -102,7 +171,7 @@ const formStrings = JSON.stringify({
 </section>
 
 <section class="sp-block sp-faq">
-  <h2 class="reveal" data-reveal>Questions</h2>
+  <h2 class="reveal" data-reveal>{STRINGS.questions}</h2>
   {
     s.faq.map((f) => (
       <details class="reveal" data-reveal>
@@ -119,14 +188,14 @@ const formStrings = JSON.stringify({
     <p class="sp-contact-sub">{s.formSub}</p>
 
     <div class="sp-quick">
-      <p class="sp-quick-label">Prefer to talk?</p>
+      <p class="sp-quick-label">{STRINGS.preferTalk}</p>
       <a href={calendly} data-track="booking_click" data-track-location="contact" target="_blank" rel="noopener">
-        Book a free 30-min call
+        {STRINGS.book}
       </a>
       {
         waHref && (
           <a href={waHref} data-track="whatsapp_click" data-track-service={s.formService} data-track-location="contact" target="_blank" rel="noopener">
-            Message me on WhatsApp
+            {STRINGS.whatsapp}
           </a>
         )
       }
@@ -139,6 +208,7 @@ const formStrings = JSON.stringify({
       method="POST"
       data-configured={formAction ? 'true' : 'false'}
       data-strings={formStrings}
+      data-currency={currency}
     >
       <input type="hidden" name="service" value={s.formService} />
       <input type="hidden" name="landing_page" value="" />
@@ -148,23 +218,23 @@ const formStrings = JSON.stringify({
       <input type="hidden" name="referrer" value="" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sp-hp" aria-hidden="true" />
       <div class="field">
-        <label for="lead-name">Name</label>
+        <label for="lead-name">{STRINGS.name}</label>
         <input id="lead-name" name="name" type="text" autocomplete="name" required />
       </div>
       <div class="field">
-        <label for="lead-email">Email</label>
+        <label for="lead-email">{STRINGS.email}</label>
         <input id="lead-email" name="email" type="email" autocomplete="email" required />
       </div>
       {
         s.askWebsite && (
           <div class="field">
-            <label for="lead-site">Website address</label>
-            <input id="lead-site" name="website" type="text" inputmode="url" placeholder="yourbusiness.com.au" required />
+            <label for="lead-site">{STRINGS.website}</label>
+            <input id="lead-site" name="website" type="text" inputmode="url" placeholder={STRINGS.websitePh} required />
           </div>
         )
       }
       <div class="field">
-        <label for="lead-msg">Anything I should know? (optional)</label>
+        <label for="lead-msg">{STRINGS.message}</label>
         <textarea id="lead-msg" name="message" rows="3"></textarea>
       </div>
       <button class="btn btn-primary sp-submit" type="submit">
@@ -172,23 +242,23 @@ const formStrings = JSON.stringify({
         <span class="btn-label">{s.submitLabel}</span>
       </button>
       <p class="form-status" role="status" aria-live="polite"></p>
-      <span class="form-note">I only use your details to reply to you. See the <a href="/en/privacy/">privacy policy</a>.</span>
+      <span class="form-note">{STRINGS.privacyPre}<a href={privacyHref}>{STRINGS.privacy}</a>.</span>
     </form>
 
     <div class="sp-more">
-      <p class="sp-more-label">Other services</p>
+      <p class="sp-more-label">{STRINGS.other}</p>
       <div class="sp-more-links">
-        {others.map((o) => <a href={`/en/${o.slug}/`}>{o.cardTitle}</a>)}
+        {others.map((o) => <a href={o.href}>{o.label}</a>)}
       </div>
     </div>
   </div>
 
   <footer class="sp-footer">
-    <a href="/en/" class="sp-foot-brand">
+    <a href={homeHref} class="sp-foot-brand">
       <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
     </a>
-    <span class="sp-foot-copy">&copy; Pablo Kohler. Sydney, Australia.</span>
-    <a href="/en/privacy/" class="sp-foot-link">Privacy</a>
+    <span class="sp-foot-copy">&copy; Pablo Kohler.{location ? ` ${location}.` : ''}</span>
+    <a href={privacyHref} class="sp-foot-link">{STRINGS.privacyLink}</a>
   </footer>
 </section>
 
@@ -233,10 +303,11 @@ const formStrings = JSON.stringify({
         });
         if (res.ok) {
           const service = (form.querySelector('input[name="service"]') as HTMLInputElement).value;
+          const currency = form.dataset.currency;
           (window as unknown as { trackEvent?: (n: string, p?: object) => void }).trackEvent?.('generate_lead', {
             service,
             form: 'service_landing',
-            currency: 'AUD',
+            ...(currency ? { currency } : {}),
           });
           setStatus(strings.success, 'success');
           form.reset();
@@ -447,6 +518,10 @@ const formStrings = JSON.stringify({
     font-family: var(--display);
     font-size: var(--fs-h2);
     letter-spacing: -0.03em;
+  }
+  .sp-price .sp-quote {
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.2;
   }
   .sp-from,
   .sp-unit {

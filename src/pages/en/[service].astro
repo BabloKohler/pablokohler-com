@@ -9,26 +9,39 @@ import { AU_SERVICES } from '../../data/au-services';
 import { AU_INDUSTRIES } from '../../data/au-industries';
 import { AU_RESCUE } from '../../data/au-rescue';
 import { AU_SEO } from '../../data/au-seo';
+import { AU_MARKETING } from '../../data/au-marketing';
+import { serviceGraph } from '../../data/schema-service';
 
 export function getStaticPaths() {
   if (!IS_AU) return [];
-  return [...AU_SERVICES, ...AU_RESCUE, ...AU_INDUSTRIES].map((s) => ({ params: { service: s.slug }, props: { s } }));
+  return [...AU_SERVICES, ...AU_MARKETING, ...AU_RESCUE, ...AU_INDUSTRIES].map((s) => ({ params: { service: s.slug }, props: { s } }));
 }
 
 const { s } = Astro.props;
 const t = getDictionary('en');
 const href = `/en/${s.slug}/`;
+// Las páginas de marketing llevan Service + FAQ en el JSON-LD y dicen "Tasmania" como ubicación.
+const isMarketing = s.group === 'marketing';
+const title = AU_SEO[s.slug]?.title ?? s.metaTitle;
+const description = AU_SEO[s.slug]?.description ?? s.metaDescription;
+const extraGraph = isMarketing
+  ? serviceGraph(s, new URL(href, Astro.site).href, String(Astro.site), [
+      { '@type': 'AdministrativeArea', name: 'Tasmania' },
+      { '@type': 'Country', name: 'Australia' },
+    ])
+  : [];
 ---
 
 <BaseLayout
   lang="en"
-  title={AU_SEO[s.slug]?.title ?? s.metaTitle}
-  description={AU_SEO[s.slug]?.description ?? s.metaDescription}
+  title={title}
+  description={description}
+  extraGraph={extraGraph}
   breadcrumb={[{ name: s.cardTitle, url: href }]}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref={href}
   enHref={href}
 >
-  <ServicePage s={s} />
+  <ServicePage s={s} {...(isMarketing ? { location: 'Tasmania, Australia', base: 'Tasmania' } : {})} />
 </BaseLayout>
