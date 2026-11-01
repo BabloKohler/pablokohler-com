@@ -17,6 +17,8 @@ export interface AuService {
   slug: string;
   /** 'rescue' = landing para quienes ya tienen sitio y no lo controlan (src/data/au-rescue.ts). */
   group?: 'rescue' | 'marketing';
+  /** Páginas que se presentan desde Tasmania (pie y recuadro de presentación). Las antiguas dicen Sydney. */
+  region?: 'tasmania';
   /** Texto corto para la lista de servicios del home y los links entre páginas. */
   cardTitle: string;
   cardBlurb: string;

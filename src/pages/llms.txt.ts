@@ -25,7 +25,7 @@ export const GET: APIRoute = ({ site }) => {
         '## Already have a website you cannot manage?',
         ...AU_RESCUE.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
         '',
-        '## By industry (Sydney)',
+        '## By industry',
         ...AU_INDUSTRIES.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),
         '',
         '## Work',

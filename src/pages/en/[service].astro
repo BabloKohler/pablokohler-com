@@ -21,7 +21,7 @@ const { s } = Astro.props;
 const t = getDictionary('en');
 const href = `/en/${s.slug}/`;
 // Las páginas de marketing llevan Service + FAQ en el JSON-LD y dicen "Tasmania" como ubicación.
-const isMarketing = s.group === 'marketing';
+const isMarketing = s.group === 'marketing' || s.region === 'tasmania';
 const title = AU_SEO[s.slug]?.title ?? s.metaTitle;
 const description = AU_SEO[s.slug]?.description ?? s.metaDescription;
 const extraGraph = isMarketing
