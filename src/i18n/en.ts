@@ -82,14 +82,14 @@ export const en = {
     headline: 'I work where',
     headlineAccent: 'strategy meets execution.',
     paragraphs: [
-      "I'm a communications and digital marketing specialist. For more than 9 years I've helped universities, academic founders, and organizations across Chile and Latin America turn their communication goals into measurable results — and I'm now getting ready to do the same from Australia. I design data-driven campaigns and build the digital systems that make them work.",
+      "I'm a communications and digital marketing specialist based in Tasmania. For more than 9 years I've helped universities, academic founders, and organizations — first across Chile and Latin America, and now small businesses in Tasmania and across Australia — turn their communication goals into measurable results. I design data-driven campaigns and build the digital systems that make them work.",
       "I don't just plan campaigns: **I build them**. My work spans content and communications strategy, marketing automation, analytics, and hands-on web development, connecting the message with the technology behind it.",
       "What drives me is **purpose**: I'm especially committed to organizations working in science, education, animal welfare, and evidence-based impact.",
     ],
     facts: [
       { n: '9+', l: 'years of experience' },
       { n: 'ES/EN', l: 'bilingual' },
-      { n: 'CL → AU', l: 'Chile, heading to Australia' },
+      { n: 'TAS', l: 'Based in Tasmania, Australia' },
     ],
     cta: "Let's talk →",
   },
@@ -116,7 +116,7 @@ export const en = {
     calendlySub: '30 min via Calendly',
     linkedinTitle: 'LinkedIn',
     linkedinSub: "Let's connect professionally",
-    footerCopy: '© 2026 Pablo Kohler · Santiago → Australia',
+    footerCopy: '© 2026 Pablo Kohler · Tasmania, Australia',
     privacyLink: 'Privacy',
   },
   cookieConsent: {

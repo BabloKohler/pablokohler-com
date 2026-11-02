@@ -42,19 +42,13 @@ const enHref = slash(Astro.props.enHref);
 const otherLangHref = lang === 'es' ? enHref : esHref;
 const canonicalHref = new URL(lang === 'es' ? esHref : enHref, Astro.site);
 
-// hreflang: en .com ES + EN (+ en-AU cruzado en las páginas compartidas); en .com.au en-AU (+ es/en cruzados
-// en las páginas compartidas, para que el grupo sea recíproco en los tres sitios).
+// hreflang: en .com ES + EN (+ en-AU cruzado en las páginas compartidas); en .com.au solo en-AU y x-default
+// hacia sí mismo, porque pablokohler.com redirige entero al .com.au y no puede ser alternativa.
 const shared = isSharedEnPath(enHref);
 const alternates: { hl: string; href: URL }[] = IS_AU
   ? [
       { hl: 'en-AU', href: new URL(enHref, AU_URL) },
-      ...(shared
-        ? [
-            { hl: 'en', href: new URL(enHref, MAIN_URL) },
-            { hl: 'es', href: new URL(esHref, MAIN_URL) },
-          ]
-        : []),
-      { hl: 'x-default', href: shared ? new URL(esHref, MAIN_URL) : new URL(enHref, AU_URL) },
+      { hl: 'x-default', href: new URL(enHref, AU_URL) },
     ]
   : [
       { hl: 'es', href: new URL(esHref, MAIN_URL) },
