@@ -12,9 +12,9 @@ export const GET: APIRoute = ({ site }) => {
   const line = (title: string, path: string, desc: string) => `- [${title}](${base}${path}): ${desc}`;
   const body = IS_AU
     ? [
-        '# Pablo Kohler: web designer for Sydney small businesses',
+        '# Pablo Kohler: web designer for Tasmanian small businesses',
         '',
-        '> Pablo Kohler is a Sydney-based web designer and digital marketing consultant. He redesigns websites, builds new ones, looks after them, and helps business owners who already have a website but cannot manage it. Prices are in AUD.',
+        '> Pablo Kohler is a Tasmania-based web designer and digital marketing consultant. He redesigns websites, builds new ones, looks after them, and helps business owners who already have a website but cannot manage it. Prices are in AUD.',
         '',
         '## Services',
         ...AU_SERVICES.map((s) => line(s.cardTitle, `/en/${s.slug}/`, `${s.cardBlurb} (${s.cardFrom})`)),

@@ -5,10 +5,10 @@ import portrait from '../../assets/about/pablo-kohler.jpg';
 // Solo hechos verificables (ver src/i18n/en.ts "about" y los casos en src/content/en/cases).
 // NO agregar reseñas, cifras de clientes ni logos sin respaldo real.
 interface Props {
-  /** Dónde está basado Pablo según la página (las páginas antiguas dicen Sydney). */
+  /** Dónde está basado Pablo según la página (por defecto Tasmania). */
   base?: string;
 }
-const { base = 'Sydney' } = Astro.props;
+const { base = 'Tasmania' } = Astro.props;
 const work = [
   { href: '/en/cases/shelovespink/', label: 'She Loves Pink', desc: 'website redesign, analytics and ads for a Sydney salon' },
   { href: '/en/cases/docomomo/', label: 'Docomomo', desc: 'website for an international architecture conference' },

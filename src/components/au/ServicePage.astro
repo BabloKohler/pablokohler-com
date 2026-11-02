@@ -10,7 +10,7 @@ import { AU_MARKETING } from '../../data/au-marketing';
 interface Props {
   s: AuService;
   lang?: 'en' | 'es';
-  /** Ubicación del pie. Las páginas antiguas del .com.au dicen "Sydney, Australia". Vacío = sin ubicación. */
+  /** Ubicación del pie. Por defecto "Tasmania, Australia". Vacío = sin ubicación. */
   location?: string;
   /** Dónde está basado Pablo en el recuadro de confianza (solo en inglés). */
   base?: string;
@@ -26,8 +26,8 @@ interface Props {
 const {
   s,
   lang = 'en',
-  location = 'Sydney, Australia',
-  base = 'Sydney',
+  location = 'Tasmania, Australia',
+  base = 'Tasmania',
   trust = true,
   homeHref = '/en/',
   privacyHref = '/en/privacy/',

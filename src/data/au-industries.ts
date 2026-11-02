@@ -12,7 +12,7 @@ const redesign = AU_SERVICES.find((s) => s.slug === 'website-redesign')!.plans[1
 
 interface Industry {
   slug: string;
-  who: string; // "Sydney tradies"
+  who: string; // "Tasmanian tradies"
   titleWho: string; // versión corta para el <title> (máx. ~60 caracteres en total)
   whoShort: string; // "tradies"
   examples: string; // "plumbers, electricians, builders"
@@ -95,13 +95,13 @@ const shopAddOn: Plan = {
 const industries: Industry[] = [
   {
     slug: 'website-design-for-tradies',
-    who: 'Sydney tradies',
-    titleWho: 'Sydney Tradies',
+    who: 'Tasmanian tradies',
+    titleWho: 'Tasmanian Tradies',
     whoShort: 'tradies',
     examples: 'plumbers, electricians, builders, landscapers',
     cardBlurb: 'Plumbers, electricians, builders and landscapers: a site that gets the phone ringing.',
     metaDescription:
-      'Website design for Sydney tradies: plumbers, electricians, builders and landscapers. Fast on mobile, click-to-call, service areas and quote requests. New sites from A$1,500.',
+      'Website design for Tasmanian tradies: plumbers, electricians, builders and landscapers. Fast on mobile, click-to-call, service areas and quote requests. New sites from A$1,500.',
     sub: 'Plumbers, electricians, builders, landscapers: when someone needs a tradie they search on their phone and call the first one that looks reliable. I build sites that make that call easy.',
     problems: [
       'Customers search “near me” on their phone and your site is slow or hard to read',
@@ -134,13 +134,13 @@ const industries: Industry[] = [
   },
   {
     slug: 'website-design-for-health-and-wellness',
-    who: 'Sydney health and wellness practices',
-    titleWho: 'Sydney Health & Wellness',
+    who: 'Tasmanian health and wellness practices',
+    titleWho: 'Tasmanian Health & Wellness',
     whoShort: 'health and wellness practices',
     examples: 'dentists, physios, psychologists, massage therapists',
     cardBlurb: 'Dentists, physios, psychologists and therapists: a calm, clear site that builds trust.',
     metaDescription:
-      'Website design for Sydney health and wellness practices: dentists, physios, psychologists and therapists. Clear services, practitioner profiles and easy booking. New sites from A$1,500.',
+      'Website design for Tasmanian health and wellness practices: dentists, physios, psychologists and therapists. Clear services, practitioner profiles and easy booking. New sites from A$1,500.',
     sub: 'Dentists, physios, psychologists, therapists: people choose a practice they trust. A clear, calm site that explains what you do, who you are and how to book makes that decision easy.',
     problems: [
       'Patients cannot easily see your services, fees or who they would be seeing',
@@ -173,13 +173,13 @@ const industries: Industry[] = [
   },
   {
     slug: 'website-design-for-cafes-and-restaurants',
-    who: 'Sydney cafes and restaurants',
-    titleWho: 'Sydney Cafes & Restaurants',
+    who: 'Tasmanian cafes and restaurants',
+    titleWho: 'Tasmanian Cafes & Restaurants',
     whoShort: 'cafes and restaurants',
     examples: 'cafes, restaurants, bars, bakeries',
     cardBlurb: 'Cafes, restaurants and bakeries: menu, hours and location where people actually look.',
     metaDescription:
-      'Website design for Sydney cafes and restaurants. Menu, hours, location and bookings that work on a phone. New sites from A$1,500.',
+      'Website design for Tasmanian cafes and restaurants. Menu, hours, location and bookings that work on a phone. New sites from A$1,500.',
     sub: 'Cafes, restaurants, bars, bakeries: people check your menu, hours and location on their phone before they walk in. I build sites that put that information up front and look as good as your food.',
     problems: [
       'Your menu is a blurry PDF or a photo',
@@ -212,13 +212,13 @@ const industries: Industry[] = [
   },
   {
     slug: 'website-design-for-professional-services',
-    who: 'Sydney professional services',
-    titleWho: 'Sydney Professional Services',
+    who: 'Tasmanian professional services',
+    titleWho: 'Tasmanian Professional Services',
     whoShort: 'professional services',
     examples: 'accountants, lawyers, consultants, real estate',
     cardBlurb: 'Accountants, lawyers, consultants and agents: a credible site that turns visits into enquiries.',
     metaDescription:
-      'Website design for Sydney professional services: accountants, lawyers, consultants and real estate. Credible, clear and built to generate enquiries. New sites from A$1,500.',
+      'Website design for Tasmanian professional services: accountants, lawyers, consultants and real estate. Credible, clear and built to generate enquiries. New sites from A$1,500.',
     sub: 'Accountants, lawyers, consultants, agents: clients decide on trust. A credible, clear site that explains your services and makes it easy to get in touch.',
     problems: [
       'The site looks generic and does not set you apart',

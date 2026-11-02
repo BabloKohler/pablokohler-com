@@ -105,7 +105,7 @@ const jsonLd = {
   ],
 };
 
-// Build AU: negocio de servicio local en Sydney (sin dirección pública) y sin mencionar Chile.
+// Build AU: negocio de servicio local en Tasmania (sin dirección pública) y sin mencionar Chile.
 // `url` y el @id usan Astro.site, que en AU es https://pablokohler.com.au.
 const auJsonLd = {
   '@context': 'https://schema.org',
@@ -127,14 +127,13 @@ const auJsonLd = {
       url: String(Astro.site),
       image: String(ogImageUrl),
       description:
-        'Website redesign, new websites, website care plans and virtual assistant services for small businesses in Sydney and across Australia.',
+        'Website redesign, new websites, website care plans and virtual assistant services for small businesses in Tasmania and across Australia.',
       founder: { '@id': `${Astro.site}#pablo-kohler` },
       areaServed: [
-        { '@type': 'City', name: 'Sydney' },
-        { '@type': 'AdministrativeArea', name: 'New South Wales' },
+        { '@type': 'AdministrativeArea', name: 'Tasmania' },
         { '@type': 'Country', name: 'Australia' },
       ],
-      address: { '@type': 'PostalAddress', addressLocality: 'Sydney', addressRegion: 'NSW', addressCountry: 'AU' },
+      address: { '@type': 'PostalAddress', addressRegion: 'TAS', addressCountry: 'AU' },
       makesOffer: [
         'Website redesign',
         'Website care plans',
