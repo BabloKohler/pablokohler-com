@@ -45,8 +45,30 @@
       ]
     },
     {
+      "source": "/es/casos/:slug/",
+      "destination": "https://pablokohler.com.au/en/cases/:slug/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
       "source": "/es/privacidad",
       "destination": "https://pablokohler.com.au/en/privacy",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
+      "source": "/es/privacidad/",
+      "destination": "https://pablokohler.com.au/en/privacy/",
       "permanent": true,
       "has": [
         {
@@ -67,8 +89,30 @@
       ]
     },
     {
+      "source": "/es/blog/",
+      "destination": "https://pablokohler.com.au/en/blog/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
       "source": "/es/servicios/seo",
       "destination": "https://pablokohler.com.au/en/services/local-seo",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/seo/",
+      "destination": "https://pablokohler.com.au/en/services/local-seo/",
       "permanent": true,
       "has": [
         {
@@ -89,6 +133,17 @@
       ]
     },
     {
+      "source": "/es/servicios/redes-sociales-meta-ads/",
+      "destination": "https://pablokohler.com.au/en/services/social-media-ads/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
       "source": "/es/servicios/:slug",
       "destination": "https://pablokohler.com.au/en/services/:slug",
       "permanent": true,
@@ -100,8 +155,30 @@
       ]
     },
     {
+      "source": "/es/servicios/:slug/",
+      "destination": "https://pablokohler.com.au/en/services/:slug/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
       "source": "/en/services/seo",
       "destination": "https://pablokohler.com.au/en/services/local-seo",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www.)?pablokohler.com$"
+        }
+      ]
+    },
+    {
+      "source": "/en/services/seo/",
+      "destination": "https://pablokohler.com.au/en/services/local-seo/",
       "permanent": true,
       "has": [
         {
@@ -232,8 +309,8 @@
       "permanent": true
     },
     {
-      "source": "/:path*",
-      "destination": "https://pablokohler.com.au/:path*",
+      "source": "/(.*)",
+      "destination": "https://pablokohler.com.au/$1",
       "permanent": true,
       "has": [
         {
