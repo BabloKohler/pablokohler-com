@@ -1,0 +1,766 @@
+---
+// Trip Pantry: página independiente (sin layout). El estado compartido vive en Firebase Realtime Database.
+const firebaseConfig = {
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Trip Pantry</title>
+    <meta name="description" content="Shared food inventory for the trip." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f0f2f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1017" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%AB%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style is:global>
+      :root {
+        --bg: #f0f2f7;
+        --surface: #ffffff;
+        --surface-2: #e8ebf2;
+        --text: #12161f;
+        --muted: #5d6578;
+        --line: #d9dde8;
+        --accent: #18794e;
+        --accent-soft: #dcf2e7;
+        --on-accent: #ffffff;
+        --danger: #b42318;
+        --shadow: 0 1px 2px rgba(18, 22, 31, 0.06);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1017;
+          --surface: #161b26;
+          --surface-2: #1f2633;
+          --text: #e8ecf3;
+          --muted: #98a1b3;
+          --line: #2a3243;
+          --accent: #22c55e;
+          --accent-soft: #12301f;
+          --on-accent: #06210f;
+          --danger: #f97066;
+          --shadow: none;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        color-scheme: light dark;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 16px;
+        line-height: 1.4;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+        background: none;
+        border: 0;
+        touch-action: manipulation;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .app {
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      /* Cabecera fija con progreso y filtros */
+      .top {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--bg);
+        padding: calc(env(safe-area-inset-top) + 14px) 16px 10px;
+        border-bottom: 1px solid var(--line);
+      }
+      .top-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .count {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .bar {
+        height: 6px;
+        border-radius: 99px;
+        background: var(--surface-2);
+        margin: 10px 0 12px;
+        overflow: hidden;
+      }
+      .bar > i {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--accent);
+        border-radius: 99px;
+        transition: width 0.25s ease;
+      }
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding: 4px;
+        background: var(--surface-2);
+        border-radius: 14px;
+      }
+      .tab {
+        min-height: 48px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .tab[aria-selected='true'] {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: var(--shadow);
+      }
+      .tab small {
+        font-weight: 500;
+        opacity: 0.8;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .net {
+        display: none;
+        margin: 10px 16px 0;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: var(--surface-2);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .net.on {
+        display: block;
+      }
+
+      /* Estados: cargando / vacío / error */
+      .state {
+        display: none;
+        text-align: center;
+        padding: 56px 24px;
+        color: var(--muted);
+      }
+      .state.on {
+        display: block;
+      }
+      .state strong {
+        display: block;
+        color: var(--text);
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+      .spin {
+        width: 28px;
+        height: 28px;
+        margin: 0 auto 14px;
+        border-radius: 50%;
+        border: 3px solid var(--line);
+        border-top-color: var(--accent);
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Categorías e ítems */
+      main {
+        padding: 12px 16px 8px;
+      }
+      .cat {
+        margin-bottom: 12px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .cat-head {
+        width: 100%;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 14px 0 16px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .cat-head .name {
+        flex: 1;
+      }
+      .cat-head .n {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .chev {
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid var(--muted);
+        border-bottom: 2px solid var(--muted);
+        transform: rotate(45deg);
+        transition: transform 0.15s ease;
+        margin: 0 4px 3px 0;
+      }
+      .cat.collapsed .chev {
+        transform: rotate(-45deg);
+        margin: 0 4px 0 0;
+      }
+      .cat.collapsed .list {
+        display: none;
+      }
+      .list {
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+      .list li + li {
+        border-top: 1px solid var(--line);
+      }
+      .item {
+        width: 100%;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 8px 16px;
+        text-align: left;
+      }
+      .item:active {
+        background: var(--surface-2);
+      }
+      .box {
+        flex: none;
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border: 2px solid var(--line);
+        display: grid;
+        place-items: center;
+        transition:
+          background 0.12s ease,
+          border-color 0.12s ease;
+      }
+      .box svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--on-accent);
+        stroke-width: 3;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+      .item[aria-pressed='true'] .box {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      .item[aria-pressed='true'] .box svg {
+        opacity: 1;
+      }
+      .item[aria-pressed='true'] .label {
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .label {
+        flex: 1;
+        overflow-wrap: anywhere;
+      }
+
+      /* Formulario para agregar */
+      .add {
+        margin: 4px 16px 0;
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 10px;
+      }
+      .add h2 {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .field {
+        width: 100%;
+        min-height: 48px;
+        padding: 0 14px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font-size: 16px; /* 16px evita el zoom automático de iOS al enfocar */
+      }
+      .field::placeholder {
+        color: var(--muted);
+      }
+      .btn {
+        min-height: 52px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .btn:active {
+        filter: brightness(0.92);
+      }
+      .btn[disabled] {
+        opacity: 0.6;
+      }
+      .foot {
+        height: calc(env(safe-area-inset-bottom) + 32px);
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(env(safe-area-inset-bottom) + 16px);
+        transform: translate(-50%, 20px);
+        max-width: calc(100% - 32px);
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: var(--text);
+        color: var(--bg);
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+        z-index: 20;
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <header class="top">
+        <div class="top-row">
+          <h1>Trip Pantry</h1>
+          <span class="count" id="count" aria-live="polite"></span>
+        </div>
+        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+        <div class="tabs" role="tablist" aria-label="Filter items">
+          <button class="tab" role="tab" type="button" data-filter="all" aria-selected="true">All <small id="n-all"></small></button>
+          <button class="tab" role="tab" type="button" data-filter="pending" aria-selected="false">Pending <small id="n-pending"></small></button>
+          <button class="tab" role="tab" type="button" data-filter="done" aria-selected="false">Done <small id="n-done"></small></button>
+        </div>
+      </header>
+
+      <div class="net" id="net" role="status">Offline. Changes will sync when you reconnect.</div>
+
+      <div class="state on" id="loading" role="status">
+        <div class="spin"></div>
+        <strong>Connecting…</strong>
+        Loading the shared pantry.
+      </div>
+      <div class="state" id="empty" role="status">
+        <strong id="empty-title">Nothing here yet</strong>
+        <span id="empty-text">Add the first item below.</span>
+      </div>
+
+      <main id="cats" hidden></main>
+
+      <form class="add" id="add-form" autocomplete="off">
+        <h2>Add an item</h2>
+        <input class="field" id="add-name" name="name" type="text" maxlength="80" placeholder="Item name, e.g. Lemons ×4" required aria-label="Item name" enterkeyhint="done" />
+        <select class="field" id="add-cat" name="category" aria-label="Category"></select>
+        <button class="btn" id="add-btn" type="submit">Add item</button>
+      </form>
+      <div class="foot"></div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script is:inline src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script is:inline src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script is:inline define:vars={{ firebaseConfig }}>
+      (function () {
+        var CATEGORIES = [
+          { name: 'Produce & Protein', items: ['Tofu 500g', 'Tofu (extra) half block', 'Yoghurt', 'Carrots ×7', 'Ginger 1 hand', 'Avocado ×1', 'Onions ×3', 'Garlic', 'Mandarins 1kg'] },
+          { name: 'Dairy & Chilled', items: ['Cream 600ml', 'Cream 200ml', 'Parmesan cheese', 'Hummus ¼ container', 'Margarine'] },
+          { name: 'Bread', items: ['Sliced bread 12 slices', 'Tortillas ×2'] },
+          { name: 'Pantry', items: ['Rice 1kg', 'Red lentils 300g', 'Green lentils 1.5kg', 'Flour 500g', 'Rolled oats 2kg', 'Granola with raisins 1kg', 'Powdered milk 1kg', 'TVP/soy protein 500g', 'Black beans ×2 cans', 'Tuna 425g', 'Pasta ×2 bags', 'Spaghetti ×1 bag'] },
+          { name: 'Baking & Sweet', items: ['Brown sugar 1kg', 'White sugar 250g', 'Baking powder', 'Chocolate half bar'] },
+          { name: 'Oils & Sauces', items: ['Sunflower oil 1L', 'Olive oil 250ml', 'Tomato pasta sauce 1 bottle', 'Tomato pasta sauce half bottle', 'Ketchup', 'Sriracha', 'Hoisin sauce'] },
+          { name: 'Spices', items: ['Salt', 'Paprika', 'Cumin', 'Oregano', 'Mexican seasoning'] },
+          { name: 'Drinks', items: ['Beer ×1', 'Black tea', 'Chamomile tea', 'Peppermint tea', 'Ginger tea', 'Instant coffee'] },
+          { name: 'Snacks', items: ['Rice crackers', 'Peanuts 100g', 'Chocolate chip cookies'] },
+          { name: 'Other', items: ['Ziploc bags extra large'] },
+        ];
+        var CAT_NAMES = CATEGORIES.map(function (c) {
+          return c.name;
+        });
+        var TIMEOUT_MS = 10000;
+        var COLLAPSE_KEY = 'trip-pantry:collapsed';
+
+        var $ = function (id) {
+          return document.getElementById(id);
+        };
+        var els = {
+          cats: $('cats'),
+          loading: $('loading'),
+          empty: $('empty'),
+          emptyTitle: $('empty-title'),
+          emptyText: $('empty-text'),
+          count: $('count'),
+          bar: $('bar'),
+          net: $('net'),
+          toast: $('toast'),
+          form: $('add-form'),
+          name: $('add-name'),
+          cat: $('add-cat'),
+          addBtn: $('add-btn'),
+        };
+
+        var items = {}; // estado local: id -> { name, cat, done, order }
+        var filter = 'all';
+        var collapsed = {};
+        var connected = false; // llegó el primer snapshot
+        var timedOut = false;
+        var toastTimer;
+
+        try {
+          collapsed = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '{}') || {};
+        } catch (e) {
+          collapsed = {};
+        }
+        function saveCollapsed() {
+          try {
+            localStorage.setItem(COLLAPSE_KEY, JSON.stringify(collapsed));
+          } catch (e) {}
+        }
+
+        CAT_NAMES.forEach(function (name) {
+          var o = document.createElement('option');
+          o.value = name;
+          o.textContent = name;
+          els.cat.appendChild(o);
+        });
+
+        function toast(msg) {
+          els.toast.textContent = msg;
+          els.toast.classList.add('on');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            els.toast.classList.remove('on');
+          }, 3200);
+        }
+
+        function showState(which, title, text) {
+          els.loading.classList.toggle('on', which === 'loading');
+          els.empty.classList.toggle('on', which === 'empty');
+          els.cats.hidden = which !== 'list';
+          if (which === 'empty') {
+            els.emptyTitle.textContent = title;
+            els.emptyText.textContent = text;
+          }
+        }
+
+        function ids() {
+          return Object.keys(items);
+        }
+        function byOrder(a, b) {
+          return (items[a].order || 0) - (items[b].order || 0);
+        }
+
+        function render() {
+          var all = ids();
+          var done = all.filter(function (id) {
+            return items[id].done;
+          }).length;
+          var total = all.length;
+          $('n-all').textContent = total;
+          $('n-pending').textContent = total - done;
+          $('n-done').textContent = done;
+          els.count.textContent = total ? done + ' of ' + total + ' done' : '';
+          els.bar.style.width = total ? (done / total) * 100 + '%' : '0';
+
+          if (!connected && !timedOut) return showState('loading');
+          if (!total) {
+            return timedOut && !connected
+              ? showState('empty', 'Can’t reach the pantry', 'Check your connection. It will load as soon as you’re back online.')
+              : showState('empty', 'Nothing here yet', 'Add the first item below.');
+          }
+
+          var frag = document.createDocumentFragment();
+          var shown = 0;
+          CAT_NAMES.forEach(function (cat) {
+            var inCat = all.filter(function (id) {
+              return items[id].cat === cat;
+            });
+            var doneInCat = inCat.filter(function (id) {
+              return items[id].done;
+            }).length;
+            var visible = inCat
+              .filter(function (id) {
+                return filter === 'all' || (filter === 'done' ? items[id].done : !items[id].done);
+              })
+              .sort(byOrder);
+            if (!visible.length) return;
+            shown += visible.length;
+
+            var section = document.createElement('section');
+            section.className = 'cat' + (collapsed[cat] ? ' collapsed' : '');
+
+            var head = document.createElement('button');
+            head.type = 'button';
+            head.className = 'cat-head';
+            head.setAttribute('aria-expanded', collapsed[cat] ? 'false' : 'true');
+            var nm = document.createElement('span');
+            nm.className = 'name';
+            nm.textContent = cat;
+            var n = document.createElement('span');
+            n.className = 'n';
+            n.textContent = doneInCat + '/' + inCat.length;
+            var chev = document.createElement('span');
+            chev.className = 'chev';
+            chev.setAttribute('aria-hidden', 'true');
+            head.append(nm, n, chev);
+            head.addEventListener('click', function () {
+              collapsed[cat] = !collapsed[cat];
+              saveCollapsed();
+              render();
+            });
+
+            var ul = document.createElement('ul');
+            ul.className = 'list';
+            visible.forEach(function (id) {
+              var it = items[id];
+              var li = document.createElement('li');
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'item';
+              btn.setAttribute('aria-pressed', it.done ? 'true' : 'false');
+              btn.dataset.id = id;
+              var box = document.createElement('span');
+              box.className = 'box';
+              box.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+              var label = document.createElement('span');
+              label.className = 'label';
+              label.textContent = it.name;
+              btn.append(box, label);
+              li.appendChild(btn);
+              ul.appendChild(li);
+            });
+
+            section.append(head, ul);
+            frag.appendChild(section);
+          });
+
+          els.cats.replaceChildren(frag);
+          if (!shown) {
+            showState('empty', filter === 'done' ? 'Nothing done yet' : 'All done', filter === 'done' ? 'Tap an item to mark it as consumed.' : 'Everything on the list is consumed.');
+          } else {
+            showState('list');
+          }
+        }
+
+        document.querySelectorAll('.tab').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            filter = tab.dataset.filter;
+            document.querySelectorAll('.tab').forEach(function (t) {
+              t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+            });
+            render();
+          });
+        });
+
+        // --- Firebase ---
+        var missing = ['apiKey', 'databaseURL', 'projectId'].filter(function (k) {
+          return !firebaseConfig[k];
+        });
+        if (typeof firebase === 'undefined' || missing.length) {
+          showState('empty', 'Pantry not connected', typeof firebase === 'undefined' ? 'Couldn’t load Firebase. Check your connection and reload.' : 'Firebase isn’t configured (missing ' + missing.join(', ') + ').');
+          els.form.hidden = true;
+          return;
+        }
+
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.database();
+        var root = db.ref('pantry');
+        var itemsRef = root.child('items');
+
+        function seedItems() {
+          var out = {};
+          var n = 0;
+          CATEGORIES.forEach(function (c) {
+            c.items.forEach(function (name) {
+              n += 1;
+              out['s' + String(n).padStart(3, '0')] = { name: name, cat: c.name, done: false, order: n };
+            });
+          });
+          return out;
+        }
+
+        // Si la base está vacía la siembra una sola vez; la transacción evita duplicados si dos teléfonos abren a la vez.
+        var seeding = false;
+        function seedIfEmpty() {
+          if (seeding) return;
+          seeding = true;
+          root.transaction(
+            function (cur) {
+              if (cur !== null) return; // ya hay datos: abortar
+              return { items: seedItems() };
+            },
+            function (err) {
+              seeding = false;
+              if (err) toast('Couldn’t set up the pantry.');
+            }
+          );
+        }
+
+        var timer = setTimeout(function () {
+          if (!connected) {
+            timedOut = true;
+            render();
+          }
+        }, TIMEOUT_MS);
+
+        itemsRef.on(
+          'value',
+          function (snap) {
+            if (!snap.exists()) {
+              seedIfEmpty();
+              return;
+            }
+            clearTimeout(timer);
+            connected = true;
+            var data = snap.val() || {};
+            var next = {};
+            Object.keys(data).forEach(function (id) {
+              var v = data[id];
+              if (!v || typeof v.name !== 'string') return;
+              next[id] = {
+                name: v.name.slice(0, 80),
+                cat: CAT_NAMES.indexOf(v.cat) > -1 ? v.cat : 'Other',
+                done: v.done === true,
+                order: typeof v.order === 'number' ? v.order : 0,
+              };
+            });
+            items = next;
+            render();
+          },
+          function () {
+            timedOut = true;
+            render();
+          }
+        );
+
+        db.ref('.info/connected').on('value', function (snap) {
+          els.net.classList.toggle('on', snap.val() === false && connected);
+        });
+
+        // Tocar un ítem: cambia de inmediato en local, escribe en la base y revierte si falla.
+        els.cats.addEventListener('click', function (e) {
+          var btn = e.target.closest('.item');
+          if (!btn) return;
+          var id = btn.dataset.id;
+          var it = items[id];
+          if (!it) return;
+          var prev = it.done;
+          it.done = !prev;
+          render();
+          itemsRef
+            .child(id)
+            .child('done')
+            .set(it.done)
+            .catch(function () {
+              if (items[id]) items[id].done = prev;
+              render();
+              toast('Couldn’t save that change. Try again.');
+            });
+        });
+
+        els.form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name = els.name.value.trim().replace(/\s+/g, ' ').slice(0, 80);
+          if (!name) {
+            els.name.focus();
+            return;
+          }
+          var cat = CAT_NAMES.indexOf(els.cat.value) > -1 ? els.cat.value : 'Other';
+          var ref = itemsRef.push();
+          var item = { name: name, cat: cat, done: false, order: Date.now() };
+          items[ref.key] = item;
+          els.name.value = '';
+          els.addBtn.disabled = true;
+          render();
+          ref
+            .set(item)
+            .then(function () {
+              toast('Added to ' + cat);
+            })
+            .catch(function () {
+              delete items[ref.key];
+              render();
+              toast('Couldn’t add that item. Try again.');
+            })
+            .then(function () {
+              els.addBtn.disabled = false;
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>
