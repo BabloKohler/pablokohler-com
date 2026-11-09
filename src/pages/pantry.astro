@@ -312,6 +312,55 @@ const firebaseConfig = {
         overflow-wrap: anywhere;
       }
 
+      /* Fila con botón de editar y formulario de edición */
+      .row {
+        display: flex;
+        align-items: stretch;
+      }
+      .row .item {
+        flex: 1;
+        min-width: 0;
+      }
+      .edit {
+        flex: none;
+        width: 52px;
+        min-height: 52px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+      .edit:active {
+        background: var(--surface-2);
+      }
+      .edit svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .edit-form {
+        display: grid;
+        gap: 10px;
+        padding: 12px 16px;
+        background: var(--surface-2);
+      }
+      .edit-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .btn-ghost {
+        min-height: 52px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        font-weight: 600;
+        font-size: 16px;
+      }
+
       /* Formulario para agregar */
       .add {
         margin: 4px 16px 0;
@@ -479,6 +528,7 @@ const firebaseConfig = {
         var connected = false; // llegó el primer snapshot
         var timedOut = false;
         var toastTimer;
+        var editing = null; // { id, value, select } mientras se renombra un ítem
 
         try {
           collapsed = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '{}') || {};
@@ -525,6 +575,8 @@ const firebaseConfig = {
         }
 
         function render() {
+          var active = document.activeElement;
+          var keep = editing && active && active.closest && active.closest('.edit-form') ? [active.selectionStart, active.selectionEnd] : null;
           var all = ids();
           var done = all.filter(function (id) {
             return items[id].done;
@@ -588,6 +640,12 @@ const firebaseConfig = {
             visible.forEach(function (id) {
               var it = items[id];
               var li = document.createElement('li');
+              if (editing && editing.id === id) {
+                li.appendChild(buildEditForm(id));
+                ul.appendChild(li);
+                return;
+              }
+              li.className = 'row';
               var btn = document.createElement('button');
               btn.type = 'button';
               btn.className = 'item';
@@ -600,7 +658,13 @@ const firebaseConfig = {
               label.className = 'label';
               label.textContent = it.name;
               btn.append(box, label);
-              li.appendChild(btn);
+              var pen = document.createElement('button');
+              pen.type = 'button';
+              pen.className = 'edit';
+              pen.dataset.id = id;
+              pen.setAttribute('aria-label', 'Edit ' + it.name);
+              pen.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
+              li.append(btn, pen);
               ul.appendChild(li);
             });
 
@@ -609,11 +673,96 @@ const firebaseConfig = {
           });
 
           els.cats.replaceChildren(frag);
+          if (editing) {
+            var inp = els.cats.querySelector('.edit-form .field');
+            if (inp && editing.select) {
+              inp.focus();
+              inp.select();
+              editing.select = false;
+            } else if (inp && keep) {
+              inp.focus();
+              inp.setSelectionRange(keep[0], keep[1]);
+            }
+          }
           if (!shown) {
             showState('empty', filter === 'done' ? 'Nothing done yet' : 'All done', filter === 'done' ? 'Tap an item to mark it as consumed.' : 'Everything on the list is consumed.');
           } else {
             showState('list');
           }
+        }
+
+        function buildEditForm(id) {
+          var form = document.createElement('form');
+          form.className = 'edit-form';
+          var input = document.createElement('input');
+          input.className = 'field';
+          input.type = 'text';
+          input.maxLength = 80;
+          input.value = editing.value;
+          input.autocomplete = 'off';
+          input.enterKeyHint = 'done';
+          input.setAttribute('aria-label', 'Item name');
+          input.addEventListener('input', function () {
+            editing.value = input.value;
+          });
+          input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') cancelEdit();
+          });
+          var actions = document.createElement('div');
+          actions.className = 'edit-actions';
+          var cancel = document.createElement('button');
+          cancel.type = 'button';
+          cancel.className = 'btn-ghost';
+          cancel.textContent = 'Cancel';
+          cancel.addEventListener('click', cancelEdit);
+          var save = document.createElement('button');
+          save.type = 'submit';
+          save.className = 'btn';
+          save.textContent = 'Save';
+          actions.append(cancel, save);
+          form.append(input, actions);
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveEdit(id);
+          });
+          return form;
+        }
+
+        function startEdit(id) {
+          if (!items[id]) return;
+          editing = { id: id, value: items[id].name, select: true };
+          render();
+        }
+
+        function cancelEdit() {
+          editing = null;
+          render();
+        }
+
+        // Renombrar: cambia de inmediato en local, escribe solo el nombre y revierte si falla.
+        function saveEdit(id) {
+          var it = items[id];
+          if (!it || !editing) return cancelEdit();
+          var name = editing.value.trim().replace(/\s+/g, ' ').slice(0, 80);
+          if (!name) {
+            var inp = els.cats.querySelector('.edit-form .field');
+            if (inp) inp.focus();
+            return;
+          }
+          if (name === it.name) return cancelEdit();
+          var prev = it.name;
+          it.name = name;
+          editing = null;
+          render();
+          itemsRef
+            .child(id)
+            .child('name')
+            .set(name)
+            .catch(function () {
+              if (items[id]) items[id].name = prev;
+              render();
+              toast('Couldn’t rename that item. Try again.');
+            });
         }
 
         document.querySelectorAll('.tab').forEach(function (tab) {
@@ -713,6 +862,8 @@ const firebaseConfig = {
 
         // Tocar un ítem: cambia de inmediato en local, escribe en la base y revierte si falla.
         els.cats.addEventListener('click', function (e) {
+          var pen = e.target.closest('.edit');
+          if (pen) return startEdit(pen.dataset.id);
           var btn = e.target.closest('.item');
           if (!btn) return;
           var id = btn.dataset.id;
