@@ -1,5 +1,6 @@
 ---
 // Trip Pantry: página independiente (sin layout). El estado compartido vive en Firebase Realtime Database.
+// Dos listas: Inventario (lo que hay) y Compras (lo que falta comprar).
 const firebaseConfig = {
   apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
   authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -14,7 +15,7 @@ const firebaseConfig = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Trip Pantry</title>
-    <meta name="description" content="Shared food inventory for the trip." />
+    <meta name="description" content="Shared food inventory and shopping list for the trip." />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#f0f2f7" media="(prefers-color-scheme: light)" />
@@ -36,6 +37,7 @@ const firebaseConfig = {
         --accent: #18794e;
         --accent-soft: #dcf2e7;
         --on-accent: #ffffff;
+        --toast-accent: #6ee7a8;
         --danger: #b42318;
         --shadow: 0 1px 2px rgba(18, 22, 31, 0.06);
       }
@@ -50,6 +52,7 @@ const firebaseConfig = {
           --accent: #22c55e;
           --accent-soft: #12301f;
           --on-accent: #06210f;
+          --toast-accent: #18794e;
           --danger: #f97066;
           --shadow: none;
         }
@@ -59,6 +62,9 @@ const firebaseConfig = {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+      }
+      [hidden] {
+        display: none !important;
       }
       html {
         -webkit-text-size-adjust: 100%;
@@ -97,7 +103,7 @@ const firebaseConfig = {
         margin: 0 auto;
       }
 
-      /* Cabecera fija con progreso y filtros */
+      /* Cabecera fija: título y selector de lista */
       .top {
         position: sticky;
         top: 0;
@@ -111,6 +117,7 @@ const firebaseConfig = {
         align-items: baseline;
         justify-content: space-between;
         gap: 12px;
+        margin-bottom: 10px;
       }
       h1 {
         font-size: 24px;
@@ -123,11 +130,46 @@ const firebaseConfig = {
         color: var(--muted);
         font-variant-numeric: tabular-nums;
       }
+      .seg {
+        display: grid;
+        gap: 4px;
+        padding: 4px;
+        background: var(--surface-2);
+        border-radius: 14px;
+      }
+      .seg.two {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .seg.three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .seg button {
+        min-height: 48px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .seg button[aria-selected='true'] {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: var(--shadow);
+      }
+      .seg small {
+        font-weight: 500;
+        opacity: 0.8;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Barra y filtros del inventario (no fijos) */
+      .inv-head {
+        padding: 14px 16px 0;
+      }
       .bar {
         height: 6px;
         border-radius: 99px;
         background: var(--surface-2);
-        margin: 10px 0 12px;
+        margin-bottom: 12px;
         overflow: hidden;
       }
       .bar > i {
@@ -137,31 +179,6 @@ const firebaseConfig = {
         background: var(--accent);
         border-radius: 99px;
         transition: width 0.25s ease;
-      }
-      .tabs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-        padding: 4px;
-        background: var(--surface-2);
-        border-radius: 14px;
-      }
-      .tab {
-        min-height: 48px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 15px;
-        color: var(--muted);
-      }
-      .tab[aria-selected='true'] {
-        background: var(--surface);
-        color: var(--text);
-        box-shadow: var(--shadow);
-      }
-      .tab small {
-        font-weight: 500;
-        opacity: 0.8;
-        font-variant-numeric: tabular-nums;
       }
 
       .net {
@@ -181,7 +198,7 @@ const firebaseConfig = {
       .state {
         display: none;
         text-align: center;
-        padding: 56px 24px;
+        padding: 48px 24px;
         color: var(--muted);
       }
       .state.on {
@@ -209,10 +226,12 @@ const firebaseConfig = {
       }
 
       /* Categorías e ítems */
-      main {
+      main,
+      .shop {
         padding: 12px 16px 8px;
       }
-      .cat {
+      .cat,
+      .card {
         margin-bottom: 12px;
         background: var(--surface);
         border: 1px solid var(--line);
@@ -257,13 +276,20 @@ const firebaseConfig = {
       }
       .list {
         list-style: none;
+      }
+      .cat .list {
         border-top: 1px solid var(--line);
       }
       .list li + li {
         border-top: 1px solid var(--line);
       }
+      .row {
+        display: flex;
+        align-items: stretch;
+      }
       .item {
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         min-height: 52px;
         display: flex;
         align-items: center;
@@ -311,17 +337,21 @@ const firebaseConfig = {
         flex: 1;
         overflow-wrap: anywhere;
       }
-
-      /* Fila con botón de editar y formulario de edición */
-      .row {
-        display: flex;
-        align-items: stretch;
-      }
-      .row .item {
+      .label-wrap {
         flex: 1;
         min-width: 0;
+        display: flex;
+        flex-direction: column;
       }
-      .edit {
+      .tag {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      /* Botones de fila: editar y quitar */
+      .edit,
+      .del {
         flex: none;
         width: 52px;
         min-height: 52px;
@@ -329,10 +359,12 @@ const firebaseConfig = {
         place-items: center;
         color: var(--muted);
       }
-      .edit:active {
+      .edit:active,
+      .del:active {
         background: var(--surface-2);
       }
-      .edit svg {
+      .edit svg,
+      .del svg {
         width: 20px;
         height: 20px;
         stroke: currentColor;
@@ -352,16 +384,15 @@ const firebaseConfig = {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
-      .btn-ghost {
-        min-height: 52px;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        background: var(--surface);
-        font-weight: 600;
-        font-size: 16px;
+
+      .shop-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
       }
 
-      /* Formulario para agregar */
+      /* Formularios para agregar */
       .add {
         margin: 4px 16px 0;
         padding: 16px;
@@ -388,13 +419,16 @@ const firebaseConfig = {
       .field::placeholder {
         color: var(--muted);
       }
-      .btn {
+      .btn,
+      .btn-ghost {
         min-height: 52px;
         border-radius: 12px;
-        background: var(--accent);
-        color: var(--on-accent);
         font-weight: 700;
         font-size: 16px;
+      }
+      .btn {
+        background: var(--accent);
+        color: var(--on-accent);
       }
       .btn:active {
         filter: brightness(0.92);
@@ -402,16 +436,27 @@ const firebaseConfig = {
       .btn[disabled] {
         opacity: 0.6;
       }
+      .btn-ghost {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        font-weight: 600;
+      }
       .foot {
         height: calc(env(safe-area-inset-bottom) + 32px);
       }
 
       .toast {
         position: fixed;
-        left: 50%;
+        left: 16px;
+        right: 16px;
+        margin: 0 auto;
+        width: max-content;
         bottom: calc(env(safe-area-inset-bottom) + 16px);
-        transform: translate(-50%, 20px);
+        transform: translateY(20px);
         max-width: calc(100% - 32px);
+        display: flex;
+        align-items: center;
+        gap: 14px;
         padding: 12px 16px;
         border-radius: 12px;
         background: var(--text);
@@ -427,7 +472,17 @@ const firebaseConfig = {
       }
       .toast.on {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: none;
+      }
+      .toast.act {
+        pointer-events: auto;
+      }
+      .toast button {
+        flex: none;
+        min-height: 48px;
+        padding: 0 4px;
+        font-weight: 700;
+        color: var(--toast-accent);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -448,15 +503,22 @@ const firebaseConfig = {
           <h1>Trip Pantry</h1>
           <span class="count" id="count" aria-live="polite"></span>
         </div>
-        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
-        <div class="tabs" role="tablist" aria-label="Filter items">
-          <button class="tab" role="tab" type="button" data-filter="all" aria-selected="true">All <small id="n-all"></small></button>
-          <button class="tab" role="tab" type="button" data-filter="pending" aria-selected="false">Pending <small id="n-pending"></small></button>
-          <button class="tab" role="tab" type="button" data-filter="done" aria-selected="false">Done <small id="n-done"></small></button>
+        <div class="seg two" role="tablist" aria-label="List">
+          <button role="tab" type="button" data-view="inventory" aria-selected="true">Inventory <small id="n-inv"></small></button>
+          <button role="tab" type="button" data-view="shopping" aria-selected="false">Shopping <small id="n-shop"></small></button>
         </div>
       </header>
 
       <div class="net" id="net" role="status">Offline. Changes will sync when you reconnect.</div>
+
+      <div class="inv-head" id="inv-head">
+        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+        <div class="seg three" role="tablist" aria-label="Filter inventory">
+          <button role="tab" type="button" data-filter="all" aria-selected="true">All <small id="n-all"></small></button>
+          <button role="tab" type="button" data-filter="stock" aria-selected="false">In stock <small id="n-stock"></small></button>
+          <button role="tab" type="button" data-filter="used" aria-selected="false">Used up <small id="n-used"></small></button>
+        </div>
+      </div>
 
       <div class="state on" id="loading" role="status">
         <div class="spin"></div>
@@ -470,11 +532,26 @@ const firebaseConfig = {
 
       <main id="cats" hidden></main>
 
+      <div class="shop" id="shop-wrap" hidden>
+        <div class="card"><ul class="list" id="shop-list"></ul></div>
+        <div class="shop-actions" id="shop-actions" hidden>
+          <button class="btn-ghost" type="button" id="clear-bought">Clear bought</button>
+          <button class="btn" type="button" id="restock">Restock bought</button>
+        </div>
+      </div>
+
       <form class="add" id="add-form" autocomplete="off">
-        <h2>Add an item</h2>
+        <h2>Add to inventory</h2>
         <input class="field" id="add-name" name="name" type="text" maxlength="80" placeholder="Item name, e.g. Lemons ×4" required aria-label="Item name" enterkeyhint="done" />
         <select class="field" id="add-cat" name="category" aria-label="Category"></select>
         <button class="btn" id="add-btn" type="submit">Add item</button>
+      </form>
+
+      <form class="add" id="shop-form" autocomplete="off" hidden>
+        <h2>Add to shopping list</h2>
+        <input class="field" id="shop-name" name="name" type="text" maxlength="80" placeholder="What do we need? e.g. Milk ×2" required aria-label="Item name" enterkeyhint="done" />
+        <select class="field" id="shop-cat" name="category" aria-label="Category"></select>
+        <button class="btn" id="shop-btn" type="submit">Add to list</button>
       </form>
       <div class="foot"></div>
     </div>
@@ -502,12 +579,17 @@ const firebaseConfig = {
         });
         var TIMEOUT_MS = 10000;
         var COLLAPSE_KEY = 'trip-pantry:collapsed';
+        var VIEW_KEY = 'trip-pantry:view';
 
         var $ = function (id) {
           return document.getElementById(id);
         };
         var els = {
           cats: $('cats'),
+          shopWrap: $('shop-wrap'),
+          shopList: $('shop-list'),
+          shopActions: $('shop-actions'),
+          invHead: $('inv-head'),
           loading: $('loading'),
           empty: $('empty'),
           emptyTitle: $('empty-title'),
@@ -516,22 +598,29 @@ const firebaseConfig = {
           bar: $('bar'),
           net: $('net'),
           toast: $('toast'),
-          form: $('add-form'),
-          name: $('add-name'),
-          cat: $('add-cat'),
+          addForm: $('add-form'),
+          addName: $('add-name'),
+          addCat: $('add-cat'),
           addBtn: $('add-btn'),
+          shopForm: $('shop-form'),
+          shopName: $('shop-name'),
+          shopCat: $('shop-cat'),
+          shopBtn: $('shop-btn'),
         };
 
-        var items = {}; // estado local: id -> { name, cat, done, order }
+        var items = {}; // inventario: id -> { name, cat, done (agotado), order }
+        var shop = {}; // compras: id -> { name, cat, bought, order, invId }
+        var view = 'inventory';
         var filter = 'all';
         var collapsed = {};
-        var connected = false; // llegó el primer snapshot
+        var connected = false; // llegó el primer snapshot del inventario
         var timedOut = false;
         var toastTimer;
-        var editing = null; // { id, value, select } mientras se renombra un ítem
+        var editing = null; // { kind: 'inv' | 'shop', id, value, select } mientras se renombra un ítem
 
         try {
           collapsed = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '{}') || {};
+          if (localStorage.getItem(VIEW_KEY) === 'shopping') view = 'shopping';
         } catch (e) {
           collapsed = {};
         }
@@ -541,157 +630,70 @@ const firebaseConfig = {
           } catch (e) {}
         }
 
-        CAT_NAMES.forEach(function (name) {
-          var o = document.createElement('option');
-          o.value = name;
-          o.textContent = name;
-          els.cat.appendChild(o);
+        [els.addCat, els.shopCat].forEach(function (sel) {
+          CAT_NAMES.forEach(function (name) {
+            var o = document.createElement('option');
+            o.value = name;
+            o.textContent = name;
+            sel.appendChild(o);
+          });
         });
+        els.shopCat.value = 'Other';
 
-        function toast(msg) {
-          els.toast.textContent = msg;
+        // Aviso breve. Con `action` muestra un botón (por ejemplo "Add to shopping list").
+        function toast(msg, action) {
+          els.toast.textContent = '';
+          var t = document.createElement('span');
+          t.textContent = msg;
+          els.toast.appendChild(t);
+          els.toast.classList.toggle('act', !!action);
+          if (action) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = action.label;
+            b.addEventListener('click', function () {
+              els.toast.classList.remove('on');
+              action.run();
+            });
+            els.toast.appendChild(b);
+          }
           els.toast.classList.add('on');
           clearTimeout(toastTimer);
-          toastTimer = setTimeout(function () {
-            els.toast.classList.remove('on');
-          }, 3200);
+          toastTimer = setTimeout(
+            function () {
+              els.toast.classList.remove('on');
+            },
+            action ? 6000 : 3200
+          );
+        }
+
+        function cleanName(v) {
+          return String(v).trim().replace(/\s+/g, ' ').slice(0, 80);
+        }
+        function ids(map) {
+          return Object.keys(map);
+        }
+        function byOrder(map) {
+          return function (a, b) {
+            return (map[a].order || 0) - (map[b].order || 0);
+          };
+        }
+        function catOf(v) {
+          return CAT_NAMES.indexOf(v) > -1 ? v : 'Other';
         }
 
         function showState(which, title, text) {
           els.loading.classList.toggle('on', which === 'loading');
           els.empty.classList.toggle('on', which === 'empty');
-          els.cats.hidden = which !== 'list';
+          els.cats.hidden = !(which === 'list' && view === 'inventory');
+          els.shopWrap.hidden = !(which === 'list' && view === 'shopping');
           if (which === 'empty') {
             els.emptyTitle.textContent = title;
             els.emptyText.textContent = text;
           }
         }
 
-        function ids() {
-          return Object.keys(items);
-        }
-        function byOrder(a, b) {
-          return (items[a].order || 0) - (items[b].order || 0);
-        }
-
-        function render() {
-          var active = document.activeElement;
-          var keep = editing && active && active.closest && active.closest('.edit-form') ? [active.selectionStart, active.selectionEnd] : null;
-          var all = ids();
-          var done = all.filter(function (id) {
-            return items[id].done;
-          }).length;
-          var total = all.length;
-          $('n-all').textContent = total;
-          $('n-pending').textContent = total - done;
-          $('n-done').textContent = done;
-          els.count.textContent = total ? done + ' of ' + total + ' done' : '';
-          els.bar.style.width = total ? (done / total) * 100 + '%' : '0';
-
-          if (!connected && !timedOut) return showState('loading');
-          if (!total) {
-            return timedOut && !connected
-              ? showState('empty', 'Can’t reach the pantry', 'Check your connection. It will load as soon as you’re back online.')
-              : showState('empty', 'Nothing here yet', 'Add the first item below.');
-          }
-
-          var frag = document.createDocumentFragment();
-          var shown = 0;
-          CAT_NAMES.forEach(function (cat) {
-            var inCat = all.filter(function (id) {
-              return items[id].cat === cat;
-            });
-            var doneInCat = inCat.filter(function (id) {
-              return items[id].done;
-            }).length;
-            var visible = inCat
-              .filter(function (id) {
-                return filter === 'all' || (filter === 'done' ? items[id].done : !items[id].done);
-              })
-              .sort(byOrder);
-            if (!visible.length) return;
-            shown += visible.length;
-
-            var section = document.createElement('section');
-            section.className = 'cat' + (collapsed[cat] ? ' collapsed' : '');
-
-            var head = document.createElement('button');
-            head.type = 'button';
-            head.className = 'cat-head';
-            head.setAttribute('aria-expanded', collapsed[cat] ? 'false' : 'true');
-            var nm = document.createElement('span');
-            nm.className = 'name';
-            nm.textContent = cat;
-            var n = document.createElement('span');
-            n.className = 'n';
-            n.textContent = doneInCat + '/' + inCat.length;
-            var chev = document.createElement('span');
-            chev.className = 'chev';
-            chev.setAttribute('aria-hidden', 'true');
-            head.append(nm, n, chev);
-            head.addEventListener('click', function () {
-              collapsed[cat] = !collapsed[cat];
-              saveCollapsed();
-              render();
-            });
-
-            var ul = document.createElement('ul');
-            ul.className = 'list';
-            visible.forEach(function (id) {
-              var it = items[id];
-              var li = document.createElement('li');
-              if (editing && editing.id === id) {
-                li.appendChild(buildEditForm(id));
-                ul.appendChild(li);
-                return;
-              }
-              li.className = 'row';
-              var btn = document.createElement('button');
-              btn.type = 'button';
-              btn.className = 'item';
-              btn.setAttribute('aria-pressed', it.done ? 'true' : 'false');
-              btn.dataset.id = id;
-              var box = document.createElement('span');
-              box.className = 'box';
-              box.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-              var label = document.createElement('span');
-              label.className = 'label';
-              label.textContent = it.name;
-              btn.append(box, label);
-              var pen = document.createElement('button');
-              pen.type = 'button';
-              pen.className = 'edit';
-              pen.dataset.id = id;
-              pen.setAttribute('aria-label', 'Edit ' + it.name);
-              pen.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
-              li.append(btn, pen);
-              ul.appendChild(li);
-            });
-
-            section.append(head, ul);
-            frag.appendChild(section);
-          });
-
-          els.cats.replaceChildren(frag);
-          if (editing) {
-            var inp = els.cats.querySelector('.edit-form .field');
-            if (inp && editing.select) {
-              inp.focus();
-              inp.select();
-              editing.select = false;
-            } else if (inp && keep) {
-              inp.focus();
-              inp.setSelectionRange(keep[0], keep[1]);
-            }
-          }
-          if (!shown) {
-            showState('empty', filter === 'done' ? 'Nothing done yet' : 'All done', filter === 'done' ? 'Tap an item to mark it as consumed.' : 'Everything on the list is consumed.');
-          } else {
-            showState('list');
-          }
-        }
-
-        function buildEditForm(id) {
+        function buildEditForm(kind, id) {
           var form = document.createElement('form');
           form.className = 'edit-form';
           var input = document.createElement('input');
@@ -723,52 +725,216 @@ const firebaseConfig = {
           form.append(input, actions);
           form.addEventListener('submit', function (e) {
             e.preventDefault();
-            saveEdit(id);
+            saveEdit(kind, id);
           });
           return form;
         }
 
-        function startEdit(id) {
-          if (!items[id]) return;
-          editing = { id: id, value: items[id].name, select: true };
-          render();
-        }
-
-        function cancelEdit() {
-          editing = null;
-          render();
-        }
-
-        // Renombrar: cambia de inmediato en local, escribe solo el nombre y revierte si falla.
-        function saveEdit(id) {
-          var it = items[id];
-          if (!it || !editing) return cancelEdit();
-          var name = editing.value.trim().replace(/\s+/g, ' ').slice(0, 80);
-          if (!name) {
-            var inp = els.cats.querySelector('.edit-form .field');
-            if (inp) inp.focus();
-            return;
+        // Una fila de inventario (kind 'inv') o de compras (kind 'shop').
+        function buildRow(kind, id, it) {
+          var li = document.createElement('li');
+          if (editing && editing.kind === kind && editing.id === id) {
+            li.appendChild(buildEditForm(kind, id));
+            return li;
           }
-          if (name === it.name) return cancelEdit();
-          var prev = it.name;
-          it.name = name;
-          editing = null;
-          render();
-          itemsRef
-            .child(id)
-            .child('name')
-            .set(name)
-            .catch(function () {
-              if (items[id]) items[id].name = prev;
-              render();
-              toast('Couldn’t rename that item. Try again.');
-            });
+          li.className = 'row';
+          var on = kind === 'inv' ? it.done : it.bought;
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'item';
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          btn.dataset.kind = kind;
+          btn.dataset.id = id;
+          var box = document.createElement('span');
+          box.className = 'box';
+          box.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+          var label = document.createElement('span');
+          label.className = 'label';
+          label.textContent = it.name;
+          if (kind === 'shop') {
+            // En compras la categoría va debajo del nombre para no apretarlo.
+            var wrap = document.createElement('span');
+            wrap.className = 'label-wrap';
+            var tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = it.cat;
+            wrap.append(label, tag);
+            btn.append(box, wrap);
+          } else {
+            btn.append(box, label);
+          }
+          var pen = document.createElement('button');
+          pen.type = 'button';
+          pen.className = 'edit';
+          pen.dataset.kind = kind;
+          pen.dataset.id = id;
+          pen.setAttribute('aria-label', 'Edit ' + it.name);
+          pen.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
+          li.append(btn, pen);
+          if (kind === 'shop') {
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'del';
+            del.dataset.id = id;
+            del.setAttribute('aria-label', 'Remove ' + it.name);
+            del.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+            li.appendChild(del);
+          }
+          return li;
         }
 
-        document.querySelectorAll('.tab').forEach(function (tab) {
+        // Si llega un cambio remoto mientras se edita, se repinta pero el foco y el cursor se conservan.
+        function editFocusSnapshot() {
+          var a = document.activeElement;
+          return editing && a && a.closest && a.closest('.edit-form') ? [a.selectionStart, a.selectionEnd] : null;
+        }
+        function restoreEditFocus(keep) {
+          if (!editing) return;
+          var inp = document.querySelector('.edit-form .field');
+          if (!inp) return;
+          if (editing.select) {
+            inp.focus();
+            inp.select();
+            editing.select = false;
+          } else if (keep) {
+            inp.focus();
+            inp.setSelectionRange(keep[0], keep[1]);
+          }
+        }
+
+        function render() {
+          var keep = editFocusSnapshot();
+          var invIds = ids(items);
+          var stock = invIds.filter(function (id) {
+            return !items[id].done;
+          }).length;
+          var toBuy = ids(shop).filter(function (id) {
+            return !shop[id].bought;
+          }).length;
+
+          $('n-inv').textContent = invIds.length ? stock : '';
+          $('n-shop').textContent = toBuy || '';
+          $('n-all').textContent = invIds.length;
+          $('n-stock').textContent = stock;
+          $('n-used').textContent = invIds.length - stock;
+          els.bar.style.width = invIds.length ? (stock / invIds.length) * 100 + '%' : '0';
+
+          document.querySelectorAll('[data-view]').forEach(function (b) {
+            b.setAttribute('aria-selected', b.dataset.view === view ? 'true' : 'false');
+          });
+          els.invHead.hidden = view !== 'inventory';
+          els.addForm.hidden = view !== 'inventory';
+          els.shopForm.hidden = view !== 'shopping';
+          els.count.textContent = view === 'inventory' ? (invIds.length ? stock + ' in stock' : '') : toBuy ? toBuy + ' to buy' : '';
+
+          if (view === 'inventory') renderInventory(invIds);
+          else renderShopping();
+          restoreEditFocus(keep);
+        }
+
+        function renderInventory(all) {
+          if (!connected && !timedOut) return showState('loading');
+          if (!all.length) {
+            return timedOut && !connected
+              ? showState('empty', 'Can’t reach the pantry', 'Check your connection. It will load as soon as you’re back online.')
+              : showState('empty', 'Nothing here yet', 'Add the first item below.');
+          }
+
+          var frag = document.createDocumentFragment();
+          var shown = 0;
+          CAT_NAMES.forEach(function (cat) {
+            var inCat = all.filter(function (id) {
+              return items[id].cat === cat;
+            });
+            var left = inCat.filter(function (id) {
+              return !items[id].done;
+            }).length;
+            var visible = inCat
+              .filter(function (id) {
+                return filter === 'all' || (filter === 'used' ? items[id].done : !items[id].done);
+              })
+              .sort(byOrder(items));
+            if (!visible.length) return;
+            shown += visible.length;
+
+            var section = document.createElement('section');
+            section.className = 'cat' + (collapsed[cat] ? ' collapsed' : '');
+
+            var head = document.createElement('button');
+            head.type = 'button';
+            head.className = 'cat-head';
+            head.setAttribute('aria-expanded', collapsed[cat] ? 'false' : 'true');
+            var nm = document.createElement('span');
+            nm.className = 'name';
+            nm.textContent = cat;
+            var n = document.createElement('span');
+            n.className = 'n';
+            n.textContent = left + '/' + inCat.length;
+            var chev = document.createElement('span');
+            chev.className = 'chev';
+            chev.setAttribute('aria-hidden', 'true');
+            head.append(nm, n, chev);
+            head.addEventListener('click', function () {
+              collapsed[cat] = !collapsed[cat];
+              saveCollapsed();
+              render();
+            });
+
+            var ul = document.createElement('ul');
+            ul.className = 'list';
+            visible.forEach(function (id) {
+              ul.appendChild(buildRow('inv', id, items[id]));
+            });
+
+            section.append(head, ul);
+            frag.appendChild(section);
+          });
+
+          els.cats.replaceChildren(frag);
+          if (!shown) {
+            showState('empty', filter === 'used' ? 'Nothing used up yet' : 'Everything is used up', filter === 'used' ? 'Tap an item to mark it as used up.' : 'Add what you buy to the shopping list.');
+          } else {
+            showState('list');
+          }
+        }
+
+        function renderShopping() {
+          if (!connected && !timedOut) return showState('loading');
+          var all = ids(shop);
+          if (!all.length) {
+            return showState('empty', 'Nothing to buy', 'Add something below, or tap “Add to shopping list” after you use an item up.');
+          }
+          // Primero lo que falta comprar, después lo ya comprado.
+          all.sort(function (a, b) {
+            if (shop[a].bought !== shop[b].bought) return shop[a].bought ? 1 : -1;
+            return byOrder(shop)(a, b);
+          });
+          var frag = document.createDocumentFragment();
+          all.forEach(function (id) {
+            frag.appendChild(buildRow('shop', id, shop[id]));
+          });
+          els.shopList.replaceChildren(frag);
+          els.shopActions.hidden = !all.some(function (id) {
+            return shop[id].bought;
+          });
+          showState('list');
+        }
+
+        // --- Interacción ---
+        document.querySelectorAll('[data-view]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            view = b.dataset.view;
+            editing = null;
+            try {
+              localStorage.setItem(VIEW_KEY, view);
+            } catch (e) {}
+            render();
+          });
+        });
+        document.querySelectorAll('[data-filter]').forEach(function (tab) {
           tab.addEventListener('click', function () {
             filter = tab.dataset.filter;
-            document.querySelectorAll('.tab').forEach(function (t) {
+            document.querySelectorAll('[data-filter]').forEach(function (t) {
               t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
             });
             render();
@@ -781,7 +947,9 @@ const firebaseConfig = {
         });
         if (typeof firebase === 'undefined' || missing.length) {
           showState('empty', 'Pantry not connected', typeof firebase === 'undefined' ? 'Couldn’t load Firebase. Check your connection and reload.' : 'Firebase isn’t configured (missing ' + missing.join(', ') + ').');
-          els.form.hidden = true;
+          els.addForm.hidden = true;
+          els.shopForm.hidden = true;
+          els.invHead.hidden = true;
           return;
         }
 
@@ -789,6 +957,7 @@ const firebaseConfig = {
         var db = firebase.database();
         var root = db.ref('pantry');
         var itemsRef = root.child('items');
+        var shopRef = root.child('shopping');
 
         function seedItems() {
           var out = {};
@@ -802,15 +971,15 @@ const firebaseConfig = {
           return out;
         }
 
-        // Si la base está vacía la siembra una sola vez; la transacción evita duplicados si dos teléfonos abren a la vez.
+        // Si el inventario está vacío lo siembra una sola vez; la transacción evita duplicados si dos teléfonos abren a la vez.
         var seeding = false;
         function seedIfEmpty() {
           if (seeding) return;
           seeding = true;
-          root.transaction(
+          itemsRef.transaction(
             function (cur) {
               if (cur !== null) return; // ya hay datos: abortar
-              return { items: seedItems() };
+              return seedItems();
             },
             function (err) {
               seeding = false;
@@ -840,12 +1009,7 @@ const firebaseConfig = {
             Object.keys(data).forEach(function (id) {
               var v = data[id];
               if (!v || typeof v.name !== 'string') return;
-              next[id] = {
-                name: v.name.slice(0, 80),
-                cat: CAT_NAMES.indexOf(v.cat) > -1 ? v.cat : 'Other',
-                done: v.done === true,
-                order: typeof v.order === 'number' ? v.order : 0,
-              };
+              next[id] = { name: v.name.slice(0, 80), cat: catOf(v.cat), done: v.done === true, order: typeof v.order === 'number' ? v.order : 0 };
             });
             items = next;
             render();
@@ -856,45 +1020,234 @@ const firebaseConfig = {
           }
         );
 
+        shopRef.on('value', function (snap) {
+          var data = snap.val() || {};
+          var next = {};
+          Object.keys(data).forEach(function (id) {
+            var v = data[id];
+            if (!v || typeof v.name !== 'string') return;
+            next[id] = {
+              name: v.name.slice(0, 80),
+              cat: catOf(v.cat),
+              bought: v.bought === true,
+              order: typeof v.order === 'number' ? v.order : 0,
+              invId: typeof v.invId === 'string' ? v.invId : '',
+            };
+          });
+          shop = next;
+          render();
+        });
+
         db.ref('.info/connected').on('value', function (snap) {
           els.net.classList.toggle('on', snap.val() === false && connected);
         });
 
-        // Tocar un ítem: cambia de inmediato en local, escribe en la base y revierte si falla.
-        els.cats.addEventListener('click', function (e) {
-          var pen = e.target.closest('.edit');
-          if (pen) return startEdit(pen.dataset.id);
-          var btn = e.target.closest('.item');
-          if (!btn) return;
-          var id = btn.dataset.id;
-          var it = items[id];
+        function mapOf(kind) {
+          return kind === 'inv' ? items : shop;
+        }
+        function refOf(kind) {
+          return kind === 'inv' ? itemsRef : shopRef;
+        }
+
+        function startEdit(kind, id) {
+          var it = mapOf(kind)[id];
           if (!it) return;
-          var prev = it.done;
-          it.done = !prev;
+          editing = { kind: kind, id: id, value: it.name, select: true };
           render();
-          itemsRef
+        }
+
+        function cancelEdit() {
+          editing = null;
+          render();
+        }
+
+        // Renombrar: cambia de inmediato en local, escribe solo el nombre y revierte si falla.
+        function saveEdit(kind, id) {
+          var it = mapOf(kind)[id];
+          if (!it || !editing) return cancelEdit();
+          var name = cleanName(editing.value);
+          if (!name) {
+            var inp = document.querySelector('.edit-form .field');
+            if (inp) inp.focus();
+            return;
+          }
+          if (name === it.name) return cancelEdit();
+          var prev = it.name;
+          it.name = name;
+          editing = null;
+          render();
+          refOf(kind)
             .child(id)
-            .child('done')
-            .set(it.done)
+            .child('name')
+            .set(name)
             .catch(function () {
-              if (items[id]) items[id].done = prev;
+              if (mapOf(kind)[id]) mapOf(kind)[id].name = prev;
+              render();
+              toast('Couldn’t rename that item. Try again.');
+            });
+        }
+
+        // Inventario: tocar marca/desmarca "agotado". Compras: tocar marca/desmarca "comprado".
+        function toggle(kind, id) {
+          var it = mapOf(kind)[id];
+          if (!it) return;
+          var field = kind === 'inv' ? 'done' : 'bought';
+          var prev = it[field];
+          it[field] = !prev;
+          render();
+          refOf(kind)
+            .child(id)
+            .child(field)
+            .set(it[field])
+            .catch(function () {
+              if (mapOf(kind)[id]) mapOf(kind)[id][field] = prev;
               render();
               toast('Couldn’t save that change. Try again.');
             });
-        });
+          if (kind === 'inv' && it.done) {
+            toast('Marked as used up', {
+              label: 'Add to shopping list',
+              run: function () {
+                addToShopping(it.name, it.cat, id);
+              },
+            });
+          }
+        }
 
-        els.form.addEventListener('submit', function (e) {
+        function addToShopping(name, cat, invId) {
+          var dup = ids(shop).some(function (sid) {
+            return invId && shop[sid].invId === invId && !shop[sid].bought;
+          });
+          if (dup) return toast('Already on the shopping list');
+          var ref = shopRef.push();
+          var item = { name: name, cat: cat, bought: false, order: Date.now() };
+          if (invId) item.invId = invId;
+          shop[ref.key] = { name: name, cat: cat, bought: false, order: item.order, invId: invId || '' };
+          render();
+          ref
+            .set(item)
+            .then(function () {
+              toast('Added to the shopping list');
+            })
+            .catch(function () {
+              delete shop[ref.key];
+              render();
+              toast('Couldn’t add that item. Try again.');
+            });
+        }
+
+        function removeShopItem(id) {
+          var prev = shop[id];
+          if (!prev) return;
+          delete shop[id];
+          render();
+          shopRef
+            .child(id)
+            .remove()
+            .catch(function () {
+              shop[id] = prev;
+              render();
+              toast('Couldn’t remove that item. Try again.');
+            });
+        }
+
+        function boughtIds() {
+          return ids(shop).filter(function (id) {
+            return shop[id].bought;
+          });
+        }
+
+        // Quita de la lista lo ya comprado (sin tocar el inventario).
+        function clearBought() {
+          var list = boughtIds();
+          if (!list.length) return;
+          var prev = {};
+          var updates = {};
+          list.forEach(function (id) {
+            prev[id] = shop[id];
+            updates[id] = null;
+            delete shop[id];
+          });
+          render();
+          shopRef.update(updates).catch(function () {
+            Object.keys(prev).forEach(function (id) {
+              shop[id] = prev[id];
+            });
+            render();
+            toast('Couldn’t clear the list. Try again.');
+          });
+        }
+
+        // Repone lo comprado en el inventario (vuelve a "en stock" o crea el ítem) y lo quita de la lista, en una sola escritura.
+        function restock() {
+          var list = boughtIds();
+          if (!list.length) return;
+          var prevShop = {};
+          var prevInv = {};
+          var updates = {};
+          var n = 0;
+          list.forEach(function (id) {
+            var s = shop[id];
+            prevShop[id] = s;
+            if (s.invId && items[s.invId]) {
+              prevInv[s.invId] = { name: items[s.invId].name, cat: items[s.invId].cat, done: items[s.invId].done, order: items[s.invId].order };
+              items[s.invId].done = false;
+              updates['items/' + s.invId + '/done'] = false;
+            } else {
+              var key = itemsRef.push().key;
+              var obj = { name: s.name, cat: s.cat, done: false, order: Date.now() + n };
+              n += 1;
+              items[key] = obj;
+              prevInv[key] = null;
+              updates['items/' + key] = obj;
+            }
+            updates['shopping/' + id] = null;
+            delete shop[id];
+          });
+          render();
+          root
+            .update(updates)
+            .then(function () {
+              toast(list.length === 1 ? 'Restocked 1 item' : 'Restocked ' + list.length + ' items');
+            })
+            .catch(function () {
+              Object.keys(prevShop).forEach(function (id) {
+                shop[id] = prevShop[id];
+              });
+              Object.keys(prevInv).forEach(function (id) {
+                if (prevInv[id]) items[id] = prevInv[id];
+                else delete items[id];
+              });
+              render();
+              toast('Couldn’t restock. Try again.');
+            });
+        }
+
+        function onListClick(e) {
+          var pen = e.target.closest('.edit');
+          if (pen) return startEdit(pen.dataset.kind, pen.dataset.id);
+          var del = e.target.closest('.del');
+          if (del) return removeShopItem(del.dataset.id);
+          var btn = e.target.closest('.item');
+          if (btn) toggle(btn.dataset.kind, btn.dataset.id);
+        }
+        els.cats.addEventListener('click', onListClick);
+        els.shopList.addEventListener('click', onListClick);
+        $('clear-bought').addEventListener('click', clearBought);
+        $('restock').addEventListener('click', restock);
+
+        els.addForm.addEventListener('submit', function (e) {
           e.preventDefault();
-          var name = els.name.value.trim().replace(/\s+/g, ' ').slice(0, 80);
+          var name = cleanName(els.addName.value);
           if (!name) {
-            els.name.focus();
+            els.addName.focus();
             return;
           }
-          var cat = CAT_NAMES.indexOf(els.cat.value) > -1 ? els.cat.value : 'Other';
+          var cat = catOf(els.addCat.value);
           var ref = itemsRef.push();
           var item = { name: name, cat: cat, done: false, order: Date.now() };
           items[ref.key] = item;
-          els.name.value = '';
+          els.addName.value = '';
           els.addBtn.disabled = true;
           render();
           ref
@@ -911,6 +1264,21 @@ const firebaseConfig = {
               els.addBtn.disabled = false;
             });
         });
+
+        els.shopForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name = cleanName(els.shopName.value);
+          if (!name) {
+            els.shopName.focus();
+            return;
+          }
+          els.shopName.value = '';
+          els.shopBtn.disabled = true;
+          addToShopping(name, catOf(els.shopCat.value), '');
+          els.shopBtn.disabled = false;
+        });
+
+        render();
       })();
     </script>
   </body>
