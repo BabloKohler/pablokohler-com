@@ -114,7 +114,7 @@ export const es = {
     calendlySub: '30 min por Calendly',
     linkedinTitle: 'LinkedIn',
     linkedinSub: 'Conectemos profesionalmente',
-    footerCopy: '© 2026 Pablo Kohler · Santiago → Australia',
+    footerCopy: '© 2026 Pablo Kohler · Tasmania, Australia',
     privacyLink: 'Privacidad',
   },
   cookieConsent: {

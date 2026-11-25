@@ -1,15 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/home/Hero.astro';
-import TrustMarquee from '../../components/home/TrustMarquee.astro';
-import Capabilities from '../../components/home/Capabilities.astro';
-import Formats from '../../components/home/Formats.astro';
-import Cases from '../../components/home/Cases.astro';
-import About from '../../components/home/About.astro';
-import Contact from '../../components/home/Contact.astro';
-import AuServices from '../../components/au/AuServices.astro';
-import { MKT, mktHref } from '../../data/marketing';
+import Home2 from '../../components/home2/Home2.astro';
+import { HOME } from '../../data/home';
 import { getDictionary } from '../../i18n';
 
 const t = getDictionary('es');
@@ -24,27 +17,12 @@ const cases = order
 
 <BaseLayout
   lang="es"
-  title="Consultor de marketing digital en Chile | Pablo Kohler"
-  description="Consultor de marketing digital y comunicaciones. Sitios web, SEO y automatización: estrategia y construcción en un solo lugar, en Chile y Latinoamérica."
+  title={HOME.es.metaTitle}
+  description={HOME.es.metaDescription}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref="/es/"
   enHref="/en/"
 >
-  <Hero t={t.hero} />
-  <TrustMarquee t={t.trust} />
-  <Capabilities t={t.caps} />
-  <AuServices
-    items={MKT.map((m) => m.es)}
-    hrefOf={(s) => mktHref('es', s)}
-    id="marketing"
-    headline="Que te encuentren y"
-    accent="te consulten"
-    intro="SEO, Google Ads y anuncios en redes, armados en cuentas que son tuyas, con una cotización por escrito después de una revisión gratis."
-    location="home_marketing"
-  />
-  <Formats t={t.formats} />
-  <Cases t={t.cases} lang="es" cases={cases} />
-  <About t={t.about} />
-  <Contact t={t.contact} lang="es" />
+  <Home2 lang="es" t={t} cases={cases} />
 </BaseLayout>

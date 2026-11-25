@@ -1,0 +1,278 @@
+---
+import Star from '../Star.astro';
+import { HOME_EMAIL, mailto, type HomeCopy } from '../../data/home';
+
+interface Props {
+  c: HomeCopy;
+}
+const { c } = Astro.props;
+
+// Estado 0 = lema completo; 1 a 4 = el lema se completa con cada servicio.
+const states = [
+  { phrase: c.lema, text: c.sub, subject: c.subject },
+  ...c.services.map((s) => ({ phrase: s.phrase, text: s.line, subject: s.subject })),
+];
+const subjects = JSON.stringify(states.map((s) => s.subject));
+---
+
+<header class="hero2" data-hero2 data-email={HOME_EMAIL} data-subjects={subjects}>
+  <div class="star-bg" aria-hidden="true">
+    <Star size="100%" color="var(--coral)" spin duration={150} />
+  </div>
+
+  <div class="inner">
+    <h1 class="phrases">
+      {
+        states.map((s, i) => (
+          <span class="phrase" data-active={i === 0 ? 'true' : 'false'}>
+            {s.phrase.pre}
+            <span class="hl">{s.phrase.mark}</span>
+            {s.phrase.post}
+          </span>
+        ))
+      }
+    </h1>
+
+    <div class="subs">
+      {
+        states.map((s, i) => (
+          <p class="sub" data-active={i === 0 ? 'true' : 'false'}>
+            {s.text}
+          </p>
+        ))
+      }
+    </div>
+    <p class="sr-only" aria-live="polite" data-live></p>
+
+    <div class="pick" role="group" aria-labelledby="hero2-pick" hidden>
+      <span class="pick-label" id="hero2-pick">{c.pickLabel}</span>
+      <div class="chips">
+        {
+          c.services.map((s) => (
+            <button class="chip" type="button" aria-pressed="false">
+              {s.chip}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a href={mailto(c.subject)} class="btn btn-primary" data-cta data-track="email_click" data-track-location="home_hero">
+        <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+        <span class="btn-label">{c.cta}</span> <span class="arrow">→</span>
+      </a>
+      <a href={mailto(c.subject)} class="mail" data-mail data-track="email_click" data-track-location="home_hero_address">{HOME_EMAIL}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero2]');
+  if (root) {
+    const email = root.dataset.email ?? '';
+    const subjects: string[] = JSON.parse(root.dataset.subjects ?? '[]');
+    const phrases = [...root.querySelectorAll<HTMLElement>('.phrase')];
+    const subs = [...root.querySelectorAll<HTMLElement>('.sub')];
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('.chip')];
+    const cta = root.querySelector<HTMLAnchorElement>('[data-cta]');
+    const mail = root.querySelector<HTMLAnchorElement>('[data-mail]');
+    const live = root.querySelector<HTMLElement>('[data-live]');
+    let current = 0;
+
+    // Sin JavaScript queda el lema completo y los cuatro servicios más abajo; con JavaScript aparecen los chips.
+    root.classList.add('is-ready');
+    root.querySelector('.pick')?.removeAttribute('hidden');
+
+    const select = (i: number, announce: boolean) => {
+      current = i;
+      phrases.forEach((p, k) => (p.dataset.active = String(k === i)));
+      subs.forEach((p, k) => (p.dataset.active = String(k === i)));
+      chips.forEach((c, k) => c.setAttribute('aria-pressed', String(k + 1 === i)));
+      const href = `mailto:${email}?subject=${encodeURIComponent(subjects[i] ?? '')}`;
+      if (cta) cta.href = href;
+      if (mail) mail.href = href;
+      if (announce && live) live.textContent = `${phrases[i]?.textContent ?? ''} ${subs[i]?.textContent ?? ''}`.replace(/\s+/g, ' ').trim();
+    };
+
+    chips.forEach((chip, k) => {
+      chip.addEventListener('click', () => select(current === k + 1 ? 0 : k + 1, true));
+    });
+  }
+</script>
+
+<style>
+  .hero2 {
+    position: relative;
+    min-height: calc(100svh - 88px);
+    display: flex;
+    align-items: center;
+    padding: clamp(104px, 15vh, 160px) clamp(24px, 5vw, 72px) clamp(56px, 9vh, 96px);
+    overflow: hidden;
+  }
+
+  /* La estrella firma, grande y recortada por el borde derecho: la única presencia de color del primer plano. */
+  .star-bg {
+    position: absolute;
+    z-index: 0;
+    width: clamp(420px, 54vw, 820px);
+    right: clamp(-300px, -16vw, -120px);
+    top: 50%;
+    transform: translateY(-46%);
+    pointer-events: none;
+  }
+  .star-bg :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* Las cinco frases ocupan la misma celda: el alto lo fija la más larga y el titular no salta al cambiar. */
+  .phrases {
+    display: grid;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--fs-display);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    max-width: 11.5em;
+    margin-bottom: clamp(24px, 3.5vh, 36px);
+    text-wrap: balance;
+  }
+  .phrase {
+    grid-area: 1 / 1;
+    align-self: end;
+  }
+  .phrase[data-active='false'] {
+    visibility: hidden;
+  }
+
+  /* El marcador se dibuja de izquierda a derecha cuando la frase pasa a estar activa. */
+  .hl {
+    background-image: linear-gradient(var(--amber), var(--amber));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 100% 0.4em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 0 0.06em;
+  }
+  .is-ready .hl {
+    background-size: 0% 0.4em;
+    transition: background-size 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .is-ready .phrase[data-active='true'] .hl {
+    background-size: 100% 0.4em;
+  }
+
+  .subs {
+    display: grid;
+    max-width: 54ch;
+    margin-bottom: clamp(28px, 4vh, 40px);
+  }
+  .sub {
+    grid-area: 1 / 1;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: var(--ink);
+    opacity: 0.78;
+  }
+  .sub[data-active='false'] {
+    visibility: hidden;
+  }
+
+  .pick {
+    margin-bottom: clamp(24px, 3.5vh, 36px);
+  }
+  .pick-label {
+    display: block;
+    font-size: var(--fs-small);
+    color: var(--ink-60);
+    margin-bottom: 12px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .chip {
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(20, 18, 16, 0.28);
+    background: rgba(250, 246, 240, 0.9);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.18s ease;
+  }
+  .chip:hover {
+    border-color: var(--ink);
+  }
+  .chip:active {
+    transform: scale(0.97);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--coral);
+    border-color: var(--coral);
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+  }
+  .mail {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+    transition: color 0.18s ease;
+  }
+  .mail:hover {
+    color: var(--coral-ink);
+  }
+
+  @media (max-width: 820px) {
+    .hero2 {
+      align-items: flex-start;
+      padding-bottom: clamp(220px, 62vw, 340px);
+    }
+    .star-bg {
+      width: 78vw;
+      right: -22vw;
+      top: auto;
+      bottom: -14vw;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-ready .hl {
+      transition: none;
+    }
+    .chip {
+      transition: none;
+    }
+  }
+</style>

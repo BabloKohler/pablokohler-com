@@ -1,0 +1,154 @@
+---
+import { Image } from 'astro:assets';
+import Star from '../Star.astro';
+import wordmark from '../../assets/brand/wordmark-blanco.png';
+import { HOME_EMAIL, mailto, type HomeCopy } from '../../data/home';
+import type { Lang, UiDictionary } from '../../i18n';
+
+interface Props {
+  c: HomeCopy;
+  t: UiDictionary['contact'];
+  lang: Lang;
+}
+const { c, t, lang } = Astro.props;
+const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
+---
+
+<section class="close2" id="contacto">
+  <div class="star-edge" aria-hidden="true">
+    <Star size="clamp(110px, 12vw, 170px)" color="var(--coral)" spin duration={108} />
+  </div>
+
+  <div class="close-inner">
+    <h2>{c.close.pre}<span class="accent">{c.close.mark}</span>{c.close.post}</h2>
+    <p class="close-sub">{t.sub}</p>
+
+    <div class="close-actions">
+      <a href={mailto(c.subject)} class="btn btn-primary close-btn" data-track="email_click" data-track-location="home_close">
+        <Star class="btn-sun" size="77px" color="var(--sun-color, var(--coral))" />
+        <span class="btn-label">{c.close.button}</span> <span class="arrow">→</span>
+      </a>
+      <a href={mailto(c.subject)} class="close-mail" data-track="email_click" data-track-location="home_close_address">{HOME_EMAIL}</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="foot-brand">
+      <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
+    </div>
+    <span class="foot-copy">{t.footerCopy}</span>
+    <a href={privacyHref} class="foot-privacy">{t.privacyLink}</a>
+  </footer>
+</section>
+
+<style>
+  .close2 {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+    margin-top: clamp(40px, 6vh, 80px);
+    padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 72px) 0;
+    overflow: hidden;
+  }
+  .star-edge {
+    position: absolute;
+    z-index: 0;
+    top: -28px;
+    right: -28px;
+    pointer-events: none;
+  }
+  .star-edge :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .close-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  h2 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--fs-h1);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    max-width: 14em;
+    margin-bottom: 22px;
+    text-wrap: balance;
+  }
+  /* Sobre fondo oscuro el marcador ámbar no contrasta con el texto claro: la palabra va en ámbar. */
+  .close2 :global(.accent) {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--amber);
+    padding: 0;
+  }
+  .close-sub {
+    font-size: var(--fs-lead);
+    color: rgba(250, 246, 240, 0.72);
+    max-width: 46ch;
+    margin-bottom: clamp(32px, 5vh, 48px);
+  }
+  .close-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px 28px;
+  }
+  .close-btn {
+    border: 1px solid var(--paper);
+  }
+  .close-mail {
+    font-family: var(--mono);
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: 500;
+    color: var(--paper);
+    text-decoration: underline;
+    text-decoration-color: var(--amber);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    overflow-wrap: anywhere;
+    transition: color 0.18s ease;
+  }
+  .close-mail:hover {
+    color: var(--amber);
+  }
+
+  .site-footer {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: clamp(64px, 10vh, 120px) auto 0;
+    padding: 28px 0;
+    border-top: 1px solid rgba(250, 246, 240, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .foot-brand {
+    display: flex;
+    align-items: center;
+  }
+  .foot-brand :global(img) {
+    display: block;
+    width: auto;
+    height: 16px;
+  }
+  .foot-copy,
+  .foot-privacy {
+    font-size: var(--fs-small);
+    color: rgba(250, 246, 240, 0.7);
+  }
+  .foot-privacy {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.18s ease;
+  }
+  .foot-privacy:hover {
+    color: var(--paper);
+  }
+</style>

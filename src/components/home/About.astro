@@ -4,7 +4,7 @@ import portrait from '../../assets/about/pablo-kohler.jpg';
 import type { UiDictionary } from '../../i18n';
 
 interface Props {
-  t: UiDictionary['about'];
+  t: Omit<UiDictionary['about'], 'facts'> & { facts: { n: string; l: string }[] };
 }
 const { t } = Astro.props;
 

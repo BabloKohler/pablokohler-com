@@ -1,0 +1,108 @@
+/* Portada nueva de pablokohler.com: papel cálido con cuadrícula casi invisible y marcador ámbar.
+   Solo se carga en las páginas que usan Home2.astro (el build AU no la importa). */
+
+:root {
+  --pad: clamp(24px, 5vw, 72px);
+  --mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.home2 {
+  position: relative;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, rgba(20, 18, 16, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 18, 16, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* El degradé coral→ámbar de los titulares viejos se reemplaza por un marcador ámbar detrás de la palabra. */
+.home2 .accent {
+  background-color: transparent;
+  background-image: linear-gradient(var(--amber), var(--amber));
+  background-repeat: no-repeat;
+  background-position: 0 90%;
+  background-size: 100% 0.4em;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 0.06em;
+}
+
+.home2 ::selection,
+.close2 ::selection {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+.home2 .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.home2 :focus-visible,
+.close2 :focus-visible {
+  outline: 2px solid var(--coral-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.close2 :focus-visible {
+  outline-color: var(--amber);
+}
+
+/* Un solo borde izquierdo para portada, servicios, proyectos y sobre mí (el contenido arranca en el mismo x). */
+.home2 section.cases,
+.home2 section.about {
+  max-width: calc(1240px + 2 * var(--pad));
+}
+
+/* Proyectos: títulos en tinta (el coral queda para la firma) y el último caso a todo el ancho en vez de quedar suelto. */
+.home2 section.cases .case .case-body h3 {
+  color: var(--ink);
+  transition: color 0.18s ease;
+}
+.home2 section.cases .case:hover .case-body h3 {
+  color: var(--coral-ink);
+}
+.home2 section.cases .case-cta {
+  color: var(--coral-ink);
+}
+@media (min-width: 1200px) {
+  .home2 section.cases .cases-grid[data-count='7'] .case:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+  }
+  .home2 section.cases .cases-grid[data-count='7'] .case:last-child .case-media {
+    aspect-ratio: auto;
+    min-height: 300px;
+  }
+  .home2 section.cases .cases-grid[data-count='7'] .case:last-child .case-body {
+    justify-content: center;
+    padding: 40px 44px;
+  }
+}
+
+/* Cifras de la ficha de Sobre mí: coral oscuro, que sí pasa 4.5:1 en tamaño pequeño. */
+.home2 section.about .fact-n {
+  color: var(--coral-ink);
+}
+
+/* Caso ancho (último): el texto se centra en bloque en vez de repartirse hacia arriba y abajo. */
+@media (min-width: 1200px) {
+  .home2 section.cases .cases-grid[data-count='7'] .case:last-child .case-body h3 {
+    font-size: var(--fs-h3);
+  }
+  .home2 section.cases .cases-grid[data-count='7'] .case:last-child .case-body p {
+    flex: none;
+    font-size: var(--fs-body);
+    max-width: 50ch;
+    margin-bottom: 24px;
+  }
+}

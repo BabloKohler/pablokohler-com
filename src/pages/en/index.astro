@@ -12,7 +12,8 @@ import AuServices from '../../components/au/AuServices.astro';
 import { AU_INDUSTRIES } from '../../data/au-industries';
 import { AU_RESCUE } from '../../data/au-rescue';
 import { AU_MARKETING } from '../../data/au-marketing';
-import { MKT, mktHref } from '../../data/marketing';
+import Home2 from '../../components/home2/Home2.astro';
+import { HOME } from '../../data/home';
 import { AU_HOME_SEO } from '../../data/au-seo';
 import { getDictionary } from '../../i18n';
 import { IS_AU } from '../../site-target';
@@ -33,18 +34,19 @@ const cases = order
   lang="en"
   title={IS_AU
     ? AU_HOME_SEO.title
-    : 'Pablo Kohler: Digital Marketing & Communications Consultant'}
+    : HOME.en.metaTitle}
   description={IS_AU
     ? AU_HOME_SEO.description
-    : 'Digital marketing and communications consultant. Websites, SEO and automation: strategy and build in one place, for clients in Latin America and Australia.'}
+    : HOME.en.metaDescription}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref="/es/"
   enHref="/en/"
 >
-  <Hero t={t.hero} />
-  <TrustMarquee t={t.trust} />
-  <Capabilities t={t.caps} />
+  {!IS_AU && <Home2 lang="en" t={t} cases={cases} />}
+  {IS_AU && <Hero t={t.hero} />}
+  {IS_AU && <TrustMarquee t={t.trust} />}
+  {IS_AU && <Capabilities t={t.caps} />}
   {IS_AU && <AuServices />}
   {
     IS_AU && (
@@ -54,19 +56,6 @@ const cases = order
         headline="Get found and"
         accent="get customers"
         intro="SEO, Google Ads and Meta Ads for small businesses in Tasmania and across Australia, set up in accounts you own."
-        location="home_marketing"
-      />
-    )
-  }
-  {
-    !IS_AU && (
-      <AuServices
-        items={MKT.map((m) => m.en)}
-        hrefOf={(s) => mktHref('en', s)}
-        id="marketing"
-        headline="Get found and"
-        accent="get enquiries"
-        intro="SEO, Google Ads and social media ads, set up in accounts you own, with a written quote after a free check."
         location="home_marketing"
       />
     )
@@ -95,8 +84,8 @@ const cases = order
       />
     )
   }
-  <Formats t={t.formats} />
-  <Cases t={t.cases} lang="en" cases={cases} />
-  <About t={t.about} />
-  <Contact t={t.contact} lang="en" />
+  {IS_AU && <Formats t={t.formats} />}
+  {IS_AU && <Cases t={t.cases} lang="en" cases={cases} />}
+  {IS_AU && <About t={t.about} />}
+  {IS_AU && <Contact t={t.contact} lang="en" />}
 </BaseLayout>
