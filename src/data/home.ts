@@ -190,4 +190,17 @@ export const HOME: Record<HomeLang, HomeCopy> = {
   },
 };
 
+/** Portada del sitio .com.au: el mismo diseño y los mismos servicios, en inglés y con la ubicación. */
+export const HOME_AU: HomeCopy = {
+  ...HOME.en,
+  about: {
+    ...HOME.en.about,
+    paragraphs: [
+      'I’m a Digital Experience Consultant based in Tasmania and Managing Partner at the digital agency <a href="https://dembu.cl" target="_blank" rel="noopener">Dembú</a>. For more than 9 years I’ve helped universities, researchers and organisations turn what they want to communicate into results they can measure.',
+      HOME.en.about.paragraphs[1],
+      HOME.en.about.paragraphs[2],
+    ],
+  },
+};
+
 export const mailto = (subject: string) => `mailto:${HOME_EMAIL}?subject=${encodeURIComponent(subject)}`;

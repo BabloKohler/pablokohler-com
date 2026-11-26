@@ -6,11 +6,12 @@ import { HOME_COPYRIGHT, HOME_EMAIL, mailto, type HomeCopy } from '../../data/ho
 import type { Lang, UiDictionary } from '../../i18n';
 
 interface Props {
+  copyright?: string;
   c: HomeCopy;
   t: UiDictionary['contact'];
   lang: Lang;
 }
-const { c, t, lang } = Astro.props;
+const { c, t, lang, copyright = HOME_COPYRIGHT } = Astro.props;
 const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
 ---
 
@@ -36,7 +37,7 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
     <div class="foot-brand">
       <Image src={wordmark} alt="Pablo Kohler" height={96} format="webp" quality={90} />
     </div>
-    <span class="foot-copy">{HOME_COPYRIGHT}</span>
+    <span class="foot-copy">{copyright}</span>
     <a href={privacyHref} class="foot-privacy">{t.privacyLink}</a>
   </footer>
 </section>

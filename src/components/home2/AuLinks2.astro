@@ -1,0 +1,111 @@
+---
+import { AU_SERVICES } from '../../data/au-services';
+import { AU_MARKETING } from '../../data/au-marketing';
+import { AU_RESCUE } from '../../data/au-rescue';
+import { AU_INDUSTRIES } from '../../data/au-industries';
+
+// Todas las páginas de servicio y de rubros del sitio AU, enlazadas desde la portada (texto, sin tarjetas).
+const groups = [
+  { title: 'Websites and day-to-day help', intro: '', items: AU_SERVICES },
+  { title: 'Get found and get customers', intro: 'SEO, Google Ads and Meta Ads for small businesses in Tasmania and across Australia, set up in accounts you own.', items: AU_MARKETING },
+  { title: 'Already have a website you can’t manage?', intro: 'Built years ago, lost the logins, or just don’t know how to edit it? Start with a free check of who controls what.', items: AU_RESCUE },
+  { title: 'Websites built for your industry', intro: 'Different businesses need different things from a website. Here is what I focus on in each industry.', items: AU_INDUSTRIES },
+];
+---
+
+<section class="aul" id="all-services" aria-label="All services">
+  {
+    groups.map((g) => (
+      <div class="group reveal" data-reveal>
+        <h3>{g.title}</h3>
+        {g.intro && <p class="intro">{g.intro}</p>}
+        <ul>
+          {g.items.map((s) => (
+            <li>
+              <a href={`/en/${s.slug}/`}>
+                <span class="name">{s.cardTitle}</span>
+                <span class="from">{s.cardFrom}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .aul {
+    position: relative;
+    z-index: 2;
+    max-width: calc(1240px + 2 * var(--pad));
+    margin: 0 auto;
+    padding: clamp(24px, 4vh, 48px) var(--pad) clamp(56px, 9vh, 112px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(36px, 6vh, 64px) clamp(32px, 5vw, 72px);
+  }
+  .group {
+    border-top: 1px solid var(--ink);
+    padding-top: 20px;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--fs-h3);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    text-wrap: balance;
+  }
+  .intro {
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--ink-60);
+    max-width: 52ch;
+    margin-bottom: 14px;
+  }
+  ul {
+    list-style: none;
+  }
+  li + li {
+    border-top: 1px solid var(--ink-12);
+  }
+  a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.18s ease;
+  }
+  a:hover,
+  a:focus-visible {
+    text-decoration-color: var(--ink);
+  }
+  .name {
+    font-weight: 600;
+    font-size: var(--fs-body);
+  }
+  .from {
+    flex: none;
+    font-size: var(--fs-small);
+    color: var(--ink-60);
+    white-space: nowrap;
+  }
+  @media (max-width: 860px) {
+    .aul {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
+  }
+</style>

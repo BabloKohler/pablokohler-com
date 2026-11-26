@@ -5,8 +5,9 @@ import { mailto, type HomeCopy, type HomeLang } from '../../data/home';
 interface Props {
   c: HomeCopy;
   lang: HomeLang;
+  variant?: 'main' | 'au';
 }
-const { c, lang } = Astro.props;
+const { c, lang, variant = 'main' } = Astro.props;
 
 // Las tres páginas de SEO, Google Ads y redes siguen existiendo: se enlazan desde la fila de conversión.
 const also = MKT.map((m) => ({ label: m[lang].cardTitle, href: mktHref(lang, m[lang]) }));
@@ -31,7 +32,7 @@ const noteHtml = c.servicesNote.replace(/\*\*(.+?)\*\*/g, '<span class="hot">$1<
             <a href={mailto(s.subject)} class="write" data-track="email_click" data-track-location="home_service" data-track-service={s.title}>
               {c.serviceLink} <span aria-hidden="true">→</span>
             </a>
-            {i === last && (
+            {i === last && variant === 'main' && (
               <p class="also">
                 {c.alsoLabel}{' '}
                 {also.map((a, k) => (

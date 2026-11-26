@@ -1,17 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/home/Hero.astro';
-import TrustMarquee from '../../components/home/TrustMarquee.astro';
-import Capabilities from '../../components/home/Capabilities.astro';
-import Formats from '../../components/home/Formats.astro';
-import Cases from '../../components/home/Cases.astro';
-import About from '../../components/home/About.astro';
-import Contact from '../../components/home/Contact.astro';
-import AuServices from '../../components/au/AuServices.astro';
-import { AU_INDUSTRIES } from '../../data/au-industries';
-import { AU_RESCUE } from '../../data/au-rescue';
-import { AU_MARKETING } from '../../data/au-marketing';
 import Home2 from '../../components/home2/Home2.astro';
 import { HOME } from '../../data/home';
 import { AU_HOME_SEO } from '../../data/au-seo';
@@ -20,7 +9,7 @@ import { IS_AU } from '../../site-target';
 
 const t = getDictionary('en');
 
-// En el build AU el caso más cercano al mercado (salón en Sydney) va primero.
+// En el build AU el caso más cercano al mercado (salón en Sídney) va primero.
 const order = IS_AU
   ? ['shelovespink', 'bondipainters', 'heritagepainting', 'docomomo', 'one-health', 'uc-graficas']
   : ['saludamente', 'docomomo', 'one-health', 'uc-graficas', 'shelovespink', 'heritagepainting', 'bondipainters'];
@@ -32,60 +21,13 @@ const cases = order
 
 <BaseLayout
   lang="en"
-  title={IS_AU
-    ? AU_HOME_SEO.title
-    : HOME.en.metaTitle}
-  description={IS_AU
-    ? AU_HOME_SEO.description
-    : HOME.en.metaDescription}
+  title={IS_AU ? AU_HOME_SEO.title : HOME.en.metaTitle}
+  description={IS_AU ? AU_HOME_SEO.description : HOME.en.metaDescription}
   navDict={t.nav}
   cookieDict={t.cookieConsent}
   esHref="/es/"
   enHref="/en/"
+  fullTheme
 >
-  {!IS_AU && <Home2 lang="en" t={t} cases={cases} />}
-  {IS_AU && <Hero t={t.hero} />}
-  {IS_AU && <TrustMarquee t={t.trust} />}
-  {IS_AU && <Capabilities t={t.caps} />}
-  {IS_AU && <AuServices />}
-  {
-    IS_AU && (
-      <AuServices
-        items={AU_MARKETING}
-        id="au-marketing"
-        headline="Get found and"
-        accent="get customers"
-        intro="SEO, Google Ads and Meta Ads for small businesses in Tasmania and across Australia, set up in accounts you own."
-        location="home_marketing"
-      />
-    )
-  }
-  {
-    IS_AU && (
-      <AuServices
-        items={AU_RESCUE}
-        id="au-rescue"
-        headline="Already have a website"
-        accent="you can’t manage?"
-        intro="Built years ago, lost the logins, or just don’t know how to edit it? Start with a free check of who controls what."
-        location="home_rescue"
-      />
-    )
-  }
-  {
-    IS_AU && (
-      <AuServices
-        items={AU_INDUSTRIES}
-        id="au-industries"
-        headline="Websites built for"
-        accent="your industry"
-        intro="Different businesses need different things from a website. Here is what I focus on for businesses in these industries."
-        location="home_industries"
-      />
-    )
-  }
-  {IS_AU && <Formats t={t.formats} />}
-  {IS_AU && <Cases t={t.cases} lang="en" cases={cases} />}
-  {IS_AU && <About t={t.about} />}
-  {IS_AU && <Contact t={t.contact} lang="en" />}
+  <Home2 lang="en" t={t} cases={cases} variant={IS_AU ? 'au' : 'main'} />
 </BaseLayout>

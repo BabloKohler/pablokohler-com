@@ -309,7 +309,7 @@ const cta = IS_AU ? null : { label: lang === 'es' ? 'Escríbeme' : 'Write to me'
 
 <style is:global>
   /* Sitio principal: barra de ancho completo, fija en el flujo de la página (no flota). */
-  body.site-main nav {
+  body.site-nav-new nav {
     position: relative;
     top: auto;
     left: auto;
@@ -328,16 +328,16 @@ const cta = IS_AU ? null : { label: lang === 'es' ? 'Escríbeme' : 'Write to me'
     box-shadow: none;
     transition: none;
   }
-  body.site-main nav.is-scrolled {
+  body.site-nav-new nav.is-scrolled {
     padding: 16px var(--pad);
     background: var(--paper);
     box-shadow: none;
   }
-  body.site-main nav .nav-links {
+  body.site-nav-new nav .nav-links {
     margin: 0 auto;
     gap: clamp(24px, 3vw, 44px);
   }
-  body.site-main.site-main nav .nav-links a {
+  body.site-nav-new.site-nav-new nav .nav-links a {
     color: var(--ink);
     font-size: var(--fs-lead);
     font-weight: 700;
@@ -348,30 +348,30 @@ const cta = IS_AU ? null : { label: lang === 'es' ? 'Escríbeme' : 'Write to me'
     text-underline-offset: 6px;
     transition: text-decoration-color 0.18s ease;
   }
-  body.site-main.site-main nav .nav-links a:hover {
+  body.site-nav-new.site-nav-new nav .nav-links a:hover {
     color: var(--ink);
     text-decoration-color: var(--ink);
   }
-  body.site-main nav .lang {
+  body.site-nav-new nav .lang {
     font-size: var(--fs-body);
     font-weight: 600;
     color: var(--ink);
   }
-  body.site-main nav .nav-cta {
+  body.site-nav-new nav .nav-cta {
     padding: 12px 24px;
     font-size: var(--fs-body);
     font-weight: 700;
     white-space: nowrap;
     flex-shrink: 0;
   }
-  body.site-main nav .menu-toggle {
+  body.site-nav-new nav .menu-toggle {
     border-radius: 0;
   }
   @media (max-width: 720px) {
-    body.site-main nav {
+    body.site-nav-new nav {
       padding: 12px var(--pad);
     }
-    body.site-main nav .nav-links {
+    body.site-nav-new nav .nav-links {
       top: 100%;
       margin: 0;
       border: 0;
@@ -383,7 +383,7 @@ const cta = IS_AU ? null : { label: lang === 'es' ? 'Escríbeme' : 'Write to me'
     }
   }
   @media (max-width: 560px) {
-    body.site-main nav .nav-cta {
+    body.site-nav-new nav .nav-cta {
       display: none;
     }
   }

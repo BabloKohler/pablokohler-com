@@ -8,23 +8,26 @@ import Close2 from './Close2.astro';
 import Logos2 from './Logos2.astro';
 import CasesMag from './CasesMag.astro';
 import About from '../home/About.astro';
-import { HOME } from '../../data/home';
+import AuLinks2 from './AuLinks2.astro';
+import { HOME, HOME_AU } from '../../data/home';
 import type { Lang, UiDictionary } from '../../i18n';
 
 interface Props {
+  variant?: 'main' | 'au';
   lang: Lang;
   t: UiDictionary;
   cases: CollectionEntry<'cases-es' | 'cases-en'>[];
 }
-const { lang, t, cases } = Astro.props;
-const c = HOME[lang];
+const { lang, t, cases, variant = 'main' } = Astro.props;
+const c = variant === 'au' ? HOME_AU : HOME[lang];
 ---
 
 <div class="home2">
   <Hero2 c={c} />
-  <Services2 c={c} lang={lang} />
+  <Services2 c={c} lang={lang} variant={variant} />
+  {variant === 'au' && <AuLinks2 />}
   <CasesMag cases={cases} lang={lang} heading={c.casesHeading} intro={c.casesIntro} viewCase={t.cases.viewCase} mag={c.mag} />
   <Logos2 lang={lang} label={t.trust.label} opens={c.mag.logosOpen} />
   <About t={c.about} />
 </div>
-<Close2 c={c} t={t.contact} lang={lang} />
+<Close2 c={c} t={t.contact} lang={lang} copyright={variant === 'au' ? t.contact.footerCopy : undefined} />
