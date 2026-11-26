@@ -424,7 +424,7 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     background: #efe9e0;
     border: 1px solid var(--ink-12);
     border-bottom: 0;
-    border-radius: 16px 16px 0 0;
+    border-radius: var(--r-card, 16px) var(--r-card, 16px) 0 0;
   }
   .dots {
     display: inline-flex;
@@ -485,7 +485,7 @@ const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
     overflow-x: hidden;
     background: #fff;
     border: 1px solid var(--ink-12);
-    border-radius: 0 0 16px 16px;
+    border-radius: 0 0 var(--r-card, 16px) var(--r-card, 16px);
     box-shadow: 0 30px 80px rgba(20, 18, 16, 0.14);
     scrollbar-width: thin;
     scrollbar-color: rgba(20, 18, 16, 0.3) transparent;

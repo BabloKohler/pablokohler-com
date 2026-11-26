@@ -18,16 +18,20 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       <div class="about-photo">
         <Image src={portrait} alt="Pablo Kohler" width={900} format="webp" quality={85} />
       </div>
-      <div class="about-facts">
-        {
-          t.facts.map((f) => (
-            <div class="fact">
-              <span class="fact-n">{f.n}</span>
-              <span class="fact-l">{f.l}</span>
-            </div>
-          ))
-        }
-      </div>
+      {
+        t.facts.length > 0 && (
+        <div class="about-facts">
+          {
+            t.facts.map((f) => (
+              <div class="fact">
+                <span class="fact-n">{f.n}</span>
+                <span class="fact-l">{f.l}</span>
+              </div>
+            ))
+          }
+        </div>
+        )
+      }
     </div>
 
     <div class="about-text reveal" data-reveal style="transition-delay: 0.1s">
@@ -62,7 +66,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   .about-photo {
     position: relative;
     aspect-ratio: 4 / 5;
-    border-radius: 20px;
+    border-radius: var(--r-card, 20px);
     overflow: hidden;
     border: 1px solid var(--ink-12);
   }
@@ -82,7 +86,7 @@ const mdBold = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     flex: 1;
     background: #fff;
     border: 1px solid var(--ink-12);
-    border-radius: 14px;
+    border-radius: var(--r-card, 14px);
     padding: 14px 12px;
     text-align: center;
   }

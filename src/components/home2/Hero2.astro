@@ -1,5 +1,6 @@
 ---
 import Star from '../Star.astro';
+import { STAR_VIEWBOX } from '../star-path';
 import { HOME_EMAIL, mailto, type HomeCopy } from '../../data/home';
 
 interface Props {
@@ -13,11 +14,77 @@ const states = [
   ...c.services.map((s) => ({ phrase: s.phrase, text: s.line, subject: s.subject })),
 ];
 const subjects = JSON.stringify(states.map((s) => s.subject));
+
+// Tamaño responsive a partir del tamaño máximo en escritorio (px): clamp(mín, vw, máx).
+const sz = (max: number, minRatio = 0.6) => `clamp(${Math.round(max * minRatio)}px, ${(max / 14.4).toFixed(2)}vw, ${max}px)`;
+
+/**
+ * Soles giratorios: los mismos de la portada anterior y con las mismas microinteracciones
+ * (ver src/scripts/sun-field.ts): entrada escalonada, desplazamiento propio con el scroll,
+ * el sol bajo el cursor se aparta y crece, y se pueden arrastrar con rebote.
+ * `speed` = factor de desplazamiento vertical con el scroll; `rot` = grados extra por px de scroll;
+ * `spin` = segundos por vuelta; `rev` = sentido antihorario.
+ */
+const suns = [
+  { size: 'clamp(520px, 84vw, 1200px)', color: 'var(--coral)', pos: 'top:-36%;right:-46%', mpos: 'top:-36vw;right:-40vw', spin: 150, rev: false, speed: 0.1, rot: 0.012, giant: true },
+  { size: 'clamp(360px, 60vw, 860px)', color: 'var(--amber)', pos: 'bottom:-78%;left:36%', mpos: 'bottom:-36%;left:-14%', spin: 190, rev: true, speed: 0.18, rot: -0.016, giant: true },
+  { size: sz(150), color: 'var(--magenta)', pos: 'top:60%;right:9%', mpos: 'top:78%;right:8%', spin: 108, rev: false, speed: 0.42, rot: 0.05 },
+  { size: sz(110), color: 'var(--amber)', pos: 'top:9%;left:47%', mpos: 'top:14%;left:42%', spin: 90, rev: true, speed: -0.14, rot: -0.04 },
+  { size: sz(96), color: 'var(--coral)', pos: 'bottom:7%;right:30%', mpos: 'bottom:5%;right:30%', spin: 77, rev: true, speed: 0.62, rot: 0.06 },
+  { size: sz(72), color: 'var(--magenta)', pos: 'top:12%;left:8%', mpos: 'top:15%;left:6%', spin: 64, rev: false, speed: 0.3, rot: -0.07 },
+  { size: sz(52), color: 'var(--coral)', pos: 'top:44%;left:55%', mpos: 'top:24%;left:12%', spin: 52, rev: true, speed: -0.28, rot: 0.08 },
+  { size: sz(40), color: 'var(--amber)', pos: 'bottom:30%;left:50%', mpos: 'top:84%;left:10%', spin: 46, rev: false, speed: 0.85, rot: -0.09 },
+  { size: sz(30), color: 'var(--magenta)', pos: 'top:24%;right:33%', mpos: 'top:21%;left:34%', spin: 38, rev: true, speed: -0.5, rot: 0.1 },
+  { size: sz(60), color: 'var(--amber)', pos: 'top:86%;left:43%', mpos: 'top:72%;left:72%', spin: 58, rev: false, speed: 0.55, rot: 0.07 },
+];
+
+// Posiciones y tamaños en CSS (escritorio + móvil). `!important` porque en móvil se resetean los 4 lados.
+const sunCss = suns
+  .map(
+    (s, i) =>
+      `.hero2 .sun[data-i="${i}"]{${s.pos};width:${s.size}}` +
+      `@media (max-width:700px){.hero2 .sun[data-i="${i}"]{top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;${s.mpos.replace(/;/g, ' !important;')} !important}}`,
+  )
+  .join('');
+
+// Estrellas fugaces: cruzan la portada en diagonal cada cierto tiempo, con una cola que se desvanece.
+const shooters = [
+  { top: '7%', right: '3%', size: 24, color: 'var(--amber)', dur: 10, delay: 1.5 },
+  { top: '34%', right: '0%', size: 18, color: 'var(--magenta)', dur: 13, delay: 6 },
+  { top: '16%', right: '34%', size: 20, color: 'var(--coral)', dur: 11.5, delay: 9 },
+  { top: '2%', right: '18%', size: 14, color: 'var(--amber)', dur: 15, delay: 12 },
+];
 ---
 
 <header class="hero2" data-hero2 data-email={HOME_EMAIL} data-subjects={subjects}>
-  <div class="star-bg" aria-hidden="true">
-    <Star size="100%" color="var(--coral)" spin duration={150} />
+  <style is:inline set:html={sunCss}></style>
+
+  <div class="suns" aria-hidden="true">
+    {
+      suns.map((s, i) => (
+        <div class:list={['sun', { 'sun--giant': s.giant }]} style={`--i:${i}`} data-i={i} data-speed={s.speed} data-rot={s.rot}>
+          <div class="sun-pos">
+            <div class="sun-pop">
+              <svg viewBox={STAR_VIEWBOX} style={`fill:${s.color};animation:${s.rev ? 'star-spin-rev' : 'star-spin'} ${s.spin}s linear infinite`}>
+                <use href="#slp-star" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="shooters" aria-hidden="true">
+    {
+      shooters.map((t) => (
+        <span class="shoot" style={`--top:${t.top};--right:${t.right};--sz:${t.size}px;--c:${t.color};--dur:${t.dur}s;--delay:${t.delay}s`}>
+          <svg viewBox={STAR_VIEWBOX}>
+            <use href="#slp-star" />
+          </svg>
+        </span>
+      ))
+    }
   </div>
 
   <div class="inner">
@@ -101,30 +168,131 @@ const subjects = JSON.stringify(states.map((s) => s.subject));
   }
 </script>
 
+<script>
+  import { initSunField } from '../../scripts/sun-field';
+
+  const hero = document.querySelector<HTMLElement>('.hero2');
+  const root = hero?.querySelector<HTMLElement>('.suns');
+  if (hero && root) {
+    const start = () => initSunField({ root, section: hero, mode: 'hero' });
+    const idle = (cb: () => void) => ('requestIdleCallback' in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 300));
+    if (document.readyState === 'complete') idle(start);
+    else window.addEventListener('load', () => idle(start), { once: true });
+  }
+</script>
+
 <style>
   .hero2 {
     position: relative;
-    min-height: calc(100svh - 88px);
+    min-height: calc(100svh - 73px);
     display: flex;
     align-items: center;
-    padding: clamp(104px, 15vh, 160px) clamp(24px, 5vw, 72px) clamp(56px, 9vh, 96px);
+    padding: clamp(40px, 8vh, 96px) var(--pad) clamp(56px, 9vh, 96px);
     overflow: hidden;
   }
 
-  /* La estrella firma, grande y recortada por el borde derecho: la única presencia de color del primer plano. */
-  .star-bg {
+  /* Capa de soles: detrás del contenido, sin capturar el mouse (el hover se calcula por distancia).
+     Tres transforms en capas distintas para que no se pisen:
+       .sun-pos  → JS: scroll + mouse + hover
+       .sun-pop  → CSS: entrada escalonada
+       svg       → CSS: giro continuo */
+  .suns {
     position: absolute;
+    inset: 0;
     z-index: 0;
-    width: clamp(420px, 54vw, 820px);
-    right: clamp(-300px, -16vw, -120px);
-    top: 50%;
-    transform: translateY(-46%);
     pointer-events: none;
   }
-  .star-bg :global(svg) {
+  .sun {
+    position: absolute;
+  }
+  .sun-pos {
+    will-change: transform;
+  }
+  .sun-pop {
+    animation: sun-in 1.15s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+    animation-delay: calc(var(--i) * 85ms + 120ms);
+    transform-origin: center;
+  }
+  .sun--giant .sun-pop {
+    animation-duration: 1.8s;
+    animation-delay: calc(var(--i) * 140ms);
+  }
+  .sun svg {
     display: block;
     width: 100%;
     height: auto;
+    will-change: transform;
+    transform-origin: center;
+  }
+  @keyframes sun-in {
+    from {
+      opacity: 0;
+      transform: scale(0.15) rotate(-120deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  /* Estrellas fugaces: una estrella pequeña con cola, que cruza en diagonal de derecha a izquierda. */
+  .shooters {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    --dx: -1000px;
+    --dy: 500px;
+  }
+  .shoot {
+    position: absolute;
+    top: var(--top);
+    right: var(--right);
+    width: var(--sz);
+    height: var(--sz);
+    opacity: 0;
+    animation: shoot var(--dur) linear var(--delay) infinite;
+  }
+  .shoot svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: var(--c);
+    animation: star-spin 1.6s linear infinite;
+  }
+  .shoot::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: clamp(110px, 15vw, 220px);
+    height: 3px;
+    transform-origin: 0 50%;
+    transform: translateY(-50%) rotate(-26.6deg);
+    background: linear-gradient(90deg, var(--c), transparent);
+    z-index: -1;
+  }
+  @keyframes shoot {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    1.5% {
+      opacity: 1;
+    }
+    13% {
+      transform: translate(var(--dx), var(--dy));
+      opacity: 1;
+    }
+    15% {
+      transform: translate(calc(var(--dx) * 1.08), calc(var(--dy) * 1.08));
+      opacity: 0;
+    }
+    100% {
+      transform: translate(calc(var(--dx) * 1.08), calc(var(--dy) * 1.08));
+      opacity: 0;
+    }
   }
 
   .inner {
@@ -182,8 +350,7 @@ const subjects = JSON.stringify(states.map((s) => s.subject));
     grid-area: 1 / 1;
     font-size: var(--fs-lead);
     line-height: 1.55;
-    color: var(--ink);
-    opacity: 0.78;
+    color: var(--ink-60);
   }
   .sub[data-active='false'] {
     visibility: hidden;
@@ -244,30 +411,46 @@ const subjects = JSON.stringify(states.map((s) => s.subject));
     font-weight: 500;
     color: var(--ink);
     text-decoration: underline;
-    text-decoration-color: var(--coral);
+    text-decoration-color: var(--ink);
     text-decoration-thickness: 2px;
     text-underline-offset: 5px;
-    transition: color 0.18s ease;
+    transition: text-decoration-thickness 0.18s ease;
   }
   .mail:hover {
-    color: var(--coral-ink);
+    text-decoration-thickness: 4px;
   }
 
   @media (max-width: 820px) {
     .hero2 {
       align-items: flex-start;
-      padding-bottom: clamp(220px, 62vw, 340px);
     }
-    .star-bg {
-      width: 78vw;
-      right: -22vw;
-      top: auto;
-      bottom: -14vw;
-      transform: none;
+    .shooters {
+      display: none;
+    }
+  }
+  /* Celular: solo los dos soles grandes y dos del extremo inferior, lejos del titular; el botón ya lleva el correo. */
+  @media (max-width: 700px) {
+    .hero2 .sun[data-i='3'],
+    .hero2 .sun[data-i='5'],
+    .hero2 .sun[data-i='6'],
+    .hero2 .sun[data-i='7'],
+    .hero2 .sun[data-i='8'],
+    .hero2 .sun[data-i='9'] {
+      display: none;
+    }
+    .mail {
+      display: none;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .sun-pop,
+    .sun svg {
+      animation: none !important;
+    }
+    .shooters {
+      display: none;
+    }
     .is-ready .hl {
       transition: none;
     }

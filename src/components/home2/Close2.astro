@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Star from '../Star.astro';
 import wordmark from '../../assets/brand/wordmark-blanco.png';
-import { HOME_EMAIL, mailto, type HomeCopy } from '../../data/home';
+import { HOME_COPYRIGHT, HOME_EMAIL, mailto, type HomeCopy } from '../../data/home';
 import type { Lang, UiDictionary } from '../../i18n';
 
 interface Props {
@@ -34,9 +34,9 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
 
   <footer class="site-footer">
     <div class="foot-brand">
-      <Image src={wordmark} alt="Pablo Kohler" height={16} format="webp" quality={90} />
+      <Image src={wordmark} alt="Pablo Kohler" height={96} format="webp" quality={90} />
     </div>
-    <span class="foot-copy">{t.footerCopy}</span>
+    <span class="foot-copy">{HOME_COPYRIGHT}</span>
     <a href={privacyHref} class="foot-privacy">{t.privacyLink}</a>
   </footer>
 </section>
@@ -106,14 +106,14 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
     font-weight: 500;
     color: var(--paper);
     text-decoration: underline;
-    text-decoration-color: var(--amber);
+    text-decoration-color: var(--paper);
     text-decoration-thickness: 2px;
     text-underline-offset: 6px;
     overflow-wrap: anywhere;
-    transition: color 0.18s ease;
+    transition: text-decoration-thickness 0.18s ease;
   }
   .close-mail:hover {
-    color: var(--amber);
+    text-decoration-thickness: 4px;
   }
 
   .site-footer {
@@ -150,5 +150,29 @@ const privacyHref = `/${lang}/${lang === 'es' ? 'privacidad' : 'privacy'}/`;
   }
   .foot-privacy:hover {
     color: var(--paper);
+  }
+
+  /* Celular: logo grande y centrado, sin el texto de copyright. */
+  @media (max-width: 720px) {
+    .site-footer {
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+      padding: 36px 0 32px;
+      text-align: center;
+    }
+    .foot-brand :global(img) {
+      height: 44px;
+    }
+    .foot-copy,
+    .foot-privacy {
+      display: none;
+    }
+    .close-sub {
+      display: none;
+    }
+    h2 {
+      margin-bottom: clamp(28px, 5vh, 40px);
+    }
   }
 </style>

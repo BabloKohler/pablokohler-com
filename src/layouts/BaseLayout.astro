@@ -189,7 +189,7 @@ const structuredData = {
     <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={publicSansLatin} as="font" type="font/woff2" crossorigin />
   </head>
-  <body>
+  <body class={IS_AU ? undefined : 'site-main'}>
     <!-- Estrella firma: una sola definición por página, reutilizada con <use href="#slp-star"> (Star, hero, footer) -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="slp-star" viewBox={STAR_VIEWBOX}><path d={STAR_PATH}></path></symbol></defs></svg>
     <div class="grain"></div>
@@ -211,7 +211,10 @@ const structuredData = {
       // El sol siempre se asoma centrado por abajo, con un color cálido distinto cada vez
       // que el mouse entra al botón (nunca repite el de la vez anterior). Al salir del
       // hover retrocede por el mismo camino y queda oculto bajo el botón.
-      const WARM_COLORS = ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
+      // En el sitio principal el botón es coral: el sol que se asoma toma los otros tonos.
+      const WARM_COLORS = document.body.classList.contains('site-main')
+        ? ['var(--amber)', 'var(--magenta)', 'var(--paper)']
+        : ['var(--coral)', 'var(--amber)', 'var(--magenta)'];
       let lastSunColor = '';
       document.querySelectorAll<HTMLElement>('.btn-primary').forEach((btn) => {
         btn.addEventListener('mouseenter', () => {

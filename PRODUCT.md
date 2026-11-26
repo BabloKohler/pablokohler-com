@@ -16,7 +16,7 @@ pablokohler.com es el sitio de marca personal de Pablo Kohler, Consultor de Expe
 
 ## Positioning
 
-Una consultoría que cubre todo el recorrido (comunicación, diseño, automatización y conversión) conectado, no servicios sueltos. Todo queda a nombre del cliente (dominios, cuentas y accesos). Bilingüe español/inglés. Más de 9 años de experiencia con universidades, fundadores académicos y organizaciones de ciencia, educación y bienestar animal.
+Una consultoría que cubre todo el recorrido (comunicación, diseño, automatización y conversión) conectado, no servicios sueltos. Todo queda a nombre del cliente (dominios, cuentas y accesos). Bilingüe español/inglés. Más de 9 años de experiencia con universidades, investigadores y organizaciones de ciencia, educación y bienestar animal.
 
 ## Operating Context
 
@@ -34,9 +34,12 @@ Pablo vive en Tasmania y antes trabajó desde Chile. El sitio comparte repositor
 
 - Cargo: "Consultor de Experiencia Digital" / "Digital Experience Consultant". No usar "estratega / constructor".
 - Lema: "Construyamos tus sueños digitales" / "Let's build your digital dreams".
-- Fondo blanco cálido con cuadrícula casi invisible; paleta naranja actual (coral, ámbar, magenta, tinta cálida) se conserva y se usa mejor.
+- Fondo blanco cálido liso (la cuadrícula se retiró el 2026-11-27); paleta naranja actual (coral, ámbar, magenta, tinta cálida) se conserva y se usa mejor.
 - Referencias vinculantes: contenido y tono de nojiggery.co, fernandarocha.rocks y adhamdannaway.com; de teak.io solo diagramación, tipografías y escala tipográfica (sin sus colores).
 - No mencionar "una sola persona" ni equivalentes: es evidente.
+- En pablokohler.com no se menciona Tasmania (ni ubicación) ni se destacan los idiomas con recuadros; la ubicación solo vive en el sitio .com.au.
+- Texto secundario oscuro (alto contraste); botones de texto y enlaces en negro, sin naranja en hover; el botón principal es coral y al pasar el cursor se invierte a negro.
+- Pablo es Managing Partner de la Agencia Digital Dembú (dembu.cl); la bio lo menciona y enlaza.
 - Ya hay una foto de Pablo en el sitio.
 
 ## Evidence on Hand

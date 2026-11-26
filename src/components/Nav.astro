@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import wordmark from '../assets/brand/wordmark-negro.png';
 import type { Lang, UiDictionary } from '../i18n';
+import { HOME, mailto } from '../data/home';
+import { IS_AU } from '../site-target';
 
 interface Props {
   lang: Lang;
@@ -19,6 +21,8 @@ interface Props {
 
 const { lang, t, otherLangHref, back, showLangSwitch = true } = Astro.props;
 const home = `/${lang}/`;
+// Sitio principal: botón de correo en la barra (el build AU no lo lleva).
+const cta = IS_AU ? null : { label: lang === 'es' ? 'Escríbeme' : 'Write to me', href: mailto(HOME[lang].subject) };
 ---
 
 <nav>
@@ -57,6 +61,11 @@ const home = `/${lang}/`;
         {showLangSwitch && (
           <a href={otherLangHref} class="lang">
             <b>{t.langLabel}</b> / <span>{lang === 'es' ? 'EN' : 'ES'}</span>
+          </a>
+        )}
+        {cta && (
+          <a href={cta.href} class="btn btn-primary nav-cta" data-track="email_click" data-track-location="nav">
+            {cta.label}
           </a>
         )}
       </>
@@ -294,6 +303,88 @@ const home = `/${lang}/`;
       font-size: var(--fs-small);
       white-space: normal;
       line-height: 1.2;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Sitio principal: barra de ancho completo, fija en el flujo de la página (no flota). */
+  body.site-main nav {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    justify-content: space-between;
+    gap: clamp(16px, 2.4vw, 32px);
+    padding: 16px var(--pad);
+    border: 0;
+    border-bottom: 1px solid var(--ink-12);
+    border-radius: 0;
+    background: var(--paper);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    transition: none;
+  }
+  body.site-main nav.is-scrolled {
+    padding: 16px var(--pad);
+    background: var(--paper);
+    box-shadow: none;
+  }
+  body.site-main nav .nav-links {
+    margin: 0 auto;
+    gap: clamp(24px, 3vw, 44px);
+  }
+  body.site-main.site-main nav .nav-links a {
+    color: var(--ink);
+    font-size: var(--fs-lead);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.18s ease;
+  }
+  body.site-main.site-main nav .nav-links a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--ink);
+  }
+  body.site-main nav .lang {
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  body.site-main nav .nav-cta {
+    padding: 12px 24px;
+    font-size: var(--fs-body);
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  body.site-main nav .menu-toggle {
+    border-radius: 0;
+  }
+  @media (max-width: 720px) {
+    body.site-main nav {
+      padding: 12px var(--pad);
+    }
+    body.site-main nav .nav-links {
+      top: 100%;
+      margin: 0;
+      border: 0;
+      border-top: 1px solid var(--ink-12);
+      border-bottom: 1px solid var(--ink-12);
+      border-radius: 0;
+      box-shadow: none;
+      padding: 8px var(--pad) 16px;
+    }
+  }
+  @media (max-width: 560px) {
+    body.site-main nav .nav-cta {
+      display: none;
     }
   }
 </style>

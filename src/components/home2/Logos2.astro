@@ -1,0 +1,113 @@
+---
+import { LOGOS, type HomeLang } from '../../data/home';
+
+interface Props {
+  lang: HomeLang;
+  label: string;
+  opens: string;
+}
+const { lang, label, opens } = Astro.props;
+---
+
+<section class="logos2" aria-labelledby="logos2-label">
+  <p class="label" id="logos2-label">{label}</p>
+  <ul class="grid">
+    {
+      LOGOS.map((l) => {
+        const href = l.href ?? l.internal?.[lang];
+        const external = Boolean(l.href);
+        return (
+          <li>
+            {href ? (
+              <a
+                class="tile"
+                href={href}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener' : undefined}
+                data-track="client_logo_click"
+                data-track-service={l.name}
+              >
+                <img src={l.logo} alt={l.name} loading="lazy" decoding="async" />
+                {external && <span class="sr-only"> ({opens})</span>}
+              </a>
+            ) : (
+              <div class="tile tile--static">
+                <img src={l.logo} alt={l.name} loading="lazy" decoding="async" />
+              </div>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .logos2 {
+    position: relative;
+    z-index: 2;
+    max-width: calc(1240px + 2 * var(--pad));
+    margin: 0 auto;
+    padding: 0 var(--pad) clamp(48px, 8vh, 96px);
+  }
+  .label {
+    font-size: var(--fs-small);
+    color: var(--ink-60);
+    margin-bottom: 16px;
+  }
+  .grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 12px;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid var(--ink-12);
+    border-radius: var(--r-card, 20px);
+    transition: border-color 0.18s ease;
+  }
+  .tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.72;
+    transition:
+      filter 0.2s ease,
+      opacity 0.2s ease;
+  }
+  a.tile:hover,
+  a.tile:focus-visible {
+    border-color: var(--ink);
+  }
+  a.tile:hover img,
+  a.tile:focus-visible img {
+    filter: none;
+    opacity: 1;
+  }
+  @media (max-width: 560px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+  }
+  @media (hover: none) {
+    .tile img {
+      filter: none;
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile,
+    .tile img {
+      transition: none;
+    }
+  }
+</style>

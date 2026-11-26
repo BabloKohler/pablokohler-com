@@ -5,7 +5,8 @@ import type { CollectionEntry } from 'astro:content';
 import Hero2 from './Hero2.astro';
 import Services2 from './Services2.astro';
 import Close2 from './Close2.astro';
-import Cases from '../home/Cases.astro';
+import Logos2 from './Logos2.astro';
+import CasesMag from './CasesMag.astro';
 import About from '../home/About.astro';
 import { HOME } from '../../data/home';
 import type { Lang, UiDictionary } from '../../i18n';
@@ -22,7 +23,8 @@ const c = HOME[lang];
 <div class="home2">
   <Hero2 c={c} />
   <Services2 c={c} lang={lang} />
-  <Cases t={{ ...t.cases, headline: c.casesHeading.lead, headlineAccent: c.casesHeading.accent, intro: c.casesIntro }} lang={lang} cases={cases} />
+  <CasesMag cases={cases} lang={lang} heading={c.casesHeading} intro={c.casesIntro} viewCase={t.cases.viewCase} mag={c.mag} />
+  <Logos2 lang={lang} label={t.trust.label} opens={c.mag.logosOpen} />
   <About t={c.about} />
 </div>
 <Close2 c={c} t={t.contact} lang={lang} />

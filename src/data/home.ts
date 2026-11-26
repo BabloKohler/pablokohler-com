@@ -1,6 +1,7 @@
 // Textos de la portada nueva de pablokohler.com (build principal). El build AU conserva su portada anterior.
 // Solo hechos que ya existen en el sitio: sin testimonios, cifras ni logos nuevos.
 export const HOME_EMAIL = 'hola@pablokohler.com';
+export const HOME_COPYRIGHT = '© 2026 Pablo Kohler';
 
 export type HomeLang = 'es' | 'en';
 
@@ -21,6 +22,26 @@ export interface HomeService {
   subject: string;
 }
 
+/** Logo de un cliente. `href` = sitio real; `internal` = caso de estudio propio cuando no hay sitio que enlazar. */
+export interface HomeLogo {
+  name: string;
+  logo: string;
+  href?: string;
+  internal?: Record<HomeLang, string>;
+}
+
+// Solo se enlazan URLs verificadas (respondieron con el sitio correcto el 2026-11-26).
+// docomomoconference2024.com ya no sirve el sitio del congreso (redirige a otro dominio): no enlazar.
+export const LOGOS: HomeLogo[] = [
+  { name: 'Vetro Chile', logo: '/logos/vetro-chile.png', href: 'https://vetrochile.cl' },
+  { name: 'Rangitaki', logo: '/logos/rangitaki.png', href: 'https://rangitaki.com' },
+  { name: 'Proyecto Alquimia', logo: '/logos/alquimia.png', href: 'https://proyectoalquimia.cl' },
+  { name: 'Fundación Huella Animal', logo: '/logos/huella-animal.png', href: 'https://fundacionhuellaanimal.cl' },
+  { name: 'UC Chile', logo: '/logos/uc.png', internal: { es: '/es/casos/uc-graficas/', en: '/en/cases/uc-graficas/' } },
+  { name: 'Docomomo', logo: '/logos/docomomo.png', internal: { es: '/es/casos/docomomo/', en: '/en/cases/docomomo/' } },
+  { name: 'She Loves Pink', logo: '/logos/she-loves-pink.png', href: 'https://shelovespink.com.au' },
+];
+
 export interface HomeCopy {
   metaTitle: string;
   metaDescription: string;
@@ -37,6 +58,7 @@ export interface HomeCopy {
   alsoLabel: string;
   casesHeading: { lead: string; accent: string };
   casesIntro: string;
+  mag: { prev: string; next: string; region: string; of: string; logosOpen: string };
   about: {
     headline: string;
     headlineAccent: string;
@@ -88,23 +110,21 @@ export const HOME: Record<HomeLang, HomeCopy> = {
       },
     ],
     servicesHeading: { lead: 'Cómo puedo', accent: 'ayudarte' },
-    servicesNote: 'Comunicación, diseño, automatización y conversión trabajando juntas, y todo (dominios, cuentas y accesos) queda a tu nombre.',
+    servicesNote: 'Soluciones para cada etapa de tu **travesía digital**.',
     serviceLink: 'Escríbeme sobre esto',
     alsoLabel: 'Ver también:',
-    casesHeading: { lead: 'Proyectos donde estrategia y ejecución vivieron', accent: 'juntas.' },
-    casesIntro: 'Una muestra de lo que hago.',
+    casesHeading: { lead: 'Proyectos', accent: 'realizados' },
+    casesIntro: '',
+    mag: { prev: 'Proyecto anterior', next: 'Proyecto siguiente', region: 'Proyectos', of: 'de', logosOpen: 'abre el sitio web' },
     about: {
       headline: 'Hola.',
       headlineAccent: "G'day.",
       paragraphs: [
-        'Soy Consultor de Experiencia Digital y vivo en Tasmania. Durante más de 9 años he ayudado a universidades, fundadores académicos y organizaciones, primero en Chile y Latinoamérica y ahora también en Australia, a convertir lo que quieren comunicar en resultados que se pueden medir.',
+        'Soy Consultor de Experiencia Digital y Managing Partner de la Agencia Digital <a href="https://dembu.cl" target="_blank" rel="noopener">Dembú</a>. Durante más de 9 años he ayudado a universidades, investigadores y organizaciones, primero en Chile y Latinoamérica y ahora también en Australia, a convertir lo que quieren comunicar en resultados que se pueden medir.',
         'No me quedo en el plan: **también lo construyo**. Mi trabajo une estrategia de comunicación, diseño, automatización y desarrollo web, para que el mensaje y la tecnología que lo sostiene vayan juntos.',
         'Lo que me mueve es el **propósito**: me comprometo especialmente con organizaciones que trabajan en ciencia, educación, bienestar animal e impacto basado en evidencia.',
       ],
-      facts: [
-        { n: 'ES/EN', l: 'bilingüe' },
-        { n: 'TAS', l: 'Tasmania, Australia' },
-      ],
+      facts: [],
       cta: 'Escríbeme →',
     },
     close: { pre: 'Cuéntame qué sueño ', mark: 'digital', post: ' quieres construir.', button: 'Escríbeme' },
@@ -149,23 +169,21 @@ export const HOME: Record<HomeLang, HomeCopy> = {
       },
     ],
     servicesHeading: { lead: 'How I can', accent: 'help you' },
-    servicesNote: 'Communications, design, automation and conversion working together, with everything (domains, accounts and logins) in your name.',
+    servicesNote: 'Solutions for every stage of your **digital journey**.',
     serviceLink: 'Write to me about this',
     alsoLabel: 'See also:',
-    casesHeading: { lead: 'Projects where strategy and execution lived', accent: 'together.' },
-    casesIntro: 'A sample of what I do.',
+    casesHeading: { lead: 'Completed', accent: 'projects' },
+    casesIntro: '',
+    mag: { prev: 'Previous project', next: 'Next project', region: 'Projects', of: 'of', logosOpen: 'opens the website' },
     about: {
       headline: 'Hello.',
       headlineAccent: "G'day.",
       paragraphs: [
-        'I’m a Digital Experience Consultant based in Tasmania. For more than 9 years I’ve helped universities, academic founders and organisations, first across Chile and Latin America and now in Australia too, turn what they want to communicate into results they can measure.',
+        'I’m a Digital Experience Consultant and Managing Partner at the digital agency <a href="https://dembu.cl" target="_blank" rel="noopener">Dembú</a>. For more than 9 years I’ve helped universities, researchers and organisations, first across Chile and Latin America and now in Australia too, turn what they want to communicate into results they can measure.',
         'I don’t stop at the plan: **I build it too**. My work brings together communications strategy, design, automation and web development, so the message and the technology behind it move together.',
         'What drives me is **purpose**: I’m especially committed to organisations working in science, education, animal welfare and evidence-based impact.',
       ],
-      facts: [
-        { n: 'ES/EN', l: 'bilingual' },
-        { n: 'TAS', l: 'Tasmania, Australia' },
-      ],
+      facts: [],
       cta: 'Write to me →',
     },
     close: { pre: 'Tell me which ', mark: 'digital', post: ' dream you want to build.', button: 'Write to me' },

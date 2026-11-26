@@ -23,6 +23,51 @@
   --fs-h2: clamp(32px, 4vw, 54px);
   --fs-h1: clamp(36px, 5.4vw, 72px);
   --fs-display: clamp(44px, 7.4vw, 96px);
+
+  --pad: clamp(24px, 5vw, 72px);
+  --r-card: 20px;
+}
+
+/* Sitio principal (pablokohler.com): tarjetas con esquinas rectas y el botón destacado en coral. */
+.site-main {
+  --r-card: 0px;
+  /* Texto secundario más oscuro (contraste de 9:1 o más sobre el papel). */
+  --ink-60: rgba(20, 18, 16, 0.82);
+  --ink-40: rgba(20, 18, 16, 0.82);
+}
+.site-main .btn-primary {
+  background: var(--coral);
+  color: var(--ink);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.18s ease;
+}
+/* Hover: el botón se invierte a negro y la flecha avanza (sin el sol que se asoma). */
+.site-main .btn-primary .btn-sun {
+  display: none;
+}
+.site-main .btn-primary:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.site-main .btn-primary .arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.site-main .btn-primary:hover .arrow {
+  transform: translateX(5px);
+}
+/* En el cierre oscuro el hover invierte a papel. */
+.site-main .close2 .btn-primary:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-main .btn-primary,
+  .site-main .btn-primary .arrow {
+    transition: none;
+  }
 }
 
 * {

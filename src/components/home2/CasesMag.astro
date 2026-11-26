@@ -1,0 +1,366 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Star from '../Star.astro';
+import type { HomeCopy, HomeLang } from '../../data/home';
+
+interface Props {
+  cases: CollectionEntry<'cases-es' | 'cases-en'>[];
+  lang: HomeLang;
+  heading: HomeCopy['casesHeading'];
+  intro: string;
+  viewCase: string;
+  mag: HomeCopy['mag'];
+}
+const { cases, lang, heading, intro, viewCase, mag } = Astro.props;
+const base = lang === 'es' ? 'casos' : 'cases';
+const total = cases.length;
+const pad2 = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="mag" id="trabajo" data-mag>
+  <div class="head reveal" data-reveal>
+    <h2>{heading.lead} <span class="accent">{heading.accent}</span></h2>
+    {intro && <p class="intro">{intro}</p>}
+  </div>
+
+  <div class="viewport" role="region" aria-roledescription="carousel" aria-label={mag.region}>
+    <ol class="track">
+      {
+        cases.map((c, i) => {
+          const d = c.data;
+          return (
+            <li
+              class={`slide tone-${i % 2 === 0 ? 'coral' : 'amber'}`}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} ${mag.of} ${total}`}
+            >
+              <div class={`media ${d.coverVariant === 'alt' ? 'alt' : ''}`}>
+                {d.coverImage ? (
+                  <img src={d.coverImage} alt="" style={`object-fit:${d.coverFit}`} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                ) : (
+                  <Star class="slide-star" size="clamp(140px, 18vw, 260px)" color={d.coverVariant === 'alt' ? 'var(--magenta)' : 'var(--coral)'} opacity={0.55} />
+                )}
+              </div>
+              <div class="panel">
+                <p class="tag">{d.tags[0]}</p>
+                <div class="copy">
+                  <h3>{d.title}</h3>
+                  <p class="desc">{d.cardDescription}</p>
+                  <a class="cta" href={`/${lang}/${base}/${c.id}/`}>
+                    {viewCase}
+                  </a>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+
+  <div class="controls">
+    <button class="arrow" type="button" data-prev aria-label={mag.prev}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6" /></svg>
+    </button>
+    <button class="arrow" type="button" data-next aria-label={mag.next}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6" /></svg>
+    </button>
+    <p class="count" aria-live="polite"><span data-cur>{pad2(1)}</span> / {pad2(total)}</p>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-mag]');
+  if (root) {
+    const viewport = root.querySelector<HTMLElement>('.viewport')!;
+    const track = root.querySelector<HTMLElement>('.track')!;
+    const slides = [...root.querySelectorAll<HTMLElement>('.slide')];
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const cur = root.querySelector<HTMLElement>('[data-cur]')!;
+    const last = slides.length - 1;
+    let i = 0;
+
+    // Sin JavaScript los proyectos quedan apilados; con JavaScript se ve uno a la vez.
+    root.classList.add('is-ready');
+
+    const go = (k: number) => {
+      i = Math.max(0, Math.min(last, k));
+      track.style.transform = `translateX(-${i * 100}%)`;
+      slides.forEach((s, n) => {
+        s.classList.toggle('is-active', n === i);
+        if (n === i) s.removeAttribute('inert');
+        else s.setAttribute('inert', '');
+      });
+      prev.disabled = i === 0;
+      next.disabled = i === last;
+      cur.textContent = String(i + 1).padStart(2, '0');
+    };
+    go(0);
+
+    prev.addEventListener('click', () => go(i - 1));
+    next.addEventListener('click', () => go(i + 1));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(i - 1);
+      else if (e.key === 'ArrowRight') go(i + 1);
+    });
+
+    // Deslizar con el dedo o el mouse.
+    let startX = 0;
+    let startY = 0;
+    viewport.addEventListener('pointerdown', (e) => {
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+    viewport.addEventListener('pointerup', (e) => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.4) go(dx < 0 ? i + 1 : i - 1);
+    });
+  }
+</script>
+
+<style>
+  .mag {
+    position: relative;
+    z-index: 2;
+    max-width: calc(1240px + 2 * var(--pad));
+    margin: 0 auto;
+    padding: clamp(60px, 9vh, 110px) var(--pad) clamp(72px, 11vh, 130px);
+  }
+  .head {
+    margin-bottom: clamp(28px, 5vh, 48px);
+  }
+  h2 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--fs-h2);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    margin-bottom: 16px;
+    max-width: 18em;
+    text-wrap: balance;
+  }
+  .intro {
+    font-size: var(--fs-lead);
+    color: var(--ink-60);
+  }
+
+  .viewport {
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    touch-action: pan-y;
+  }
+  .track {
+    list-style: none;
+    display: flex;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .slide {
+    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    min-height: clamp(420px, 56vh, 600px);
+  }
+
+  .media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #ffe8dc;
+    border-right: 1px solid var(--ink);
+  }
+  .media.alt {
+    background: #fbd9e6;
+  }
+  .media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(1.07);
+    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slide.is-active .media img {
+    transform: scale(1);
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: clamp(24px, 3.4vw, 48px);
+    color: var(--ink);
+  }
+  .tone-coral .panel {
+    background: var(--coral);
+  }
+  .tone-amber .panel {
+    background: var(--amber);
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(28px, 3.2vw, 48px);
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+    margin-bottom: 16px;
+    text-wrap: balance;
+  }
+  .desc {
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    max-width: 42ch;
+    margin-bottom: 22px;
+  }
+  .cta {
+    display: inline-block;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--fs-body);
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    transition: transform 0.2s ease;
+  }
+  .cta:hover {
+    transform: translateX(4px);
+  }
+
+  /* El texto de cada proyecto entra escalonado cuando su lámina pasa a estar activa. */
+  .is-ready .panel > *,
+  .is-ready .copy > * {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .is-ready .slide.is-active .panel > .tag,
+  .is-ready .slide.is-active .copy > * {
+    opacity: 1;
+    transform: none;
+  }
+  .is-ready .slide.is-active .copy > h3 {
+    transition-delay: 0.25s;
+  }
+  .is-ready .slide.is-active .copy > .desc {
+    transition-delay: 0.35s;
+  }
+  .is-ready .slide.is-active .copy > .cta {
+    transition-delay: 0.45s;
+  }
+  /* El contenedor .copy no se anima como bloque: solo sus hijos. */
+  .is-ready .panel > .copy {
+    opacity: 1;
+    transform: none;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .mag:not(.is-ready) .controls {
+    display: none;
+  }
+  .arrow {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      opacity 0.18s ease;
+  }
+  .arrow svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+  .arrow:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .count {
+    margin-left: 12px;
+    font-family: var(--mono);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* Sin JavaScript: proyectos apilados. */
+  .mag:not(.is-ready) .track {
+    display: grid;
+    gap: 24px;
+  }
+  .mag:not(.is-ready) .viewport {
+    border: 0;
+    background: none;
+  }
+  .mag:not(.is-ready) .slide {
+    border: 1px solid var(--ink);
+  }
+
+  @media (max-width: 860px) {
+    .slide {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .media {
+      aspect-ratio: 16 / 10;
+      border-right: 0;
+      border-bottom: 1px solid var(--ink);
+    }
+    .panel {
+      gap: 20px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track,
+    .media img,
+    .is-ready .panel > *,
+    .is-ready .copy > *,
+    .cta,
+    .arrow {
+      transition: none !important;
+    }
+    .is-ready .panel > *,
+    .is-ready .copy > * {
+      opacity: 1;
+      transform: none;
+    }
+    .media img {
+      transform: none;
+    }
+  }
+</style>
