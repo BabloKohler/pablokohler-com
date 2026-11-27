@@ -66,7 +66,7 @@ export interface HomeCopy {
     facts: { n: string; l: string }[];
     cta: string;
   };
-  close: { pre: string; mark: string; post: string; button: string };
+  close: { pre: string; mark: string; post: string; sub: string; button: string };
 }
 
 export const HOME: Record<HomeLang, HomeCopy> = {
@@ -127,7 +127,7 @@ export const HOME: Record<HomeLang, HomeCopy> = {
       facts: [],
       cta: 'Escríbeme →',
     },
-    close: { pre: 'Cuéntame qué sueño ', mark: 'digital', post: ' quieres construir.', button: 'Escríbeme' },
+    close: { pre: 'Cuéntame qué sueño ', mark: 'digital', post: ' quieres construir.', sub: 'Cuéntame en qué andas.', button: 'Escríbeme' },
   },
   en: {
     metaTitle: 'Pablo Kohler | Digital Experience Consultant',
@@ -186,7 +186,7 @@ export const HOME: Record<HomeLang, HomeCopy> = {
       facts: [],
       cta: 'Write to me →',
     },
-    close: { pre: 'Tell me which ', mark: 'digital', post: ' dream you want to build.', button: 'Write to me' },
+    close: { pre: 'Tell me which ', mark: 'digital', post: ' dream you want to build.', sub: 'Tell me what you’re working on.', button: 'Write to me' },
   },
 };
 
