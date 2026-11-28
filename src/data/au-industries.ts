@@ -42,7 +42,7 @@ function build(i: Industry): AuService {
     region: i.region,
     cardTitle: i.cardTitle ?? `Websites for ${i.whoShort}`,
     cardBlurb: i.cardBlurb,
-    cardFrom: i.cardFrom ?? 'from A$1,500',
+    cardFrom: i.cardFrom ?? 'from A$800',
     metaTitle: i.metaTitle ?? `Website Design for ${i.titleWho} | Pablo Kohler`,
     metaDescription: i.metaDescription,
     eyebrow: i.eyebrow ?? `Websites for ${i.whoShort}`,
@@ -101,7 +101,7 @@ const industries: Industry[] = [
     examples: 'plumbers, electricians, builders, landscapers',
     cardBlurb: 'Plumbers, electricians, builders and landscapers: a site that gets the phone ringing.',
     metaDescription:
-      'Website design for Tasmanian tradies: plumbers, electricians, builders and landscapers. Fast on mobile, click-to-call, service areas and quote requests. New sites from A$1,500.',
+      'Website design for Tasmanian tradies: plumbers, electricians, builders and landscapers. Fast on mobile, click-to-call, service areas and quote requests. New sites from A$800.',
     sub: 'Plumbers, electricians, builders, landscapers: when someone needs a tradie they search on their phone and call the first one that looks reliable. I build sites that make that call easy.',
     problems: [
       'Customers search “near me” on their phone and your site is slow or hard to read',
@@ -140,7 +140,7 @@ const industries: Industry[] = [
     examples: 'dentists, physios, psychologists, massage therapists',
     cardBlurb: 'Dentists, physios, psychologists and therapists: a calm, clear site that builds trust.',
     metaDescription:
-      'Website design for Tasmanian health and wellness practices: dentists, physios, psychologists and therapists. Clear services, practitioner profiles and easy booking. New sites from A$1,500.',
+      'Website design for Tasmanian health and wellness practices: dentists, physios, psychologists and therapists. Clear services, practitioner profiles and easy booking. New sites from A$800.',
     sub: 'Dentists, physios, psychologists, therapists: people choose a practice they trust. A clear, calm site that explains what you do, who you are and how to book makes that decision easy.',
     problems: [
       'Patients cannot easily see your services, fees or who they would be seeing',
@@ -179,7 +179,7 @@ const industries: Industry[] = [
     examples: 'cafes, restaurants, bars, bakeries',
     cardBlurb: 'Cafes, restaurants and bakeries: menu, hours and location where people actually look.',
     metaDescription:
-      'Website design for Tasmanian cafes and restaurants. Menu, hours, location and bookings that work on a phone. New sites from A$1,500.',
+      'Website design for Tasmanian cafes and restaurants. Menu, hours, location and bookings that work on a phone. New sites from A$800.',
     sub: 'Cafes, restaurants, bars, bakeries: people check your menu, hours and location on their phone before they walk in. I build sites that put that information up front and look as good as your food.',
     problems: [
       'Your menu is a blurry PDF or a photo',
@@ -218,7 +218,7 @@ const industries: Industry[] = [
     examples: 'accountants, lawyers, consultants, real estate',
     cardBlurb: 'Accountants, lawyers, consultants and agents: a credible site that turns visits into enquiries.',
     metaDescription:
-      'Website design for Tasmanian professional services: accountants, lawyers, consultants and real estate. Credible, clear and built to generate enquiries. New sites from A$1,500.',
+      'Website design for Tasmanian professional services: accountants, lawyers, consultants and real estate. Credible, clear and built to generate enquiries. New sites from A$800.',
     sub: 'Accountants, lawyers, consultants, agents: clients decide on trust. A credible, clear site that explains your services and makes it easy to get in touch.',
     problems: [
       'The site looks generic and does not set you apart',
@@ -259,7 +259,7 @@ const industries: Industry[] = [
     examples: 'hair, nails, lashes, skin and massage',
     cardBlurb: 'Hair, nails, lashes and skin: a site that shows your work, lists your prices and gets bookings.',
     metaDescription:
-      'Website design for beauty salons in Tasmania and Australia: price list, treatment pages, gallery and booking that work on a phone. From A$1,500.',
+      'Website design for beauty salons in Tasmania and Australia: price list, treatment pages, gallery and booking that work on a phone. From A$800.',
     sub: 'Hair, nails, lashes, skin, massage: people choose a salon by how it looks and how easy it is to book. I build sites that show your work, list your prices and make booking one tap.',
     problems: [
       'Your price list lives in an Instagram post or a PDF nobody can read on a phone',
@@ -306,7 +306,7 @@ const industries: Industry[] = [
     examples: 'tattoo and piercing studios and independent artists',
     cardBlurb: 'Studios and artists: a portfolio that shows your style and an enquiry form that brings the right clients.',
     metaDescription:
-      'Website design for tattoo studios in Tasmania and Australia: artist portfolios, styles, enquiries, aftercare and local search. From A$1,500.',
+      'Website design for tattoo studios in Tasmania and Australia: artist portfolios, styles, enquiries, aftercare and local search. From A$800.',
     sub: 'Clients choose an artist by style. A fast portfolio, clear styles and an enquiry form that asks for the right details means fewer back-and-forth messages and more of the work you want.',
     problems: [
       'Your portfolio only lives on Instagram, so you do not control it and it is hard to browse',

@@ -9,7 +9,7 @@ export const AU_SEO: Record<string, { title: string; description: string }> = {
   'website-redesign': {
     title: 'Website Redesign for Tasmanian Small Business | Pablo Kohler',
     description:
-      'Refresh or redesign your Tasmanian business website: modern, fast, mobile-friendly and built to keep your Google rankings. Refresh from A$1,200.',
+      'Refresh or redesign your Tasmanian business website: modern, fast, mobile-friendly and built to keep your Google rankings. Refresh from A$500.',
   },
   'website-care-plans': {
     title: 'Website Care Plans & Maintenance Tasmania | Pablo Kohler',
@@ -24,7 +24,7 @@ export const AU_SEO: Record<string, { title: string; description: string }> = {
   'web-design': {
     title: 'Website Design for Tasmanian Small Business | Pablo Kohler',
     description:
-      'Clean, fast, mobile-friendly websites for Tasmanian small businesses, set up to be found on Google. New sites from A$1,500.',
+      'Clean, fast, mobile-friendly websites for Tasmanian small businesses, set up to be found on Google. New sites from A$800.',
   },
   'virtual-assistant': {
     title: 'Virtual Assistant for Tasmanian Business Owners | Pablo Kohler',
@@ -65,28 +65,28 @@ export const AU_SEO: Record<string, { title: string; description: string }> = {
   'move-off-wix': {
     title: 'Move Off Wix or Squarespace | Tasmania | Pablo Kohler',
     description:
-      'Move your website off Wix or Squarespace without losing your Google rankings. Rebuilt on a platform you control. From A$2,200.',
+      'Move your website off Wix or Squarespace without losing your Google rankings. Rebuilt on a platform you control. From A$600.',
   },
   // Por rubro
   'website-design-for-tradies': {
     title: 'Website Design for Tasmanian Tradies | Pablo Kohler',
     description:
-      'Websites for Tasmanian plumbers, electricians, builders and landscapers: fast on mobile, tap-to-call and quote requests. New sites from A$1,500.',
+      'Websites for Tasmanian plumbers, electricians, builders and landscapers: fast on mobile, tap-to-call and quote requests. New sites from A$800.',
   },
   'website-design-for-health-and-wellness': {
     title: 'Website Design for Tasmanian Health & Wellness | Pablo Kohler',
     description:
-      'Websites for Tasmanian dentists, physios, psychologists and therapists: clear services, practitioner profiles and easy booking. From A$1,500.',
+      'Websites for Tasmanian dentists, physios, psychologists and therapists: clear services, practitioner profiles and easy booking. From A$800.',
   },
   'website-design-for-cafes-and-restaurants': {
     title: 'Websites for Tasmanian Cafes & Restaurants | Pablo Kohler',
     description:
-      'Menu, hours, location and bookings that work on a phone. Websites for Tasmanian cafes, restaurants and bakeries. New sites from A$1,500.',
+      'Menu, hours, location and bookings that work on a phone. Websites for Tasmanian cafes, restaurants and bakeries. New sites from A$800.',
   },
   'website-design-for-professional-services': {
     title: 'Website Design for Tasmanian Professionals | Pablo Kohler',
     description:
-      'Credible, clear websites for Tasmanian accountants, lawyers, consultants and agents, built to generate enquiries. New sites from A$1,500.',
+      'Credible, clear websites for Tasmanian accountants, lawyers, consultants and agents, built to generate enquiries. New sites from A$800.',
   },
 
   // Marketing (SEO, Google Ads, Meta Ads)

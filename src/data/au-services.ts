@@ -51,10 +51,10 @@ export const AU_SERVICES: AuService[] = [
     slug: 'website-redesign',
     cardTitle: 'Website redesign',
     cardBlurb: 'Your site looks dated, runs slowly or does not bring in enquiries. Same business, a site that works.',
-    cardFrom: 'from A$1,200',
+    cardFrom: 'from A$500',
     metaTitle: 'Website Redesign for Small Business | Tasmania & Australia | Pablo Kohler',
     metaDescription:
-      'Website refresh and redesign for Tasmanian and Australian small businesses. Modern, fast, mobile-friendly, and built to keep the Google rankings you already have. Refresh from A$1,200, redesign from A$2,000.',
+      'Website refresh and redesign for Tasmanian and Australian small businesses. Modern, fast, mobile-friendly, and built to keep the Google rankings you already have. Refresh from A$500, redesign from A$800.',
     eyebrow: 'Website redesign',
     h1: 'Website redesign for',
     h1Accent: 'Tasmanian small businesses.',
@@ -79,14 +79,14 @@ export const AU_SERVICES: AuService[] = [
     plans: [
       {
         name: 'Website Refresh',
-        price: 'A$1,200',
+        price: 'A$500',
         unit: 'from',
         blurb: 'Same pages and content, a much better look and feel.',
         features: ['Up to 5 pages', 'Modern design on your existing content', 'Mobile and speed fixes', 'Basic on-page SEO tidy-up'],
       },
       {
         name: 'Website Redesign',
-        price: 'A$2,000',
+        price: 'A$800',
         unit: 'from',
         blurb: 'A rethink of structure and message, not just the paint.',
         features: [
@@ -260,10 +260,10 @@ export const AU_SERVICES: AuService[] = [
     slug: 'web-design',
     cardTitle: 'New website',
     cardBlurb: 'No site yet, or a DIY one you have outgrown. A clean, fast site that brings in enquiries.',
-    cardFrom: 'from A$1,500',
+    cardFrom: 'from A$800',
     metaTitle: 'Website Design for Small Business | Tasmania & Australia | Pablo Kohler',
     metaDescription:
-      'A clean, fast, mobile-friendly website for your Tasmanian or Australian small business, set up to be found on Google. New sites from A$1,500.',
+      'A clean, fast, mobile-friendly website for your Tasmanian or Australian small business, set up to be found on Google. New sites from A$800.',
     eyebrow: 'New website',
     h1: 'A new website for your',
     h1Accent: 'Tasmanian business.',
@@ -288,7 +288,7 @@ export const AU_SERVICES: AuService[] = [
     plans: [
       {
         name: 'New website',
-        price: 'A$1,500',
+        price: 'A$800',
         unit: 'from',
         blurb: 'Everything a small business needs to get online properly.',
         features: [

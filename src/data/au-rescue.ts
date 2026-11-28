@@ -443,10 +443,10 @@ export const AU_RESCUE: AuService[] = [
     group: 'rescue',
     cardTitle: 'Move off Wix or Squarespace',
     cardBlurb: 'Outgrown your site builder? I rebuild on a platform you control and keep your Google rankings.',
-    cardFrom: 'from A$2,200',
+    cardFrom: 'from A$600',
     metaTitle: 'Move Off Wix or Squarespace | Tasmania & Australia | Pablo Kohler',
     metaDescription:
-      'Want to move your website off Wix or Squarespace without losing your Google rankings? Rebuild on a platform you control, with redirects and easy editing. Tasmania and Australia, from A$2,200.',
+      'Want to move your website off Wix or Squarespace without losing your Google rankings? Rebuild on a platform you control, with redirects and easy editing. Tasmania and Australia, from A$600.',
     eyebrow: 'Move off Wix or Squarespace',
     h1: 'Move off Wix or Squarespace',
     h1Accent: 'without losing your rankings.',
@@ -471,7 +471,7 @@ export const AU_RESCUE: AuService[] = [
     plans: [
       {
         name: 'Move off Wix or Squarespace',
-        price: 'A$2,200',
+        price: 'A$600',
         unit: 'from',
         blurb: 'A rebuild you own, with your rankings protected.',
         features: [
